@@ -1,0 +1,34 @@
+--disable andOperator
+--disable leadingDelimiters
+--disable linebreakAtEndOfFile
+--disable numberFormatting
+--disable sortImports
+--disable strongOutlets
+--disable wrapArguments
+--operatorfunc no-space
+--disable preferKeyPath
+--disable wrapMultilineStatementBraces
+--disable redundantSelf
+
+# rules
+
+--ifdef outdent
+--specifierorder public,override
+--typeblanklines preserve
+
+--enable isEmpty
+--enable redundantExtensionACL
+--enable redundantFileprivate
+--enable redundantGet
+--enable redundantInit
+--enable redundantLet
+--enable redundantLetError
+--enable redundantNilInit
+--enable redundantRawValues
+--enable redundantReturn
+--enable redundantBackticks
+--enable redundantBreak
+--enable redundantClosure
+--enable duplicateImports
+#--enable fileHeader
+#--header strip
