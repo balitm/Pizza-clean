@@ -12,5 +12,5 @@ public protocol CartUseCase {
     func items() -> AnyPublisher<[CartItem], Never>
     func total() -> AnyPublisher<Double, Never>
     func remove(at index: Int) -> AnyPublisher<Void, Error>
-    func checkout() -> AnyPublisher<Void, APIErrorType>
+    func checkout() -> AnyPublisher<Void, APIError>
 }
