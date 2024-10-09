@@ -12,48 +12,9 @@ import class UIKit.UIImage
 
 typealias URLPath = (baseURL: URL, path: String?)
 
-struct ParamArray {
+private struct ParamArray {
     let elements: [String]
 }
-
-// final class APINetwork: Sendable {
-//     let api = API()
-//
-//     /// Singleton instance
-//     static let shared = APINetwork()
-//
-//     func getIngredients() -> AnyPublisher<[DS.Ingredient], API.ErrorType> {
-//         let url = api.createGetURL("5e91eda1172eb64389622c7a")
-//         return api.fetch(url)
-//     }
-//
-//     func getDrinks() -> AnyPublisher<[DS.Drink], API.ErrorType> {
-//         let url = api.createGetURL("5e91ef298e85c84370147b21")
-//         return api.fetch(url)
-//     }
-//
-//     func getPizzas() -> AnyPublisher<DS.Pizzas, API.ErrorType> {
-//         let url = api.createGetURL("5e91f1a0cc62be4369c2e408")
-//         return api.fetch(url)
-//     }
-//
-//     func checkout(pizzas: [DS.Pizza], drinks: [DS.Drink.ID]) -> AnyPublisher<Void, API.ErrorType> {
-//         let url = api.createPostURL(Checkout(pizzas: pizzas, drinks: drinks))
-//         return api.post(url)
-//     }
-//
-//     func downloadImage(url: URL) -> AnyPublisher<Image, API.ErrorType> {
-//         URLSession.shared.dataTaskPublisher(for: url)
-//             .tryMap {
-//                 guard let image = Image(data: $0.data) else {
-//                     throw API.ErrorType.processingFailed
-//                 }
-//                 return image
-//             }
-//             .mapError { _ in API.ErrorType.processingFailed }
-//             .eraseToAnyPublisher()
-//     }
-// }
 
 public final class API: Sendable {
     /// Singleton instance
@@ -80,12 +41,47 @@ public final class API: Sendable {
     }
 
     func perform<T: Decodable>(type: T.Type = T.self, request: TargetType) async throws -> T {
-        try await performRequest(
+        var body: Encodable?
+        var parameters: [String: Any]?
+        switch request.requestParameters {
+        case let .requestParameters(params):
+            parameters = params
+        case let .requestJSONEncodable(encodable):
+            body = encodable
+        default:
+            break
+        }
+
+        return try await performRequest(
             type: type,
-            body: EmptyBody?.none,
+            body: body,
             httpMethod: request.method.rawValue,
             httpHeaders: request.headers,
-            parameters: nil,
+            parameters: parameters,
+            timeout: request.timeout,
+            path: URLPath(request.baseURL, request.path),
+            retryNumber: request.retryCount
+        )
+    }
+
+    @discardableResult
+    func perform(request: TargetType) async throws -> Data {
+        var body: Encodable?
+        var parameters: [String: Any]?
+        switch request.requestParameters {
+        case let .requestParameters(params):
+            parameters = params
+        case let .requestJSONEncodable(encodable):
+            body = encodable
+        default:
+            break
+        }
+
+        return try await performRequest(
+            body: body,
+            httpMethod: request.method.rawValue,
+            httpHeaders: request.headers,
+            parameters: parameters,
             timeout: request.timeout,
             path: URLPath(request.baseURL, request.path),
             retryNumber: request.retryCount
@@ -94,10 +90,10 @@ public final class API: Sendable {
 
     private func performRequest<T>(
         type: T.Type = T.self,
-        body: (some Encodable)?,
+        body: Encodable?,
         httpMethod: String,
         httpHeaders _: [String: String]?,
-        parameters: [String: Any?]?,
+        parameters: [String: Any]?,
         timeout: TimeInterval,
         path: URLPath,
         retryNumber: Int
@@ -120,6 +116,35 @@ public final class API: Sendable {
             try await _perform(request, retryNumber)
         }
         return object
+    }
+
+    private func performRequest(
+        body: Encodable?,
+        httpMethod: String,
+        httpHeaders _: [String: String]?,
+        parameters: [String: Any]?,
+        timeout: TimeInterval,
+        path: URLPath,
+        retryNumber: Int
+    ) async throws -> Data {
+        // Create request, use non-default base url.
+        var request = try createRequest(path, timeout: timeout, parameters: parameters)
+        request.httpMethod = httpMethod
+
+        // Set body type and value if we have body.
+        if let body {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let httpBody = try encoder.encode(body)
+            request.httpBody = httpBody
+        }
+
+        NetworkLogger.log(request: request)
+
+        // Execute the request with fetching the response data.
+        let object = try await executeForData(APIError.self) {
+            try await _perform(request, retryNumber)
+        }
+        return object.data
     }
 
     private func createRequest(
@@ -155,8 +180,6 @@ public final class API: Sendable {
         if let httpHeaders, !httpHeaders.isEmpty {
             request.allHTTPHeaderFields?.merge(httpHeaders, uniquingKeysWith: { $1 })
         }
-
-        request.setValue("application/json", forHTTPHeaderField: "accept")
 
         return request
     }
@@ -197,10 +220,10 @@ public final class API: Sendable {
         }
     }
 
-    func executeForData<E>(
+    private func executeForData<E>(
         _ errorType: E.Type,
         _ perform: () async throws -> (Data, HTTPURLResponse)
-    ) async throws -> (Data, HTTPStatusCode) where E: APIErrorProtocol {
+    ) async throws -> (data: Data, statusCode: HTTPStatusCode) where E: APIErrorProtocol {
         do {
             // Fetch data.
             let (data, response) = try await perform()
@@ -228,7 +251,7 @@ public final class API: Sendable {
         }
     }
 
-    func _perform(_ request: URLRequest, _ retryNumber: Int) async throws -> (Data, HTTPURLResponse) {
+    private func _perform(_ request: URLRequest, _ retryNumber: Int) async throws -> (Data, HTTPURLResponse) {
         func getResult(retry: Bool = false) async throws -> (Data, HTTPURLResponse) {
             var data = Data()
             var response: URLResponse?
@@ -281,7 +304,7 @@ public final class API: Sendable {
         return (data, httpResponse)
     }
 
-    func processSucces<T>(
+    private func processSucces<T>(
         _: T.Type,
         _ data: Data,
         requestId _: String
@@ -295,7 +318,7 @@ public final class API: Sendable {
         }
     }
 
-    func processError(
+    private func processError(
         _ status: HTTPStatusCode,
         _: Data,
         _: any APIErrorProtocol.Type,

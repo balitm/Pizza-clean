@@ -58,10 +58,6 @@ protocol TargetType {
     /// The timeout of the request.
     var retryCount: Int { get }
 
-    var resultIsData: Bool { get }
-
-    var decodableResutType: Decodable.Type? { get }
-
     var isAbsolutePath: Bool { get }
 }
 
