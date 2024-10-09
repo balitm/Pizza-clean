@@ -92,14 +92,19 @@ public final class API: Sendable {
         type: T.Type = T.self,
         body: Encodable?,
         httpMethod: String,
-        httpHeaders _: [String: String]?,
+        httpHeaders: [String: String]?,
         parameters: [String: Any]?,
         timeout: TimeInterval,
         path: URLPath,
         retryNumber: Int
     ) async throws -> T where T: Decodable {
-        // Create request, use non-default base url.
-        var request = try createRequest(path, timeout: timeout, parameters: parameters)
+        // Create request.
+        var request = try createRequest(
+            path,
+            timeout: timeout,
+            parameters: parameters,
+            httpHeaders: httpHeaders
+        )
         request.httpMethod = httpMethod
 
         // Set body type and value if we have body.
@@ -121,14 +126,19 @@ public final class API: Sendable {
     private func performRequest(
         body: Encodable?,
         httpMethod: String,
-        httpHeaders _: [String: String]?,
+        httpHeaders: [String: String]?,
         parameters: [String: Any]?,
         timeout: TimeInterval,
         path: URLPath,
         retryNumber: Int
     ) async throws -> Data {
         // Create request, use non-default base url.
-        var request = try createRequest(path, timeout: timeout, parameters: parameters)
+        var request = try createRequest(
+            path,
+            timeout: timeout,
+            parameters: parameters,
+            httpHeaders: httpHeaders
+        )
         request.httpMethod = httpMethod
 
         // Set body type and value if we have body.
@@ -178,7 +188,9 @@ public final class API: Sendable {
 
         // Set additional http headers.
         if let httpHeaders, !httpHeaders.isEmpty {
-            request.allHTTPHeaderFields?.merge(httpHeaders, uniquingKeysWith: { $1 })
+            for (key, value) in httpHeaders {
+                request.setValue(value, forHTTPHeaderField: key)
+            }
         }
 
         return request
@@ -287,10 +299,10 @@ public final class API: Sendable {
         var i = 1
 
 #if DEBUG
-        // DLog("\n-----\nHeaders:\n")
-        // httpResponse.allHeaderFields.forEach {
-        //     print($0.key, ":", $0.value)
-        // }
+        DLog("\n-----\nHeaders:\n")
+        for headerField in httpResponse.allHeaderFields {
+            print(headerField.key, ":", headerField.value)
+        }
         if let JSONString = String(data: data, encoding: .utf8) {
             DLog("\n----\nReq: \(request.url?.absoluteString ?? "nil")\nResponse: \(httpResponse.statusCode)\n-----\n\(JSONString)")
         }
