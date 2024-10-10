@@ -38,7 +38,7 @@ protocol TargetType {
     var baseURL: URL { get }
 
     /// The path to be appended to `baseURL` to form the full `URL`.
-    var path: String { get }
+    var path: String? { get }
 
     /// The HTTP method used in the request.
     var method: Method { get }
@@ -57,8 +57,6 @@ protocol TargetType {
 
     /// The timeout of the request.
     var retryCount: Int { get }
-
-    var isAbsolutePath: Bool { get }
 }
 
 extension TargetType {

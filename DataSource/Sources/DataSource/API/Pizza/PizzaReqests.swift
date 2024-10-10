@@ -57,15 +57,22 @@ enum PizzaReqests {
 }
 
 extension PizzaReqests: TargetType {
-    var baseURL: URL { _kBaseUrl }
+    var baseURL: URL {
+        switch self {
+        case let .downloadImage(url):
+            url
+        default:
+            _kBaseUrl
+        }
+    }
 
-    var path: String {
+    var path: String? {
         switch self {
         case .getIngredients: "ingredients"
         case .getDrinks: "drinks"
         case .getPizzas: "pizzas"
         case .checkout: "checkout"
-        case .downloadImage: ""
+        case .downloadImage: nil
         }
     }
 
@@ -74,15 +81,6 @@ extension PizzaReqests: TargetType {
         case .getIngredients, .getDrinks, .getPizzas: .get
         case .checkout: .post
         case .downloadImage: .get
-        }
-    }
-
-    var isAbsolutePath: Bool {
-        switch self {
-        case .getIngredients, .getDrinks, .getPizzas, .checkout:
-            false
-        case .downloadImage:
-            true
         }
     }
 

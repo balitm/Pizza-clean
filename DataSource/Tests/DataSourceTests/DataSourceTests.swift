@@ -1,4 +1,5 @@
 import XCTest
+import class UIKit.UIImage
 @testable import DataSource
 
 final class DataSourceTests: XCTestCase {
@@ -21,6 +22,13 @@ final class DataSourceTests: XCTestCase {
         let pizzas: DS.Pizzas = try! await API.shared.perform(request: PizzaReqests.getPizzas)
         debugPrint(#fileID, #line, pizzas)
         XCTAssertTrue(!pizzas.pizzas.isEmpty)
+
+        if let str = pizzas.pizzas[2].imageUrl, let url = URL(string: str) {
+            let data = try! await API.shared.perform(request: PizzaReqests.downloadImage(url: url))
+            debugPrint(#fileID, #line, "recved data: \(data.count)")
+            let image = UIImage(data: data)
+            debugPrint(#fileID, #line, "imge size:", image?.size ?? .zero)
+        }
 
         try! await API.shared.perform(request: PizzaReqests.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id]))
         debugPrint(#fileID, #line, pizzas)

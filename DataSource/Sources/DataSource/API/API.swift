@@ -299,10 +299,10 @@ public final class API: Sendable {
         var i = 1
 
 #if DEBUG
-        DLog("\n-----\nHeaders:\n")
-        for headerField in httpResponse.allHeaderFields {
-            print(headerField.key, ":", headerField.value)
-        }
+        // DLog("\n-----\nHeaders:\n")
+        // for headerField in httpResponse.allHeaderFields {
+        //     print(headerField.key, ":", headerField.value)
+        // }
         if let JSONString = String(data: data, encoding: .utf8) {
             DLog("\n----\nReq: \(request.url?.absoluteString ?? "nil")\nResponse: \(httpResponse.statusCode)\n-----\n\(JSONString)")
         }
