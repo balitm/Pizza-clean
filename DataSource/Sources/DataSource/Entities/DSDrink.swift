@@ -9,7 +9,7 @@
 import Foundation
 import Domain
 
-extension DataSource {
+public extension DataSource {
     typealias Drink = Domain.Drink
 }
 

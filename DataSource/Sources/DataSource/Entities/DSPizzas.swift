@@ -9,8 +9,8 @@
 import Foundation
 import Domain
 
-extension DataSource {
-    struct Pizzas: Codable {
+public extension DataSource {
+    struct Pizzas: Codable, Sendable {
         let pizzas: [Pizza]
         let basePrice: Double
 

@@ -6,48 +6,80 @@
 //
 
 import Foundation
+import Domain
+import class UIKit.UIImage
+
+#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
+public typealias Image = UIImage
+#endif
 
 private let _kBaseUrl = URL(string: "http://192.168.1.20:4010")!
 
-// final class APINetwork: Sendable {
-//     let api = API()
-//
-//     /// Singleton instance
-//     static let shared = APINetwork()
-//
-//     func getIngredients() -> AnyPublisher<[DS.Ingredient], API.ErrorType> {
-//         let url = api.createGetURL("5e91eda1172eb64389622c7a")
-//         return api.fetch(url)
-//     }
-//
-//     func getDrinks() -> AnyPublisher<[DS.Drink], API.ErrorType> {
-//         let url = api.createGetURL("5e91ef298e85c84370147b21")
-//         return api.fetch(url)
-//     }
-//
-//     func getPizzas() -> AnyPublisher<DS.Pizzas, API.ErrorType> {
-//         let url = api.createGetURL("5e91f1a0cc62be4369c2e408")
-//         return api.fetch(url)
-//     }
-//
-//     func checkout(pizzas: [DS.Pizza], drinks: [DS.Drink.ID]) -> AnyPublisher<Void, API.ErrorType> {
-//         let url = api.createPostURL(Checkout(pizzas: pizzas, drinks: drinks))
-//         return api.post(url)
-//     }
-//
-//     func downloadImage(url: URL) -> AnyPublisher<Image, API.ErrorType> {
-//         URLSession.shared.dataTaskPublisher(for: url)
-//             .tryMap {
-//                 guard let image = Image(data: $0.data) else {
-//                     throw API.ErrorType.processingFailed
-//                 }
-//                 return image
-//             }
-//             .mapError { _ in API.ErrorType.processingFailed }
-//             .eraseToAnyPublisher()
-//     }
-// }
+/// Protocol for request Pizza API.
+public protocol PizzaNetwork: Sendable {
+    func getIngredients() async throws -> [DataSource.Ingredient]
+    func getDrinks() async throws -> [DataSource.Drink]
+    func getPizzas() async throws -> DataSource.Pizzas
+    func checkout(pizzas: [DataSource.Pizza], drinks: [DataSource.Drink.ID]) async throws
+    func downloadImage(url: URL) async throws -> Image
+}
 
+/// Implementation of request Pizza API.
+final class APIPizzaNetwork: PizzaNetwork {
+    let api = API()
+
+    /// Singleton instance
+    static let shared = APIPizzaNetwork()
+
+    func getIngredients() async throws -> [DataSource.Ingredient] {
+        try await api.perform(request: PizzaReqests.getIngredients)
+    }
+
+    func getDrinks() async throws -> [DataSource.Drink] {
+        try await api.perform(request: PizzaReqests.getDrinks)
+    }
+
+    func getPizzas() async throws -> DataSource.Pizzas {
+        try await api.perform(request: PizzaReqests.getPizzas)
+    }
+
+    func checkout(pizzas: [DS.Pizza], drinks: [DS.Drink.ID]) async throws {
+        try await api.perform(request: PizzaReqests.checkout(pizzas: pizzas, drinks: drinks))
+    }
+
+    func downloadImage(url: URL) async throws -> Image {
+        let data = try await api.perform(request: PizzaReqests.downloadImage(url: url))
+        let image = UIImage(data: data)
+        guard let image else { throw APIError(kind: .processingFailed) }
+        return image
+    }
+}
+
+#if DEBUG
+/// Mock implementation of request Pizza API.
+final class MockPizzaNetwork: PizzaNetwork {
+    func getIngredients() async throws -> [DataSource.Ingredient] {
+        PizzaData.ingredients
+    }
+
+    func getDrinks() async throws -> [DataSource.Drink] {
+        PizzaData.drinks
+    }
+
+    func getPizzas() async throws -> DataSource.Pizzas {
+        PizzaData.pizzas
+    }
+
+    func checkout(pizzas _: [DS.Pizza], drinks _: [DS.Drink.ID]) async throws {}
+
+    func downloadImage(url: URL) async throws -> Image {
+        let image = try UIImage(data: Data(contentsOf: url))!
+        return image
+    }
+}
+#endif
+
+/// Request declarations of Pizza API.
 enum PizzaReqests {
     case getIngredients
     case getDrinks
@@ -56,6 +88,7 @@ enum PizzaReqests {
     case downloadImage(url: URL)
 }
 
+/// Request definitions of Pizza API
 extension PizzaReqests: TargetType {
     var baseURL: URL {
         switch self {
@@ -115,13 +148,5 @@ extension PizzaReqests: TargetType {
 
 private let _kFallbackToken =
     """
-    eyJ0eXAiOiJKV1QiLCJraWQiOiJpV3FKSTY3dUttVkpBQWdraEdSQW9NVGtObVk9IiwiYWxnIjoiUlMyNTYifQ\
-    .eyJhdF9oYXNoIjoiTlZNRWh0SzBtUUlVS21yc0NyNHktdyIsInN1YiI6IjA4ZTkxNmM4LTYwZmYtNDlhOS1hNGVkLTlmZTE3MmNhNW\
-    UxMyIsImF1ZGl0VHJhY2tpbmdJZCI6IjQzODQ5ZWEyLTZhMTEtNDcxNy05NzhhLTM2NmUxYzg2ZDQ0Zi0yNDY5NzEiLCJzdWJuYW1lIjoi\
-    MDhlOTE2YzgtNjBmZi00OWE5LWE0ZWQtOWZlMTcyY2E1ZTEzIiwiaXNzIjoiaHR0cHM6Ly9jaWFtLmRldi5hbGx1dmlhbC5jbG91ZC9hbS9\
-    vYXV0aDIiLCJ0b2tlbk5hbWUiOiJpZF90b2tlbiIsImF1ZCI6InBhc3N3b3JkZ3JhbnRjbGllbnQiLCJhenAiOiJwYXNzd29yZGdy\
-    YW50Y2xpZW50IiwiYXV0aF90aW1lIjoxNjY2MzYzMzczLCJyZWFsbSI6Ii8iLCJleHAiOjE2NjYzNjY5NzMsInRva2VuVHlwZSI6IkpXVFRva2VuIiwiaWF0IjoxNjY2MzYzMzczfQ\
-    .qxxgbdz65NVk4odKwY-VUKieNTYRpAkANKO0x6dY7YYA8V4CsCO4X3rHB1EUmrNBd61wkNH7sYONmt7UVxVy3f-Fa1s2sovwGzg5UbJvKyOgak4AF5-26Jy8vM8DI6nSKWLhlomVuZ\
-    jT2qanxHVEYS88ETbggUTFLPJqYRuj80Qpqy-yguduxVQJvaDalp6dHXyll8NQ\
-    4gMSsauJf0kJXwX19RPapVSvWC_HqJFq8P4bkFZ0Rmk3aBYf5KtEOB8sUWPi3gjnddT_N2EiiCanzobTi8llsZ2NAXQISHUwF8k0i2IsX89kP5ZuaVQIqy36tf1Iu7WhccfiC3fZxD-4SA
+    eyJ0eXAiOiJKV1QiLCJraWQiOiJpV3FKSTY3dUttVkpBQWdraEdSQW9NVGtObVk9IiwiYWxnIjoiUlMyNTYifQ
     """

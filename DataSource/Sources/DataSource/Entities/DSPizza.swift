@@ -9,8 +9,8 @@
 import Foundation
 import Domain
 
-extension DataSource {
-    struct Pizza: Codable {
+public extension DataSource {
+    struct Pizza: Codable, Sendable {
         let name: String
         let ingredients: [Ingredient.ID]
         let imageUrl: String?
