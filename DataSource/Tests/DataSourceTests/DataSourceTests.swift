@@ -1,27 +1,22 @@
-import XCTest
+import Testing
+import Foundation
 import class UIKit.UIImage
 @testable import DataSource
 
-final class DataSourceTests: XCTestCase {
-    // XCTest Documentation
-    // https://developer.apple.com/documentation/xctest
-
-    // Defining Test Cases and Test Methods
-    // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
-
-    func testNetworkGet() async throws {
+struct DataSourceTests {
+    @Test func networkGet() async throws {
         let drinksCase = PizzaReqests.getDrinks
         let drinks: [DS.Drink] = try! await API.shared.perform(request: drinksCase)
         debugPrint(#fileID, #line, drinks)
-        XCTAssertTrue(!drinks.isEmpty)
+        #expect(!drinks.isEmpty)
 
         let ingredients: [DS.Ingredient] = try! await API.shared.perform(request: PizzaReqests.getIngredients)
         debugPrint(#fileID, #line, ingredients)
-        XCTAssertTrue(!ingredients.isEmpty)
+        #expect(!ingredients.isEmpty)
 
         let pizzas: DS.Pizzas = try! await API.shared.perform(request: PizzaReqests.getPizzas)
         debugPrint(#fileID, #line, pizzas)
-        XCTAssertTrue(!pizzas.pizzas.isEmpty)
+        #expect(!pizzas.pizzas.isEmpty)
 
         if let str = pizzas.pizzas[2].imageUrl, let url = URL(string: str) {
             let data = try! await API.shared.perform(request: PizzaReqests.downloadImage(url: url))
@@ -32,6 +27,6 @@ final class DataSourceTests: XCTestCase {
 
         try! await API.shared.perform(request: PizzaReqests.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id]))
         debugPrint(#fileID, #line, pizzas)
-        XCTAssertTrue(!pizzas.pizzas.isEmpty)
+        #expect(!pizzas.pizzas.isEmpty)
     }
 }
