@@ -12,10 +12,10 @@ import Domain
 protocol DatabaseContainerProtocol {}
 
 extension DatabaseContainerProtocol {
-    static func initContainer() -> Container? {
-        dbQueue.sync {
+    static func initContainer() -> DS.Container? {
+        DS.dbQueue.sync {
             do {
-                return try Container()
+                return try DS.Container()
             } catch {
                 DLog("# DB init failed: ", error)
             }

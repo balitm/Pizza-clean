@@ -1,10 +1,11 @@
 import Testing
 import Foundation
+import Factory
 import class UIKit.UIImage
 @testable import DataSource
 
 struct DataSourceTests {
-    @Test func networkGet() async throws {
+    @Test func network() async throws {
         let drinksCase = PizzaReqests.getDrinks
         let drinks: [DS.Drink] = try! await API.shared.perform(request: drinksCase)
         debugPrint(#fileID, #line, drinks)
@@ -26,6 +27,41 @@ struct DataSourceTests {
         }
 
         try! await API.shared.perform(request: PizzaReqests.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id]))
+        debugPrint(#fileID, #line, pizzas)
+        #expect(!pizzas.pizzas.isEmpty)
+    }
+
+    @Test func publicAPI() async throws {
+        let api = Container.shared.pizzaAPI()
+
+        await testNetwork(api: api)
+    }
+
+    @Test func mockAPI() async throws {
+        let api = Container.shared.mockPizzaAPI()
+
+        await testNetwork(api: api)
+    }
+
+    func testNetwork(api: PizzaNetwork) async {
+        let drinks = try! await api.getDrinks()
+        debugPrint(#fileID, #line, drinks)
+        #expect(!drinks.isEmpty)
+
+        let ingredients = try! await api.getIngredients()
+        debugPrint(#fileID, #line, ingredients)
+        #expect(!ingredients.isEmpty)
+
+        let pizzas = try! await api.getPizzas()
+        debugPrint(#fileID, #line, pizzas)
+        #expect(!pizzas.pizzas.isEmpty)
+
+        if let str = pizzas.pizzas[2].imageUrl, let url = URL(string: str) {
+            let image = try! await api.downloadImage(url: url)
+            debugPrint(#fileID, #line, "imge size:", image.size)
+        }
+
+        try! await api.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id])
         debugPrint(#fileID, #line, pizzas)
         #expect(!pizzas.pizzas.isEmpty)
     }

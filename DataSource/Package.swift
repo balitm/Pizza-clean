@@ -16,7 +16,8 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/realm/realm-swift.git", .upToNextMajor(from: "10.48.1")),
+        .package(url: "https://github.com/realm/realm-swift.git", .upToNextMajor(from: "10.54.0")),
+        .package(url: "https://github.com/hmlongco/Factory.git", exact: .init(stringLiteral: "2.4.0")),
         .package(path: "../Domain"),
     ],
     targets: [
@@ -26,6 +27,7 @@ let package = Package(
             name: "DataSource",
             dependencies: [
                 .product(name: "RealmSwift", package: "realm-swift"),
+                .product(name: "Factory", package: "Factory"),
                 "Domain",
             ]),
         .testTarget(

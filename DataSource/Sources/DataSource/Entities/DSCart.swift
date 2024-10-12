@@ -9,7 +9,7 @@
 import Foundation
 import Domain
 
-extension DataSource {
+public extension DataSource {
     struct Cart: Codable {
         public let pizzas: [Pizza]
         public let drinks: [Drink.ID]
