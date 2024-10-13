@@ -9,13 +9,13 @@
 import Foundation
 
 extension DS.Pizza: Persistable {
-    init(managedObject: RMPizza) {
+    public init(managedObject: RMPizza) {
         name = managedObject.name
         imageUrl = managedObject.imageUrl
         ingredients = managedObject.ingredients.map { $0 }
     }
 
-    func managedObject() -> RMPizza {
+    public func managedObject() -> RMPizza {
         let object = RMPizza()
         object.name = name
         object.imageUrl = imageUrl ?? ""
@@ -25,12 +25,12 @@ extension DS.Pizza: Persistable {
 }
 
 extension DS.Cart: Persistable {
-    init(managedObject: RMCart) {
+    public init(managedObject: RMCart) {
         pizzas = managedObject.pizzas.map { DS.Pizza(managedObject: $0) }
         drinks = managedObject.drinks.map { DS.Drink.ID($0) }
     }
 
-    func managedObject() -> RMCart {
+    public func managedObject() -> RMCart {
         let object = RMCart()
         let pizzaObjects = pizzas.map { $0.managedObject() }
         object.pizzas.append(objectsIn: pizzaObjects)

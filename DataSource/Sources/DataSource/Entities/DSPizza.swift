@@ -11,29 +11,14 @@ import Domain
 
 public extension DataSource {
     struct Pizza: Codable, Sendable {
-        let name: String
-        let ingredients: [Ingredient.ID]
-        let imageUrl: String?
-    }
-}
+        public let name: String
+        public let ingredients: [Ingredient.ID]
+        public let imageUrl: String?
 
-extension DataSource.Pizza: DomainConvertibleType {
-    func asDomain(with ingredients: [DS.Ingredient], drinks _: [DS.Drink]) -> Domain.Pizza {
-        let related = self.ingredients.compactMap { id in
-            ingredients.first(where: { $0.id == id })
+        public init(name: String, ingredients: [Ingredient.ID], imageUrl: String? = nil) {
+            self.name = name
+            self.ingredients = ingredients
+            self.imageUrl = imageUrl
         }
-        let imageURL: URL? = {
-            guard let str = imageUrl else { return nil }
-            return URL(string: str)
-        }()
-        return Domain.Pizza(name: name, ingredients: related, imageUrl: imageURL)
-    }
-}
-
-extension Domain.Pizza: DSRepresentable {
-    func asDataSource() -> DataSource.Pizza {
-        DS.Pizza(name: name,
-                 ingredients: ingredients.map(\.id),
-                 imageUrl: imageUrl?.absoluteString)
     }
 }

@@ -10,8 +10,8 @@ import Foundation
 public struct ImageInfo: Sendable {
     public static let empty = ImageInfo(url: URL(string: "https://kildev.hu")!, offset: -1)
 
-    let url: URL
-    let offset: Int
+    public let url: URL
+    public let offset: Int
 
     public init(url: URL, offset: Int) {
         self.url = url

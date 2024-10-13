@@ -10,14 +10,14 @@ import Foundation
 import Domain
 import RealmSwift
 
-protocol Persistable {
+public protocol Persistable {
     associatedtype ManagedObject: Object
 
     init(managedObject: ManagedObject)
     func managedObject() -> ManagedObject
 }
 
-extension DataSource {
+public extension DataSource {
     static let dbQueue = DispatchQueue(label: "dbQueue",
                                        qos: .background,
                                        target: DispatchQueue.global(qos: .background))
@@ -42,24 +42,26 @@ extension DataSource {
     final class Container {
         private let _realm: Realm
 
-        convenience init() throws {
+        public convenience init() throws {
             let config = Realm.Configuration.defaultConfiguration
             DLog(">>> realm path: ", config.fileURL!.path)
             try self.init(realm: Realm(queue: dbQueue))
         }
 
-        init(realm: Realm) {
+#if DEBUG
+        public init(realm: Realm) {
             _realm = realm
         }
+#endif
 
-        func write(_ block: (WriteTransaction) -> Void) throws {
+        public func write(_ block: (WriteTransaction) -> Void) throws {
             let transaction = WriteTransaction(realm: _realm)
             try _realm.write {
                 block(transaction)
             }
         }
 
-        func values<T: Persistable>(_: T.Type) -> [T] {
+        public func values<T: Persistable>(_: T.Type) -> [T] {
             let results = _realm.objects(T.ManagedObject.self)
             return results.map { T(managedObject: $0) }
         }

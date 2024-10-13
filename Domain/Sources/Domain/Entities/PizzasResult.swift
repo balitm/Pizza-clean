@@ -13,7 +13,7 @@ public struct PizzasResult: Sendable {
 
     static let empty = PizzasResult(pizzas: Pizzas.empty, error: nil)
 
-    init(pizzas: Pizzas, error: APIError? = nil) {
+    public init(pizzas: Pizzas, error: APIError? = nil) {
         self.pizzas = pizzas
         self.error = error
     }

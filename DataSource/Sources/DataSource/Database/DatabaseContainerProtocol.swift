@@ -9,10 +9,10 @@
 import Foundation
 import Domain
 
-protocol DatabaseContainerProtocol {}
+public protocol DatabaseContainerProtocol {}
 
-extension DatabaseContainerProtocol {
-    static func initContainer() -> DS.Container? {
+public extension DatabaseContainerProtocol {
+    static func initContainer() -> DataSource.Container? {
         DS.dbQueue.sync {
             do {
                 return try DS.Container()
