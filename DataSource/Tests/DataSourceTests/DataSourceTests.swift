@@ -38,7 +38,10 @@ struct DataSourceTests {
     }
 
     @Test func mockAPI() async throws {
-        let api = Container.shared.mockPizzaAPI()
+        _ = Container.shared.pizzaAPI.register {
+            MockPizzaNetwork()
+        }.singleton
+        let api = Container.shared.pizzaAPI()
 
         await testNetwork(api: api)
     }

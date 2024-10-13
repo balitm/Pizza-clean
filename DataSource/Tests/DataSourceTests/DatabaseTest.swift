@@ -12,6 +12,10 @@ import Factory
 
 struct DatabaseTest {
     nonisolated(unsafe) static let realm: Realm = {
+        _ = Container.shared.pizzaAPI.register {
+            MockPizzaNetwork()
+        }.singleton
+
         var config = Realm.Configuration.defaultConfiguration
         debugPrint(#fileID, #line, "Realm file: \(config.fileURL!.path)")
         var fileURL = config.fileURL!
@@ -35,10 +39,11 @@ struct DatabaseTest {
     }()
 
     let container: DS.Container
-    let mock = Container.shared.mockPizzaAPI()
+    let mock: PizzaNetwork
 
     init() async throws {
         container = DS.Container(realm: Self.realm)
+        mock = Container.shared.pizzaAPI()
         debugPrint(#fileID, #line, "!!! test case init")
     }
 

@@ -12,10 +12,4 @@ public extension Container {
     var pizzaAPI: Factory<PizzaNetwork> {
         self { APIPizzaNetwork() }.singleton
     }
-
-#if DEBUG
-    var mockPizzaAPI: Factory<PizzaNetwork> {
-        self { MockPizzaNetwork() }.singleton
-    }
-#endif
 }
