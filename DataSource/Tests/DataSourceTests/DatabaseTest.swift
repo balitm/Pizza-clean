@@ -27,22 +27,26 @@ struct DatabaseTest {
         config.fileURL = fileURL
 
         do {
-            var realm: Realm!
+            nonisolated(unsafe) var realm: Realm!
             try DS.dbQueue.sync {
                 realm = try Realm(configuration: config, queue: DS.dbQueue)
+                _ = Container.shared.storage.register {
+                    DS.Storage(realm: realm)
+                }
             }
             debugPrint(#fileID, #line, "!!! test sequence init")
+
             return realm
         } catch {
             fatalError("test realm can't be inited:\n\(error)")
         }
     }()
 
-    let container: DS.Container
+    let container: DS.Storage
     let mock: PizzaNetwork
 
     init() async throws {
-        container = DS.Container(realm: Self.realm)
+        container = DS.Storage(realm: Self.realm)
         mock = Container.shared.pizzaAPI()
         debugPrint(#fileID, #line, "!!! test case init")
     }
@@ -91,7 +95,7 @@ struct DatabaseTest {
 }
 
 private func dbAction(
-    _ container: DS.Container?,
+    _ container: DS.Storage?,
     _ operation: (DS.WriteTransaction) -> Void = { _ in }
 ) -> Error? {
     do {

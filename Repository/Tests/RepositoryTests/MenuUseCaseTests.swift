@@ -5,44 +5,25 @@
 //  Created by Balázs Kilvády on 5/15/20.
 //
 
-import XCTest
-import Combine
+import Testing
+import Factory
 import Domain
 @testable import Repository
 
 class MenuUseCaseTests: NetworklessUseCaseTestsBase {
-    var service: MenuRepository!
+    var service: MenuUseCase!
 
-    override func setUp() {
-        super.setUp()
+    @Test func pizzas() async throws {
+        let pizzas = await service.pizzas()
 
-        service = MenuRepository(data: data)
+        DLog("all pizzas: ", pizzas.pizzas.count)
+        #expect(!pizzas.pizzas.isEmpty)
     }
 
-    func testPizzas() {
-        var c: AnyCancellable?
-
-        expectation { expectation in
-            c = service.pizzas()
-                .first()
-                .sink(receiveValue: {
-                    if let error = $0.error {
-                        XCTAssert(false, "Received error: \(error)")
-                    } else {
-                        let pizzas = $0.pizzas
-                        DLog("all pizzas: ", pizzas.pizzas.count)
-                        XCTAssertGreaterThan(pizzas.pizzas.count, 0)
-                    }
-                    expectation.fulfill()
-                })
-        }
-        c?.cancel()
-    }
-
-    func testAddPizza() {
-        addItemTest(addItem: { [useCase = service!, component = component!] in
-            let pizza = component.pizzas.pizzas.first!
-            return useCase.addToCart(pizza: pizza)
+    @Test func addPizza() async throws {
+        try await addItemTest(addItem: {
+            let pizza = await self.data.component.pizzas.pizzas.first!
+            try await self.service.addToCart(pizza: pizza)
         })
     }
 }

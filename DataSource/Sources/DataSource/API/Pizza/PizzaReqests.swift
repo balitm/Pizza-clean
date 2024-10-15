@@ -21,7 +21,14 @@ public protocol PizzaNetwork: Sendable {
     func getDrinks() async throws -> [DataSource.Drink]
     func getPizzas() async throws -> DataSource.Pizzas
     func checkout(pizzas: [DataSource.Pizza], drinks: [DataSource.Drink.ID]) async throws
+    func checkout(cart: DataSource.Cart) async throws
     func downloadImage(url: URL) async throws -> Image
+}
+
+public extension PizzaNetwork {
+    func checkout(cart: DataSource.Cart) async throws {
+        try await checkout(pizzas: cart.pizzas, drinks: cart.drinks)
+    }
 }
 
 /// Implementation of request Pizza API.
@@ -57,22 +64,24 @@ final class APIPizzaNetwork: PizzaNetwork {
 
 #if DEBUG
 /// Mock implementation of request Pizza API.
-final class MockPizzaNetwork: PizzaNetwork {
-    func getIngredients() async throws -> [DataSource.Ingredient] {
+public final class MockPizzaNetwork: PizzaNetwork {
+    public init() {}
+
+    public func getIngredients() async throws -> [DataSource.Ingredient] {
         PizzaData.ingredients
     }
 
-    func getDrinks() async throws -> [DataSource.Drink] {
+    public func getDrinks() async throws -> [DataSource.Drink] {
         PizzaData.drinks
     }
 
-    func getPizzas() async throws -> DataSource.Pizzas {
+    public func getPizzas() async throws -> DataSource.Pizzas {
         PizzaData.pizzas
     }
 
-    func checkout(pizzas _: [DS.Pizza], drinks _: [DS.Drink.ID]) async throws {}
+    public func checkout(pizzas _: [DataSource.Pizza], drinks _: [DataSource.Drink.ID]) async throws {}
 
-    func downloadImage(url: URL) async throws -> Image {
+    public func downloadImage(url: URL) async throws -> Image {
         let image = try UIImage(data: Data(contentsOf: url))!
         return image
     }

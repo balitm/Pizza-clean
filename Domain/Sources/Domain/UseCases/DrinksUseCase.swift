@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import Combine
 
 public protocol DrinksUseCase {
-    func drinks() -> AnyPublisher<[Drink], Never>
-    func addToCart(drinkIndex: Int) -> AnyPublisher<Void, Error>
+    func drinks() async throws -> [Drink]
+    func addToCart(drinkIndex: Int) async throws
 }

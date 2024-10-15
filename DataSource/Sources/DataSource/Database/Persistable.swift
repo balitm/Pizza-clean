@@ -39,13 +39,17 @@ public extension DataSource {
         }
     }
 
-    final class Container {
+    final class Storage: @unchecked Sendable {
         private let _realm: Realm
 
-        public convenience init() throws {
+        public init() {
             let config = Realm.Configuration.defaultConfiguration
             DLog(">>> realm path: ", config.fileURL!.path)
-            try self.init(realm: Realm(queue: dbQueue))
+            do {
+                _realm = try Realm(queue: dbQueue)
+            } catch {
+                _realm = try! Realm(queue: dbQueue)
+            }
         }
 
 #if DEBUG

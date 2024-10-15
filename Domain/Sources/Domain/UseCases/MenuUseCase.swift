@@ -9,12 +9,12 @@ import Foundation
 import Combine
 
 public protocol MenuUseCase {
-    /// Request to fetch a pizza image.
-    var imageInfo: AnySubscriber<ImageInfo, Never> { get }
+    /// Initialize components.
+    func initialize() async throws
 
     /// DataSource of available pizzas.
-    func pizzas() -> AnyPublisher<PizzasResult, Never>
+    func pizzas() async -> Pizzas
 
     /// Add a pizza to the shopping cart.
-    func addToCart(pizza: Pizza) -> AnyPublisher<Void, Error>
+    func addToCart(pizza: Pizza) async throws
 }

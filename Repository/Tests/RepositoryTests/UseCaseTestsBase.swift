@@ -5,54 +5,54 @@
 //  Created by Balázs Kilvády on 5/15/20.
 //
 
-import XCTest
+import Testing
 import RealmSwift
 import Domain
 import DataSource
-import Combine
+import Factory
 @testable import Repository
 
 typealias DS = DataSource
 
-class UseCaseTestsBase: XCTestCase {
-    nonisolated(unsafe) static var realm: Realm!
-    var container: DS.Container!
+class UseCaseTestsBase {
+    static let inited: Bool = {
+        _ = Container.shared.pizzaAPI.register {
+            MockPizzaNetwork()
+        }.singleton
 
-    override class func setUp() {
-        super.setUp()
-
-        var _realmConfig: Realm.Configuration {
-            var config = Realm.Configuration.defaultConfiguration
-            DLog("Realm file: \(config.fileURL!.path)")
-            var fileURL = config.fileURL!
-            fileURL.deleteLastPathComponent()
-            fileURL.deleteLastPathComponent()
-            fileURL.appendPathComponent("tmp")
-            fileURL.appendPathComponent("test.realm")
-            DLog("Realm file: \(fileURL.path)")
-            config.fileURL = fileURL
-            return config
-        }
+        var config = Realm.Configuration.defaultConfiguration
+        debugPrint(#fileID, #line, "Realm file: \(config.fileURL!.path)")
+        var fileURL = config.fileURL!
+        fileURL.deleteLastPathComponent()
+        fileURL.deleteLastPathComponent()
+        fileURL.appendPathComponent("tmp")
+        fileURL.appendPathComponent("test.realm")
+        debugPrint(#fileID, #line, "Realm file: \(fileURL.path)")
+        config.fileURL = fileURL
 
         do {
+            nonisolated(unsafe) var realm: Realm!
             try DS.dbQueue.sync {
-                let config = _realmConfig
                 realm = try Realm(configuration: config, queue: DS.dbQueue)
+                _ = Container.shared.storage.register {
+                    DS.Storage(realm: realm)
+                }
             }
+            debugPrint(#fileID, #line, "!!! test sequence init")
+
+            return true
         } catch {
             fatalError("test realm can't be inited:\n\(error)")
         }
-    }
+    }()
 
-    override func setUp() {
-        super.setUp()
+    let storage: DS.Storage
+    let mock: PizzaNetwork
 
-        container = DS.Container(realm: UseCaseTestsBase.realm)
-    }
-
-    func expectation(timeout: Double = 30.0, test: (XCTestExpectation) -> Void) {
-        let expectation = XCTestExpectation(description: "combine")
-        test(expectation)
-        wait(for: [expectation], timeout: timeout)
+    init() async throws {
+        _ = Self.inited
+        storage = Container.shared.storage()
+        mock = Container.shared.pizzaAPI()
+        debugPrint(#fileID, #line, "!!! test case init")
     }
 }

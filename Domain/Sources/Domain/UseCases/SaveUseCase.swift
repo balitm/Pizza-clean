@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import Combine
 
 public protocol SaveUseCase {
-    func saveCart() -> AnyPublisher<Void, Error>
+    func saveCart() async throws
 }

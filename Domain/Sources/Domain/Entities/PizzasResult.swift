@@ -7,6 +7,7 @@
 
 import Foundation
 
+// TODO: drop file
 public struct PizzasResult: Sendable {
     public let pizzas: Pizzas
     public let error: APIError?

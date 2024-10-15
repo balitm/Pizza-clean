@@ -5,40 +5,32 @@
 //  Created by Balázs Kilvády on 5/16/20.
 //
 
-import XCTest
-import Combine
+import Testing
 import Domain
+import Factory
 @testable import Repository
 
 class IngredientsUseCaseTests: NetworklessUseCaseTestsBase {
-    var service: IngredientsRepository!
+    var service: IngredientsUseCase!
 
-    override func setUp() {
-        super.setUp()
+    override init() async throws {
+        try await super.init()
 
+        service = Container.shared.ingredientsUseCase()
+    }
+
+    @Test func testIngredients() async throws {
         let pizza = component.pizzas.pizzas[0]
-        service = IngredientsRepository(data: data, pizza: Just(pizza).eraseToAnyPublisher())
+        var selection = await service.selectedIngredients(for: pizza)
+        selection = service.select(ingredientIndex: 0)
+        #expect(!selection.isEmpty)
+        selection = service.select(ingredientIndex: 1)
+        #expect(!selection.isEmpty)
     }
 
-    func testIngredients() {
-        let selected = CurrentValueSubject<Int, Never>(0)
-        var c: AnyCancellable?
-
-        expectation { expectation in
-            c = service.ingredients(selected: AnyPublisher(selected))
-                .sink(receiveValue: {
-                    XCTAssertGreaterThan($0.count, 0)
-                })
-
-            selected.send(1)
-            expectation.fulfill()
-        }
-        c?.cancel()
-    }
-
-    func testAddPizza() {
-        addItemTest(addItem: { [service = service!] in
-            service.addToCart()
+    @Test func addPizza() async throws {
+        try await addItemTest(addItem: { [service = service!] in
+            await service.addToCart()
         })
     }
 }

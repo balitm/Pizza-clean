@@ -5,43 +5,35 @@
 //  Created by Balázs Kilvády on 5/20/20.
 //
 
-import XCTest
-import Combine
+import Testing
 import Domain
+import Factory
 @testable import Repository
 
 class DrinksUseCaseTests: NetworklessUseCaseTestsBase {
     var service: DrinksUseCase!
 
-    override func setUp() {
-        super.setUp()
+    override init() async throws {
+        try await super.init()
 
-        service = DrinksRepository(data: data)
+        service = Container.shared.drinksUseCase()
     }
 
-    func testDrinks() {
-        var c: AnyCancellable?
-
-        expectation { expectation in
-            c = service.drinks()
-                .sink {
-                    if case Subscribers.Completion<Never>.finished = $0 {
-                        expectation.fulfill()
-                    }
-                } receiveValue: {
-                    XCTAssertGreaterThan($0.count, 0)
-                    expectation.fulfill()
-                }
-        }
-        c?.cancel()
+    @Test func drinks() async throws {
+        let drinks = try await service.drinks()
+        #expect(!drinks.isEmpty)
     }
 
-    func testAddDrink() {
-        addItemTest { [service = service!] in
-            service.addToCart(drinkIndex: 0)
+    @Test func addDrink() async throws {
+        try await addItemTest {
+            try await self.service.addToCart(drinkIndex: 0)
         } test: { [unowned data = data!] in
-            XCTAssertEqual($0.drinks.count, 1)
-            XCTAssertEqual($0.drinks[0].id, try? data.component.get().drinks[0].id)
+            #expect($0.drinks.count == 1)
+            let handler = await data.cartHandler
+            let cart = await handler.cart
+            let id = cart.drinks[0].id
+
+            #expect($0.drinks[0].id == id)
         }
     }
 }

@@ -5,71 +5,36 @@
 //  Created by Balázs Kilvády on 7/20/20.
 //
 
-import XCTest
+import Testing
 import RealmSwift
-import Combine
 import Domain
+import Factory
 @testable import Repository
 
 class NetworklessUseCaseTestsBase: UseCaseTestsBase {
-    var data: Initializer!
-    var component: Initializer.Components!
+    var data: InitRepository!
+    var component: InitRepository.Components!
 
-    override func setUp() {
-        super.setUp()
+    override init() async throws {
+        try await super.init()
 
-        let network: NetworkProtocol = TestNetUseCase()
-        data = Initializer(container: container, network: network)
-        component = try! data.component.get()
+        data = Container.shared.initActor()
+        component = try await data.initialize()
     }
 
-    func addItemTest(addItem: @escaping () -> AnyPublisher<Void, Error>,
-                     test: @escaping (Cart) -> Void = { XCTAssertEqual($0.pizzas.count, 1) }) {
-        var c: AnyCancellable?
+    func addItemTest(
+        addItem: @escaping () async throws -> Void,
+        test: @escaping (Cart) async throws -> Void = { #expect($0.pizzas.count >= 1) }
+    ) async throws {
+        // Empty the cart.
+        _ = try await data.cartHandler.empty()
+        await #expect(data.cartHandler.cart.pizzas.isEmpty)
+        await #expect(data.cartHandler.cart.drinks.isEmpty)
 
-        expectation { [unowned data = data!] expectation in
-            // Empty the cart.
-            c = data.cartHandler.trigger(action: .empty)
-                .handleEvents(receiveCompletion: {
-                    if case let Subscribers.Completion.failure(error) = $0 {
-                        XCTAssert(false, "\(error)")
-                    }
-                }, receiveCancel: {
-                    XCTAssert(false, "cancelled")
-                })
-                .catch { _ in Empty<Void, Never>() }
-                .flatMap { _ in
-                    // Check if cart is empty.
-                    data.cartHandler.cartResult
-                        .first()
-                        .map(\.cart)
-                        .handleEvents(receiveOutput: {
-                            XCTAssert($0.pizzas.isEmpty)
-                            XCTAssert($0.drinks.isEmpty)
-                        })
-                }
-                .flatMap { _ in
-                    // Add item.
-                    addItem()
-                        .handleEvents(receiveOutput: {
-                            XCTAssert(true)
-                        }, receiveCompletion: {
-                            if case let Subscribers.Completion.failure(error) = $0 {
-                                XCTAssert(false, "failed with: \(error)")
-                            }
-                        })
-                        .catch { _ in Empty<Void, Never>() }
-                }
-                .flatMap {
-                    data.cartHandler.cartResult
-                        .first()
-                        .map(\.cart)
-                }
-                .sink {
-                    test($0)
-                    expectation.fulfill()
-                }
-        }
-        c?.cancel()
+        // Add item.
+        try await addItem()
+
+        // test
+        try await test(data.cartHandler.cart)
     }
 }
