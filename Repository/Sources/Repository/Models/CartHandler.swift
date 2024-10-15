@@ -52,9 +52,11 @@ actor CartHandler {
 
 private func _dbAction(_ container: DataSource.Storage,
                        _ operation: (DataSource.WriteTransaction) -> Void = { _ in }) throws {
-    try container.write {
-        $0.delete(DataSource.Pizza.self)
-        $0.delete(DataSource.Cart.self)
-        operation($0)
+    try DataSource.dbQueue.sync {
+        try container.write {
+            $0.delete(DataSource.Pizza.self)
+            $0.delete(DataSource.Cart.self)
+            operation($0)
+        }
     }
 }

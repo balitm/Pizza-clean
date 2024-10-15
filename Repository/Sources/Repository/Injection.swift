@@ -16,7 +16,7 @@ extension Container {
 }
 
 public extension Container {
-    var menuRepository: Factory<MenuUseCase> {
+    var menuUseCase: Factory<MenuUseCase> {
         self { MenuRepository() }
     }
 

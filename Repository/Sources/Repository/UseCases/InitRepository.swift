@@ -31,7 +31,9 @@ actor InitRepository {
 
         // Init cart.
         // DLog("###### init cart. #########")
-        let dsCart = storage.values(DataSource.Cart.self).first ?? DataSource.Cart(pizzas: [], drinks: [])
+        let dsCart = DataSource.dbQueue.sync {
+            storage.values(DataSource.Cart.self).first ?? DataSource.Cart(pizzas: [], drinks: [])
+        }
         var cart = dsCart.asDomain(with: component.ingredients, drinks: component.drinks)
         cart.basePrice = component.pizzas.basePrice
         _ = await self.cartHandler.start(with: cart)

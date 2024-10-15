@@ -12,7 +12,7 @@ import Domain
 import DataSource
 @testable import Repository
 
-class CartUseCaseTests: NetworklessUseCaseTestsBase {
+@Suite(.serialized) class CartUseCaseTests: NetworklessUseCaseTestsBase {
     var service: CartUseCase!
 
     override init() async throws {
@@ -68,7 +68,7 @@ class CartUseCaseTests: NetworklessUseCaseTestsBase {
 
         total = await service.total()
 
-        var cart = await data.cartHandler.cart
+        let cart = await data.cartHandler.cart
         let pp = cart.pizzas.reduce(0.0) {
             $0 + $1.ingredients.reduce(cart.basePrice) {
                 $0 + $1.price
@@ -82,12 +82,15 @@ class CartUseCaseTests: NetworklessUseCaseTestsBase {
 
         let items = await service.items()
         let t = items.reduce(0.0) { $0 + $1.price }
+        DLog(l: .trace, "items's sum: \(t)")
+        #expect(t == total)
     }
 
     @Test func checkout() async throws {
         let rcart = try await service.checkout()
-
         let cart = await data.cartHandler.cart
+
+        DLog(l: .trace, "after checkout: \(rcart.pizzas.count) - \(cart.pizzas.count)")
         #expect(cart.pizzas.isEmpty)
         #expect(cart.drinks.isEmpty)
         #expect(rcart.pizzas.isEmpty)

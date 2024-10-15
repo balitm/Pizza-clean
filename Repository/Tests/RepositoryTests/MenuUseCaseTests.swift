@@ -13,6 +13,12 @@ import Domain
 class MenuUseCaseTests: NetworklessUseCaseTestsBase {
     var service: MenuUseCase!
 
+    override init() async throws {
+        try await super.init()
+
+        service = Container.shared.menuUseCase()
+    }
+
     @Test func pizzas() async throws {
         let pizzas = await service.pizzas()
 
