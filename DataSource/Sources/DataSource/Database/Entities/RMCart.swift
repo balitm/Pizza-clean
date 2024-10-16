@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-final class RMCart: Object {
+public final class RMCart: Object {
     let pizzas = List<RMPizza>()
     let drinks = List<Int64>()
 }

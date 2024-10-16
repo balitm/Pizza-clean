@@ -28,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		29AFAD982CBADCF000D87FC2 /* Repository */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Repository; sourceTree = "<group>"; };
 		29D3C0C52CB044FF00BD1D6C /* Pizza.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pizza.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29D3C0D52CB0450000BD1D6C /* PizzaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PizzaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		29D3C0DF2CB0450000BD1D6C /* PizzaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PizzaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +84,7 @@
 			children = (
 				29ED04C12CB3EA2400680F0E /* Domain */,
 				29DE63B52CB053A900EDF5AC /* DataSource */,
+				29AFAD982CBADCF000D87FC2 /* Repository */,
 				29D3C0C72CB044FF00BD1D6C /* Pizza */,
 				29D3C0D82CB0450000BD1D6C /* PizzaTests */,
 				29D3C0E22CB0450000BD1D6C /* PizzaUITests */,

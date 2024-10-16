@@ -45,6 +45,7 @@ public struct Cart: Sendable {
     }
 
     public mutating func remove(at index: Int) {
+        guard index >= 0 && index < _ids.count else { return }
         _ids.remove(at: index)
         let count = pizzas.count
         if index < count {

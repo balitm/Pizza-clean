@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-final class RMPizza: Object {
+public final class RMPizza: Object {
     @Persisted var name = ""
     let ingredients = List<Int64>()
     @Persisted var imageUrl = ""

@@ -1,29 +1,71 @@
-import XCTest
+import Testing
+import Foundation
+import Factory
+import class UIKit.UIImage
 @testable import DataSource
 
-final class DataSourceTests: XCTestCase {
-    // XCTest Documentation
-    // https://developer.apple.com/documentation/xctest
-
-    // Defining Test Cases and Test Methods
-    // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
-
-    func testNetwork() async throws {
-        let drinksCase = Network.getDrinks
+struct DataSourceTests {
+    @Test func network() async throws {
+        let drinksCase = PizzaReqests.getDrinks
         let drinks: [DS.Drink] = try! await API.shared.perform(request: drinksCase)
         debugPrint(#fileID, #line, drinks)
-        XCTAssertTrue(!drinks.isEmpty)
+        #expect(!drinks.isEmpty)
 
-        let ingredients: [DS.Ingredient] = try! await API.shared.perform(request: Network.getIngredients)
+        let ingredients: [DS.Ingredient] = try! await API.shared.perform(request: PizzaReqests.getIngredients)
         debugPrint(#fileID, #line, ingredients)
-        XCTAssertTrue(!ingredients.isEmpty)
+        #expect(!ingredients.isEmpty)
 
-        let pizzas: DS.Pizzas = try! await API.shared.perform(request: Network.getPizzas)
+        let pizzas: DS.Pizzas = try! await API.shared.perform(request: PizzaReqests.getPizzas)
         debugPrint(#fileID, #line, pizzas)
-        XCTAssertTrue(!pizzas.pizzas.isEmpty)
+        #expect(!pizzas.pizzas.isEmpty)
 
-        try! await API.shared.perform(request: Network.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id]))
+        if let str = pizzas.pizzas[2].imageUrl, let url = URL(string: str) {
+            let data = try! await API.shared.perform(request: PizzaReqests.downloadImage(url: url))
+            debugPrint(#fileID, #line, "recved data: \(data.count)")
+            let image = UIImage(data: data)
+            debugPrint(#fileID, #line, "imge size:", image?.size ?? .zero)
+        }
+
+        try! await API.shared.perform(request: PizzaReqests.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id]))
         debugPrint(#fileID, #line, pizzas)
-        XCTAssertTrue(!pizzas.pizzas.isEmpty)
+        #expect(!pizzas.pizzas.isEmpty)
+    }
+
+    @Test func publicAPI() async throws {
+        let api = Container.shared.pizzaAPI()
+
+        await testNetwork(api: api)
+    }
+
+    @Test func mockAPI() async throws {
+        _ = Container.shared.pizzaAPI.register {
+            MockPizzaNetwork()
+        }.singleton
+        let api = Container.shared.pizzaAPI()
+
+        await testNetwork(api: api)
+    }
+
+    func testNetwork(api: PizzaNetwork) async {
+        let drinks = try! await api.getDrinks()
+        debugPrint(#fileID, #line, drinks)
+        #expect(!drinks.isEmpty)
+
+        let ingredients = try! await api.getIngredients()
+        debugPrint(#fileID, #line, ingredients)
+        #expect(!ingredients.isEmpty)
+
+        let pizzas = try! await api.getPizzas()
+        debugPrint(#fileID, #line, pizzas)
+        #expect(!pizzas.pizzas.isEmpty)
+
+        if let str = pizzas.pizzas[2].imageUrl, let url = URL(string: str) {
+            let image = try! await api.downloadImage(url: url)
+            debugPrint(#fileID, #line, "imge size:", image.size)
+        }
+
+        try! await api.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id])
+        debugPrint(#fileID, #line, pizzas)
+        #expect(!pizzas.pizzas.isEmpty)
     }
 }
