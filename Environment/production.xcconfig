@@ -1,0 +1,12 @@
+//
+//  production.xcconfig
+//  Pizza
+//
+//  Created by Balázs Kilvády on 2024. 10. 16..
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+APP_FLAVOR = production
+PIZZA_API_URL = http:/$()/192.168.1.20:4010
