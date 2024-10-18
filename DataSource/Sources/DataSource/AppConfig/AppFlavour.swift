@@ -9,7 +9,7 @@ import Foundation
 
 public enum AppFlavour: String, Codable, Sendable {
     case production
-    case staging
+    case `internal`
     case develompent
     case testing // no xcconfig; used in package testing
 }
