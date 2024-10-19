@@ -12,16 +12,17 @@ import Factory
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            MenuListView()
+            // Image(systemName: "globe")
+            //     .imageScale(.large)
+            //     .foregroundStyle(Color.tint)
+            // Text("Hello, world!")
         }
         .padding()
         .task {
-            let api = Container.shared.pizzaAPI()
-            let drinks = try! await api.getDrinks()
-            debugPrint(#fileID, #line, drinks)
+            // let api = Container.shared.pizzaAPI()
+            // let drinks = try! await api.getDrinks()
+            // debugPrint(#fileID, #line, drinks)
         }
     }
 }

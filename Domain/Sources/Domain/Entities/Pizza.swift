@@ -10,15 +10,13 @@ import Foundation
 import Combine
 import class UIKit.UIImage
 
-public typealias Image = UIImage
-
 public struct Pizza: Sendable {
     public let name: String
     public let ingredients: [Ingredient]
     public let imageUrl: URL?
-    public let image: Image?
+    public let image: UIImage?
 
-    public init(copy other: Pizza, with ingredients: [Ingredient]? = nil, image: Image? = nil) {
+    public init(copy other: Pizza, with ingredients: [Ingredient]? = nil, image: UIImage? = nil) {
         name = other.name
         imageUrl = other.imageUrl
         self.ingredients = ingredients ?? other.ingredients
