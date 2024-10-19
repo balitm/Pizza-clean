@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>APP_FLAVOR</key>
+	<string>$(APP_FLAVOR)</string>
+	<key>PIZZA_API_URL</key>
+	<string>$(PIZZA_API_URL)</string>
+</dict>
+</plist>

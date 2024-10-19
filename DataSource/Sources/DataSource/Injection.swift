@@ -16,4 +16,18 @@ public extension Container {
     var storage: Factory<DataSource.Storage> {
         self { DataSource.Storage() }.singleton
     }
+
+    var appConfig: Factory<AppConfigProtocol> {
+        self { AppConfig() }.singleton
+    }
+}
+
+extension Container: @retroactive AutoRegistering {
+    public func autoRegister() {
+#if DEBUG
+        Container.shared.pizzaAPI.onPreview { MockPizzaNetwork() }
+        Container.shared.pizzaAPI.onTest { MockPizzaNetwork() }
+        Container.shared.appConfig.onTest { TestingAppConfig() }
+#endif
+    }
 }

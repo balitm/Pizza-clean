@@ -46,7 +46,9 @@ public extension DataSource {
             let config = Realm.Configuration.defaultConfiguration
             DLog(">>> realm path: ", config.fileURL!.path)
             do {
-                _realm = try Realm(queue: dbQueue)
+                _realm = try dbQueue.sync {
+                    try Realm(queue: dbQueue)
+                }
             } catch {
                 _realm = try! Realm(queue: dbQueue)
             }

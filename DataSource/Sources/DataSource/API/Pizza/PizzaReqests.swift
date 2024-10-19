@@ -7,13 +7,10 @@
 
 import Foundation
 import Domain
+import Factory
 import class UIKit.UIImage
 
-#if os(iOS) || os(tvOS) || targetEnvironment(macCatalyst)
 public typealias Image = UIImage
-#endif
-
-private let _kBaseUrl = URL(string: "http://192.168.1.20:4010")!
 
 /// Protocol for request Pizza API.
 public protocol PizzaNetwork: Sendable {
@@ -102,9 +99,10 @@ extension PizzaReqests: TargetType {
     var baseURL: URL {
         switch self {
         case let .downloadImage(url):
-            url
+            return url
         default:
-            _kBaseUrl
+            let string = Container.shared.appConfig().pizzaBaseURL
+            return URL(string: string)!
         }
     }
 

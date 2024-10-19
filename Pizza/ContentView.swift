@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import DataSource
+import Factory
 
 struct ContentView: View {
     var body: some View {
@@ -16,9 +18,16 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .task {
+            let api = Container.shared.pizzaAPI()
+            let drinks = try! await api.getDrinks()
+            debugPrint(#fileID, #line, drinks)
+        }
     }
 }
 
+#if DEBUG
 #Preview {
     ContentView()
 }
+#endif
