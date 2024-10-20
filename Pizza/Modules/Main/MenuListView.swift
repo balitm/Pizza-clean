@@ -12,6 +12,7 @@ import Domain
 struct MenuListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
     @StateObject private var viewModel = MenuListViewModel()
+    @StateObject private var router = MainRouter()
 
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.accent]
@@ -19,7 +20,9 @@ struct MenuListView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        // let _ = Self._printChanges()
+
+        NavigationStack(path: $router.path) {
             List(viewModel.listData) { rowVM in
                 MenuRow(viewModel: rowVM)
                     .listRowInsets(.init())
@@ -34,20 +37,13 @@ struct MenuListView: View {
             //     EmptyView()
             // }
             // .buttonStyle(PlainButtonStyle())
-            .listStyle(.plain)
-            .navigationTitle(Text("NENNO'S PIZZA"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Image(.icCartNavbar)
-                    // HStack {
-                    //     Text("")
-                    //     NavigationLink(
-                    //         destination:
-                    //         resolver.resolve(CartListView.self)
-                    //     ) {
-                    //         Image("ic_cart_navbar")
-                    //     }
-                    // }
+                    Button {
+                        router.push(.cart)
+                    } label: {
+                        Image(.icCartNavbar)
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Image(systemName: "plus")
@@ -66,20 +62,26 @@ struct MenuListView: View {
                     // }
                 }
             }
-            // .sheet(isPresented: $_viewModel.showAdded) {
-            //     AddedView()
-            // }
+            .listStyle(.plain)
+            .navigationDestination(for: MainPath.self) {
+                router.view(for: $0)
+            }
+            .navigationTitle(Text("NENNO'S PIZZA"))
         }
-        .alertModifier(viewModel, alertHelper)
+        .alertModifier(viewModel, alertHelper, router)
         .task {
             try? await viewModel.loadPizzas()
         }
+        .environmentObject(router)
     }
 }
 
 private extension View {
-    func alertModifier(_ viewModel: MenuListViewModel,
-                       _ alertHelper: AlertHelper) -> some View {
+    func alertModifier(
+        _ viewModel: MenuListViewModel,
+        _ alertHelper: AlertHelper,
+        _ router: MainRouter
+    ) -> some View {
         onReceive(viewModel.alertKind) { kind in
             switch kind {
             case .none:
@@ -91,8 +93,10 @@ private extension View {
                     isTouchOutside: true,
                     alignment: .top
                 ) {
-                    AddNotification()
-                        .transition(.move(edge: .top))
+                    AddNotification {
+                        router.push(.cart)
+                    }
+                    .transition(.move(edge: .top))
                 }
             }
         }

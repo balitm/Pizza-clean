@@ -36,6 +36,7 @@ final class AddNotificationModel: ObservableObject {
 struct AddNotification: View {
     @EnvironmentObject private var alertHelper: AlertHelper
     @StateObject private var addNotificationModel = AddNotificationModel()
+    var onNavigate: () -> Void
 
     var body: some View {
         Text("ADDED TO CART")
@@ -56,6 +57,7 @@ struct AddNotification: View {
             }
             .onDisappear {
                 addNotificationModel.cancel()
+                onNavigate()
             }
     }
 
@@ -66,7 +68,7 @@ struct AddNotification: View {
 
 #if DEBUG
 #Preview {
-    AddNotification()
+    AddNotification {}
         .environmentObject(AlertHelper())
 }
 #endif
