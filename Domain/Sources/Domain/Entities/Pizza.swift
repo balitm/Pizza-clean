@@ -7,27 +7,22 @@
 //
 
 import Foundation
-import Combine
-import class UIKit.UIImage
 
 public struct Pizza: Sendable {
     public let name: String
     public let ingredients: [Ingredient]
     public let imageUrl: URL?
-    public let image: UIImage?
 
-    public init(copy other: Pizza, with ingredients: [Ingredient]? = nil, image: UIImage? = nil) {
+    public init(copy other: Pizza, with ingredients: [Ingredient]? = nil) {
         name = other.name
         imageUrl = other.imageUrl
         self.ingredients = ingredients ?? other.ingredients
-        self.image = image ?? other.image
     }
 
     public init() {
         name = "Custom"
         imageUrl = nil
         ingredients = []
-        image = nil
     }
 
     public init(
@@ -38,7 +33,6 @@ public struct Pizza: Sendable {
         self.name = name
         self.ingredients = ingredients
         self.imageUrl = imageUrl
-        image = nil
     }
 
     public func price(from basePrice: Double) -> Double {
