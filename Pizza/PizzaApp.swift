@@ -12,6 +12,7 @@ struct PizzaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(AlertHelper())
         }
     }
 }

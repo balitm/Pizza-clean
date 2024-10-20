@@ -6,23 +6,11 @@
 //
 
 import SwiftUI
-import DataSource
-import Factory
 
 struct ContentView: View {
     var body: some View {
-        VStack {
+        AlertHelperView {
             MenuListView()
-            // Image(systemName: "globe")
-            //     .imageScale(.large)
-            //     .foregroundStyle(Color.tint)
-            // Text("Hello, world!")
-        }
-        .padding()
-        .task {
-            // let api = Container.shared.pizzaAPI()
-            // let drinks = try! await api.getDrinks()
-            // debugPrint(#fileID, #line, drinks)
         }
     }
 }

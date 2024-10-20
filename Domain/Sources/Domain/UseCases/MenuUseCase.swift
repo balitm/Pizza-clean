@@ -16,5 +16,5 @@ public protocol MenuUseCase {
     func pizzas() async -> Pizzas
 
     /// Add a pizza to the shopping cart.
-    func addToCart(pizza: Pizza) async throws
+    func addToCart(pizza: Pizza) async
 }
