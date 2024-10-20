@@ -79,10 +79,10 @@ import Factory
                 if let pizzas {
                     MenuRow(viewModel: MenuRowViewModel(index: 0,
                                                         basePrice: pizzas.basePrice,
-                                                        pizza: pizzas.pizzas[0]))
+                                                        pizza: pizzas.pizzas[0]) { _ in })
                     MenuRow(viewModel: MenuRowViewModel(index: 1,
                                                         basePrice: pizzas.basePrice,
-                                                        pizza: pizzas.pizzas[1]))
+                                                        pizza: pizzas.pizzas[1]) { _ in })
                         .environment(\.colorScheme, .dark)
                 }
             }

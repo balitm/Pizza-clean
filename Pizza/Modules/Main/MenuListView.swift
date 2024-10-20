@@ -10,6 +10,7 @@ import SwiftUI
 import Domain
 
 struct MenuListView: View {
+    @EnvironmentObject private var alertHelper: AlertHelper
     @StateObject private var viewModel = MenuListViewModel()
 
     init() {
@@ -69,13 +70,38 @@ struct MenuListView: View {
             //     AddedView()
             // }
         }
-        .accentColor(.accent)
+        .alertModifier(viewModel, alertHelper)
         .task {
             try? await viewModel.loadPizzas()
         }
     }
 }
 
+private extension View {
+    func alertModifier(_ viewModel: MenuListViewModel,
+                       _ alertHelper: AlertHelper) -> some View {
+        onReceive(viewModel.alertKind) { kind in
+            switch kind {
+            case .none:
+                alertHelper.hideAlert()
+            case .progress:
+                alertHelper.showProgress()
+            case .added:
+                alertHelper.showAlert(
+                    isTouchOutside: true,
+                    alignment: .top
+                ) {
+                    AddNotification()
+                        .transition(.move(edge: .top))
+                }
+            }
+        }
+    }
+}
+
+#if DEBUG
 #Preview {
     MenuListView()
+        .environmentObject(AlertHelper())
 }
+#endif

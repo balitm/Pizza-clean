@@ -8,31 +8,30 @@
 
 import Foundation
 import Domain
-import struct SwiftUI.Image
 
-final class MenuRowViewModel: ObservableObject {
+final class MenuRowViewModel {
     let index: Int
     let nameText: String
     let ingredientsText: String
     let priceText: String
-    let image: Image?
     let url: URL?
+    let onTapPrice: (Int) -> Void
 
-    init(index: Int, basePrice: Double, pizza: Pizza) {
+    init(index: Int, basePrice: Double, pizza: Pizza, onTapPrice: @escaping (Int) -> Void) {
         self.index = index
         nameText = pizza.name
         let price = pizza.price(from: basePrice)
         priceText = format(price: price)
         ingredientsText = pizza.ingredientNames()
-        image = pizza.image.map { Image(uiImage: $0) }
         url = pizza.imageUrl
+        self.onTapPrice = onTapPrice
     }
 
     func addToCart() {
-        // tap = index
+        onTapPrice(index)
     }
 }
 
 extension MenuRowViewModel: Identifiable {
-    var id: Int { index + (image != nil ? 0x10 : 0) }
+    var id: Int { index }
 }

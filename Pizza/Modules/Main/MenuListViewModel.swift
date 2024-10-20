@@ -9,57 +9,55 @@
 import Foundation
 import Domain
 import Factory
-
-// import struct SwiftUI.Image
+import Combine
 
 final class MenuListViewModel: ObservableObject {
+    enum AlertKind {
+        case progress, none, added
+    }
+
     // Output
     @Published var listData = [MenuRowViewModel]()
-    @Published var showAdded = false
+    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
+    private let _alertKind = PassthroughSubject<AlertKind, Never>()
+
+    private var pizzas: Pizzas?
 
     @Injected(\.menuUseCase) private var service
 
     init() {
         DLog(">>> init: ", type(of: self))
+    }
 
-        // Buy tapped.
-        // let cartEvents = $listData
-        //     .map { vms in
-        //         vms.map {
-        //             $0.$tap
-        //                 .dropFirst()
-        //         }
-        //     }
-        //     .flatMap {
-        //         Publishers.MergeMany($0)
-        //     }
+    @MainActor
+    func addPizza(_: Int) {
+        guard let pizzas else { return }
 
-        // Update cart on add events.
-        // cartEvents
-        //     .flatMap { [cachedPizzas = _cachedPizzas] index in
-        //         cachedPizzas
-        //             .first()
-        //             .map { (index: index, pizzas: $0) }
-        //     }
-        //     .flatMap { index, pizzas in
-        //         service.addToCart(pizza: pizzas.pizzas[index])
-        //             .catch { _ in Empty<Void, Never>() }
-        //             .map { true }
-        //     }
-        //     .assign(to: \.showAdded, on: self)
-        //     .store(in: &_bag)
+        Task {
+            // let pizza = pizzas.pizzas[index]
+            // await service.addToCart(pizza: pizza)
+            _alertKind.send(.added)
+        }
     }
 
     /// Load pizza data.
+    @MainActor
     func loadPizzas() async throws {
+        _alertKind.send(.progress)
+
         try await service.initialize()
         let pizzas = await service.pizzas()
+        self.pizzas = pizzas
 
         let basePrice = pizzas.basePrice
         let vms = pizzas.pizzas.enumerated().map {
-            MenuRowViewModel(index: $0.offset, basePrice: basePrice, pizza: $0.element)
+            MenuRowViewModel(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
         }
         DLog(l: .trace, "############## update pizza vms. #########")
+
+        try? await Task.sleep(nanoseconds: 3 * kSleepSecond)
+
         listData = vms
+        _alertKind.send(.none)
     }
 }
