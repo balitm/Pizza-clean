@@ -66,7 +66,7 @@ struct MenuListView: View {
             .navigationDestination(for: MainPath.self) {
                 router.view(for: $0)
             }
-            .navigationTitle(Text("NENNO'S PIZZA"))
+            .navigationTitle(.localizable(.mainTitle))
         }
         .alertModifier(viewModel, alertHelper, router)
         .task {

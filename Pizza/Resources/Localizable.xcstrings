@@ -1,11 +1,28 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "ADDED TO CART" : {
-
+    "addedNotification" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ADDED TO CART"
+          }
+        }
+      }
     },
-    "NENNO'S PIZZA" : {
-
+    "mainTitle" : {
+      "comment" : "Main screen's title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NENNO'S PIZZA"
+          }
+        }
+      }
     },
     "No net" : {
 

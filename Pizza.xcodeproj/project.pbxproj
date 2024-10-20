@@ -157,6 +157,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				29F765B42CC5602B00762B25 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				29D3C0C72CB044FF00BD1D6C /* Pizza */,
@@ -249,6 +250,9 @@
 			);
 			mainGroup = 29D3C0BC2CB044FF00BD1D6C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				29F765B22CC55F7B00762B25 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 29D3C0C62CB044FF00BD1D6C /* Products */;
 			projectDirPath = "";
@@ -320,6 +324,10 @@
 			isa = PBXTargetDependency;
 			target = 29D3C0C42CB044FF00BD1D6C /* Pizza */;
 			targetProxy = 29D3C0E02CB0450000BD1D6C /* PBXContainerItemProxy */;
+		};
+		29F765B42CC5602B00762B25 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 29F765B32CC5602B00762B25 /* XCStringsToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -902,6 +910,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		29F765B22CC55F7B00762B25 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/liamnichols/xcstrings-tool-plugin";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		293EE8612CC11F8200DDDD25 /* Domain */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -914,6 +933,11 @@
 		293EE8652CC11F9600DDDD25 /* DataSource */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DataSource;
+		};
+		29F765B32CC5602B00762B25 /* XCStringsToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29F765B22CC55F7B00762B25 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */;
+			productName = "plugin:XCStringsToolPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

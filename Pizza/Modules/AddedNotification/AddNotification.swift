@@ -39,7 +39,7 @@ struct AddNotification: View {
     var onNavigate: () -> Void
 
     var body: some View {
-        Text("ADDED TO CART")
+        Text(localizable: .addedNotification)
             .foregroundStyle(.white)
             .padding()
             .frame(maxWidth: .infinity)
