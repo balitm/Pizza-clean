@@ -21,7 +21,7 @@ struct PizzaApp: App {
     }
 
     private func configNavBar() {
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.tint]
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.tint]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.accent]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.accent]
     }
 }

@@ -12,6 +12,39 @@
         }
       }
     },
+    "cartSuccessThanx" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you\nfor your order!"
+          }
+        }
+      }
+    },
+    "cartTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CART"
+          }
+        }
+      }
+    },
+    "checkout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CHECKOUT"
+          }
+        }
+      }
+    },
     "mainTitle" : {
       "comment" : "Main screen's title",
       "extractionState" : "manual",
@@ -26,6 +59,17 @@
     },
     "No net" : {
 
+    },
+    "total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOTAL"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -36,20 +36,22 @@ final class AddNotificationModel: ObservableObject {
 struct AddNotification: View {
     @EnvironmentObject private var alertHelper: AlertHelper
     @StateObject private var addNotificationModel = AddNotificationModel()
+    let text: LocalizedStringKey
     var onNavigate: () -> Void
 
     var body: some View {
-        Text(localizable: .addedNotification)
+        Text(text)
             .foregroundStyle(.white)
             .padding()
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.tint)
+                    .fill(.accent)
             }
             .padding(.horizontal, 16)
             .onTapGesture {
                 addNotificationModel.stop()
+                onNavigate()
             }
             .onAppear {
                 addNotificationModel.onFire = onFire
@@ -57,7 +59,6 @@ struct AddNotification: View {
             }
             .onDisappear {
                 addNotificationModel.cancel()
-                onNavigate()
             }
     }
 
@@ -68,7 +69,7 @@ struct AddNotification: View {
 
 #if DEBUG
 #Preview {
-    AddNotification {}
+    AddNotification(text: .localizable(.addedNotification)) {}
         .environmentObject(AlertHelper())
 }
 #endif

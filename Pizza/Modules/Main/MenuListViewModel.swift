@@ -17,7 +17,7 @@ final class MenuListViewModel: ObservableObject {
     }
 
     // Output
-    @Published var listData = [MenuRowViewModel]()
+    @Published var listData = [MenuRowData]()
     var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
@@ -51,7 +51,7 @@ final class MenuListViewModel: ObservableObject {
 
         let basePrice = pizzas.basePrice
         let vms = pizzas.pizzas.enumerated().map {
-            MenuRowViewModel(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
+            MenuRowData(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
         }
         DLog(l: .trace, "############## update pizza vms. #########")
 

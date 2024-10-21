@@ -63,7 +63,7 @@ struct MenuListView: View {
             }
             .navigationTitle(.localizable(.mainTitle))
         }
-        .tint(.tint)
+        .tint(.accent)
         .alertModifier(viewModel, alertHelper, router)
         .task {
             try? await viewModel.loadPizzas()
@@ -89,7 +89,7 @@ private extension View {
                     isTouchOutside: true,
                     alignment: .top
                 ) {
-                    AddNotification {
+                    AddNotification(text: .localizable(.addedNotification)) {
                         router.push(.cart)
                     }
                     .transition(.move(edge: .top))
