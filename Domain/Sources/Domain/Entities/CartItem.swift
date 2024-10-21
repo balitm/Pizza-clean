@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CartItem {
+public struct CartItem: Sendable {
     public let name: String
     public let price: Double
     public let id: Int

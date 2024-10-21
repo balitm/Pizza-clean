@@ -1,5 +1,5 @@
 //
-//  MenuRowViewModel.swift
+//  MenuRowData.swift
 //  DCPizza
 //
 //  Created by Balázs Kilvády on 2/18/20.
@@ -9,7 +9,7 @@
 import Foundation
 import Domain
 
-final class MenuRowViewModel {
+final class MenuRowData {
     let index: Int
     let nameText: String
     let ingredientsText: String
@@ -32,6 +32,6 @@ final class MenuRowViewModel {
     }
 }
 
-extension MenuRowViewModel: Identifiable {
+extension MenuRowData: Identifiable {
     var id: Int { index }
 }

@@ -15,7 +15,7 @@ final class MainRouter: CustomNavPathProvider<MainPath>, Routing {
     @ViewBuilder func view(for route: MainPath) -> some View {
         switch route {
         case .cart:
-            EmptyView()
+            CartView()
         }
     }
 }
