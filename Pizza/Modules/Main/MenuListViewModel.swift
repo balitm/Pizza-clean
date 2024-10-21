@@ -30,12 +30,12 @@ final class MenuListViewModel: ObservableObject {
     }
 
     @MainActor
-    func addPizza(_: Int) {
+    func addPizza(index: Int) {
         guard let pizzas else { return }
 
         Task {
-            // let pizza = pizzas.pizzas[index]
-            // await service.addToCart(pizza: pizza)
+            let pizza = pizzas.pizzas[index]
+            await service.addToCart(pizza: pizza)
             _alertKind.send(.added)
         }
     }
@@ -55,7 +55,7 @@ final class MenuListViewModel: ObservableObject {
         }
         DLog(l: .trace, "############## update pizza vms. #########")
 
-        try? await Task.sleep(nanoseconds: 3 * kSleepSecond)
+        // try? await Task.sleep(nanoseconds: 3 * kSleepSecond)
 
         listData = vms
         _alertKind.send(.none)

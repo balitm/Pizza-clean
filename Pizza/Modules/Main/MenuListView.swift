@@ -14,11 +14,6 @@ struct MenuListView: View {
     @StateObject private var viewModel = MenuListViewModel()
     @StateObject private var router = MainRouter()
 
-    init() {
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.accent]
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.accent]
-    }
-
     var body: some View {
         // let _ = Self._printChanges()
 
@@ -68,6 +63,7 @@ struct MenuListView: View {
             }
             .navigationTitle(.localizable(.mainTitle))
         }
+        .tint(.tint)
         .alertModifier(viewModel, alertHelper, router)
         .task {
             try? await viewModel.loadPizzas()
