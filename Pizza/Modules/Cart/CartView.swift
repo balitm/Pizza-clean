@@ -76,8 +76,14 @@ private extension View {
             case .progress:
                 alertHelper.showProgress()
             case let .checkoutError(error):
-                alertHelper.showAlert(isTouchOutside: true) {
-                    EmptyView()
+                alertHelper.showAlert(
+                    isTouchOutside: true,
+                    alignment: .bottom
+                ) {
+                    ErrorView(error: error) {
+                        viewModel.hideAlert()
+                    }
+                    .transition(.move(edge: .bottom))
                 }
             }
         }

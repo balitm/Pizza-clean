@@ -89,7 +89,7 @@ private extension View {
                     isTouchOutside: true,
                     alignment: .top
                 ) {
-                    AddNotification(text: .localizable(.addedNotification)) {
+                    CustomNotification(text: .localizable(.addedNotification)) {
                         router.push(.cart)
                     }
                     .transition(.move(edge: .top))

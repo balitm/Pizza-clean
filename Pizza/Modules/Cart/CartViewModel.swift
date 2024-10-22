@@ -68,4 +68,8 @@ final class CartViewModel: ObservableObject {
             await loadItems()
         }
     }
+
+    func hideAlert() {
+        _alertKind.send(.none)
+    }
 }

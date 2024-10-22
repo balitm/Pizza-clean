@@ -1,5 +1,5 @@
 //
-//  AddNotification.swift
+//  CustomNotification.swift
 //  Pizza
 //
 //  Created by Balázs Kilvády on 2024. 10. 19..
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-final class AddNotificationModel: ObservableObject {
+final class CustomNotificationModel: ObservableObject {
     private var timer = Timer()
     var onFire: (() -> Void)?
 
@@ -33,9 +33,9 @@ final class AddNotificationModel: ObservableObject {
     }
 }
 
-struct AddNotification: View {
+struct CustomNotification: View {
     @EnvironmentObject private var alertHelper: AlertHelper
-    @StateObject private var addNotificationModel = AddNotificationModel()
+    @StateObject private var addNotificationModel = CustomNotificationModel()
     let text: LocalizedStringKey
     var onNavigate: () -> Void
 
@@ -69,7 +69,7 @@ struct AddNotification: View {
 
 #if DEBUG
 #Preview {
-    AddNotification(text: .localizable(.addedNotification)) {}
+    CustomNotification(text: .localizable(.addedNotification)) {}
         .environmentObject(AlertHelper())
 }
 #endif
