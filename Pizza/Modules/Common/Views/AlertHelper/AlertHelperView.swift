@@ -56,11 +56,11 @@ struct AlertHelperView<Content: View>: View {
         }
         .onReceive(_navHelper.$alertView) { alertView in
             withAnimation {
-                if alertView == nil {
-                    DLog(l: .trace, "#> hide alert")
-                } else {
-                    DLog(l: .trace, "#> show alert")
-                }
+                // if alertView == nil {
+                //     DLog(l: .trace, "#> hide alert")
+                // } else {
+                //     DLog(l: .trace, "#> show alert")
+                // }
                 _alert = alertView
             }
         }

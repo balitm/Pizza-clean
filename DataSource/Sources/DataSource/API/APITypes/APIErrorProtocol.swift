@@ -8,12 +8,6 @@
 import Foundation
 import Domain
 
-protocol APIErrorProtocol: Error {
-    func setStatusCode(_ code: HTTPStatusCode)
-}
-
-extension APIErrorProtocol {
-    func setStatusCode(_: HTTPStatusCode) {}
-}
+protocol APIErrorProtocol: Error {}
 
 extension APIError: APIErrorProtocol {}

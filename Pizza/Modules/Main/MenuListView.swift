@@ -94,6 +94,16 @@ private extension View {
                     }
                     .transition(.move(edge: .top))
                 }
+            case let .initError(error):
+                alertHelper.showAlert(
+                    isTouchOutside: true,
+                    alignment: .bottom
+                ) {
+                    ErrorView(error: error) {
+                        viewModel.hideAlert()
+                    }
+                    .transition(.move(edge: .bottom))
+                }
             }
         }
     }

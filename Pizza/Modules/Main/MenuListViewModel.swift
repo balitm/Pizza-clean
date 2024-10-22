@@ -13,7 +13,7 @@ import Combine
 
 final class MenuListViewModel: ObservableObject {
     enum AlertKind {
-        case progress, none, added
+        case progress, none, added, initError(Error)
     }
 
     // Output
@@ -45,19 +45,27 @@ final class MenuListViewModel: ObservableObject {
     func loadPizzas() async throws {
         _alertKind.send(.progress)
 
-        try await service.initialize()
-        let pizzas = await service.pizzas()
-        self.pizzas = pizzas
+        do {
+            try await service.initialize()
+            let pizzas = await service.pizzas()
+            self.pizzas = pizzas
 
-        let basePrice = pizzas.basePrice
-        let vms = pizzas.pizzas.enumerated().map {
-            MenuRowData(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
+            let basePrice = pizzas.basePrice
+            let vms = pizzas.pizzas.enumerated().map {
+                MenuRowData(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
+            }
+            DLog(l: .trace, "############## update pizza vms. #########")
+
+            // try? await Task.sleep(nanoseconds: 3 * kSleepSecond)
+
+            listData = vms
+            _alertKind.send(.none)
+        } catch {
+            _alertKind.send(.initError(error))
         }
-        DLog(l: .trace, "############## update pizza vms. #########")
+    }
 
-        // try? await Task.sleep(nanoseconds: 3 * kSleepSecond)
-
-        listData = vms
+    func hideAlert() {
         _alertKind.send(.none)
     }
 }
