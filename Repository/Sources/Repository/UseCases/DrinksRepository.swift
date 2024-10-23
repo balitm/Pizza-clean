@@ -10,14 +10,29 @@ import Domain
 import Factory
 
 struct DrinksRepository: DrinksUseCase {
-    @Injected(\.initActor) private var initActor
+    @Injected(\.initActor) fileprivate var initActor
 
-    func drinks() async throws -> [Drink] {
+    func drinks() async -> [Drink] {
         await initActor.component.drinks
     }
 
-    func addToCart(drinkIndex: Int) async throws {
+    func addToCart(drinkIndex: Int) async {
         let drinks = await initActor.component.drinks
         _ = await initActor.cartHandler.add(drink: drinks[drinkIndex])
     }
 }
+
+#if DEBUG
+struct PreviewDrinksRepository: DrinksUseCase {
+    let implementation = DrinksRepository()
+
+    func drinks() async -> [Drink] {
+        _ = try? await implementation.initActor.initialize()
+        return await implementation.drinks()
+    }
+
+    func addToCart(drinkIndex: Int) async {
+        await implementation.addToCart(drinkIndex: drinkIndex)
+    }
+}
+#endif

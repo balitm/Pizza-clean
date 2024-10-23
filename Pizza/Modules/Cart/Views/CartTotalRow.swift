@@ -27,6 +27,8 @@ struct CartTotalRow: View {
     }
 }
 
+#if DEBUG
 #Preview {
     CartTotalRow(data: CartTotalRowData(price: 12.5))
 }
+#endif

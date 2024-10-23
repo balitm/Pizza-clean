@@ -1,36 +1,34 @@
 //
-//  CartItemRow.swift
+//  DrinkRow.swift
 //  DCPizza
 //
-//  Created by Balázs Kilvády on 7/6/20.
+//  Created by Balázs Kilvády on 7/10/20.
 //  Copyright © 2020 kil-dev. All rights reserved.
 //
 
 import SwiftUI
-import Domain
 
-struct CartItemRow: View {
-    let data: CartItemRowData
+struct DrinkRow: View {
+    let data: DrinkRowData
 
     var body: some View {
         HStack(spacing: 0) {
-            Image(systemName: "xmark")
+            Image(systemName: "plus")
                 .foregroundStyle(.accent)
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 11, weight: .regular))
                 .frame(width: 54)
             Text(data.name)
                 .foregroundStyle(.text)
             Spacer()
             Text(data.priceText)
                 .foregroundStyle(.text)
-                .padding(.trailing, 12)
         }
-        .frame(height: 44)
+        .padding(.trailing, 16)
     }
 }
 
 #if DEBUG
 #Preview {
-    CartItemRow(data: .preview)
+    DrinkRow(data: .preview)
 }
 #endif

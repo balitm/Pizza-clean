@@ -10,16 +10,17 @@ import SwiftUI
 struct CartView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var alertHelper: AlertHelper
+    @EnvironmentObject private var router: MainRouter
     @StateObject private var viewModel = CartViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                LazyVStack(spacing: 0) {
+                VStack(spacing: 0) {
                     Section(header: listHeader, footer: listHeader) {
-                        ForEach(self.viewModel.listData) { item in
+                        ForEach(viewModel.listData) { item in
                             Button {
-                                self.viewModel.select(index: item.index)
+                                viewModel.select(index: item.index)
                             } label: {
                                 CartItemRow(data: item)
                                     .listRowInsets(.init())
@@ -36,14 +37,13 @@ struct CartView: View {
 
             FooterView(viewModel: viewModel)
         }
-        // .backNavigationBarItems(
-        //     _mode,
-        //     trailing:
-        //     NavigationLink(destination: resolver.resolve(DrinksListView.self)) {
-        //         Image("ic_drinks")
-        //     }
-        //     .isDetailLink(false)
-        // )
+        .toolbar {
+            Button {
+                router.push(.drinks)
+            } label: {
+                Image(.icDrinks)
+            }
+        }
         .sheet(isPresented: $viewModel.showSuccess) {
             SuccessView()
         }
@@ -117,6 +117,7 @@ private struct FooterView: View {
     NavigationStack {
         CartView()
             .environmentObject(AlertHelper())
+            .environmentObject(MainRouter())
     }
 }
 #endif

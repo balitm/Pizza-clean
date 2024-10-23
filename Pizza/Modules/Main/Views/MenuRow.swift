@@ -10,7 +10,7 @@ import SwiftUI
 import Domain
 
 struct MenuRow: View {
-    let viewModel: MenuRowData
+    let data: MenuRowData
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -19,7 +19,7 @@ struct MenuRow: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 128, alignment: .top)
                 .clipped()
-            if let url = viewModel.url {
+            if let url = data.url {
                 AsyncImage(url: url) { image in
                     image.resizable()
                 } placeholder: {
@@ -31,16 +31,16 @@ struct MenuRow: View {
             }
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text(viewModel.nameText)
+                    Text(data.nameText)
                         .font(.system(size: 24, weight: .bold))
                         .foregroundStyle(.text)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(viewModel.ingredientsText)
+                    Text(data.ingredientsText)
                         .font(.system(size: 14))
                         .foregroundStyle(.text)
                 }
                 Button {
-                    self.viewModel.addToCart()
+                    self.data.addToCart()
                 } label: {
                     HStack(spacing: 4) {
                         Image(.icCartButton)
@@ -48,7 +48,7 @@ struct MenuRow: View {
                             .foregroundStyle(.price)
                             .frame(width: 14, height: 14)
                             .scaledToFit()
-                        Text(viewModel.priceText)
+                        Text(data.priceText)
                             .foregroundStyle(.price)
                             .font(.system(size: 16, weight: .bold))
                     }
@@ -77,12 +77,8 @@ import Factory
         var body: some View {
             VStack(spacing: 10) {
                 if let pizzas {
-                    MenuRow(viewModel: MenuRowData(index: 0,
-                                                   basePrice: pizzas.basePrice,
-                                                   pizza: pizzas.pizzas[0]) { _ in })
-                    MenuRow(viewModel: MenuRowData(index: 1,
-                                                   basePrice: pizzas.basePrice,
-                                                   pizza: pizzas.pizzas[1]) { _ in })
+                    MenuRow(data: .preview(from: pizzas, at: 0))
+                    MenuRow(data: .preview(from: pizzas, at: 1))
                         .environment(\.colorScheme, .dark)
                 }
             }

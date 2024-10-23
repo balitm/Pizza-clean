@@ -11,6 +11,7 @@ import Domain
 import Factory
 import Combine
 
+@MainActor
 final class MenuListViewModel: ObservableObject {
     enum AlertKind {
         case progress, none, added, initError(Error)
@@ -25,11 +26,6 @@ final class MenuListViewModel: ObservableObject {
 
     @Injected(\.menuUseCase) private var service
 
-    init() {
-        DLog(">>> init: ", type(of: self))
-    }
-
-    @MainActor
     func addPizza(index: Int) {
         guard let pizzas else { return }
 
@@ -41,7 +37,6 @@ final class MenuListViewModel: ObservableObject {
     }
 
     /// Load pizza data.
-    @MainActor
     func loadPizzas() async throws {
         _alertKind.send(.progress)
 
@@ -54,9 +49,6 @@ final class MenuListViewModel: ObservableObject {
             let vms = pizzas.pizzas.enumerated().map {
                 MenuRowData(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
             }
-            DLog(l: .trace, "############## update pizza vms. #########")
-
-            // try? await Task.sleep(nanoseconds: 3 * kSleepSecond)
 
             listData = vms
             _alertKind.send(.none)

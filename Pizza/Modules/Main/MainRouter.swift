@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum MainPath: Hashable {
-    case cart
+    case cart, drinks
 }
 
 final class MainRouter: CustomNavPathProvider<MainPath>, Routing {
@@ -16,6 +16,8 @@ final class MainRouter: CustomNavPathProvider<MainPath>, Routing {
         switch route {
         case .cart:
             CartView()
+        case .drinks:
+            DrinksListView()
         }
     }
 }

@@ -19,7 +19,7 @@ struct MenuListView: View {
 
         NavigationStack(path: $router.path) {
             List(viewModel.listData) { rowVM in
-                MenuRow(viewModel: rowVM)
+                MenuRow(data: rowVM)
                     .listRowInsets(.init())
                     .listRowSeparator(.hidden)
             }

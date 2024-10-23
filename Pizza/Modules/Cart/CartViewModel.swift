@@ -12,7 +12,7 @@ import Combine
 import Factory
 
 @MainActor
-final class CartViewModel: ObservableObject {
+final class CartViewModel: ViewModelBase {
     enum AlertKind {
         case progress, none, checkoutError(Error)
     }
@@ -25,14 +25,6 @@ final class CartViewModel: ObservableObject {
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
     @Injected(\.cartUseCase) private var service
-
-    deinit {
-        DLog(">>> deinit: ", type(of: self))
-    }
-
-    init() {
-        DLog(">>> init: ", type(of: self))
-    }
 
     /// Load items.
     func loadItems() async {

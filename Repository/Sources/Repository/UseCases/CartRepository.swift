@@ -10,7 +10,7 @@ import Domain
 import Factory
 
 struct CartRepository: CartUseCase {
-    @Injected(\.initActor) private var initActor
+    @Injected(\.initActor) fileprivate var initActor
     @Injected(\.pizzaAPI) private var network
 
     func items() async -> [CartItem] {
@@ -31,3 +31,31 @@ struct CartRepository: CartUseCase {
         return try await initActor.cartHandler.empty()
     }
 }
+
+#if DEBUG
+struct PreviewCartRepository: CartUseCase {
+    let implementation = CartRepository()
+
+    func items() async -> [CartItem] {
+        if let components = try? await implementation.initActor.initialize() {
+            _ = await implementation.initActor.cartHandler.add(drink: components.drinks[0])
+            _ = await implementation.initActor.cartHandler.add(drink: components.drinks[1])
+            _ = await implementation.initActor.cartHandler.add(pizza: components.pizzas.pizzas[0])
+            _ = await implementation.initActor.cartHandler.add(pizza: components.pizzas.pizzas[1])
+        }
+        return await implementation.items()
+    }
+
+    func total() async -> Double {
+        await implementation.total()
+    }
+
+    func remove(at index: Int) async {
+        await implementation.remove(at: index)
+    }
+
+    func checkout() async throws -> Cart {
+        try await implementation.checkout()
+    }
+}
+#endif

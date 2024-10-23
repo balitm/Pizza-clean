@@ -45,6 +45,17 @@
         }
       }
     },
+    "drinksTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DRINKS"
+          }
+        }
+      }
+    },
     "errorAction" : {
       "extractionState" : "manual",
       "localizations" : {
