@@ -17,9 +17,6 @@ private struct ParamArray {
 }
 
 public final class API: Sendable {
-    /// Singleton instance
-    static let shared = API()
-
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
     private let session: URLSession

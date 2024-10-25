@@ -26,6 +26,12 @@ public extension Container {
 
     var drinksUseCase: Factory<DrinksUseCase> {
         self { DrinksRepository() }
+#if DEBUG
+            .onPreview {
+                debugPrint(#fileID, #line, "#1 on Preview, switching to mock drinks repository.")
+                return PreviewDrinksRepository()
+            }
+#endif
     }
 
     var saveUseCase: Factory<SaveUseCase> {
@@ -34,5 +40,11 @@ public extension Container {
 
     var cartUseCase: Factory<CartUseCase> {
         self { CartRepository() }
+#if DEBUG
+            .onPreview {
+                debugPrint(#fileID, #line, "#1 on Preview, switching to mock cart repository.")
+                return PreviewCartRepository()
+            }
+#endif
     }
 }

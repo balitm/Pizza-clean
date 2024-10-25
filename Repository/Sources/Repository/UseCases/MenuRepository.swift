@@ -20,7 +20,7 @@ actor MenuRepository: MenuUseCase {
         await initActor.component.pizzas
     }
 
-    func addToCart(pizza: Pizza) async throws {
+    func addToCart(pizza: Pizza) async {
         _ = await initActor.cartHandler.add(pizza: pizza)
     }
 }

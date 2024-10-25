@@ -8,6 +8,6 @@
 import Foundation
 
 public protocol DrinksUseCase {
-    func drinks() async throws -> [Drink]
-    func addToCart(drinkIndex: Int) async throws
+    func drinks() async -> [Drink]
+    func addToCart(drinkIndex: Int) async
 }
