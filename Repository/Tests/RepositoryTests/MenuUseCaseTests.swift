@@ -29,7 +29,7 @@ class MenuUseCaseTests: NetworklessUseCaseTestsBase {
     @Test func addPizza() async throws {
         try await addItemTest(addItem: {
             let pizza = await self.data.component.pizzas.pizzas.first!
-            try await self.service.addToCart(pizza: pizza)
+            await self.service.addToCart(pizza: pizza)
         })
     }
 }

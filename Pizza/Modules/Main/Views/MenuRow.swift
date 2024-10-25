@@ -10,25 +10,29 @@ import SwiftUI
 import Domain
 
 struct MenuRow: View {
-    let data: MenuRowData
+    @ObservedObject var data: MenuRowData
 
     var body: some View {
+        let _ = Self._printChanges()
+
         ZStack(alignment: .top) {
             Image(.bgWood)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 128, alignment: .top)
                 .clipped()
-            if let url = data.url {
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
-                }
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 179)
-                .clipped()
+
+            if let image = data.image {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 179)
+                    .clipped()
+            } else {
+                ProgressView()
+                    .frame(height: 128)
             }
+
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
                     Text(data.nameText)
@@ -40,7 +44,7 @@ struct MenuRow: View {
                         .foregroundStyle(.text)
                 }
                 Button {
-                    self.data.addToCart()
+                    data.addToCart()
                 } label: {
                     HStack(spacing: 4) {
                         Image(.icCartButton)
@@ -63,6 +67,9 @@ struct MenuRow: View {
             .padding()
             .background(.regularMaterial, in: Rectangle())
             .padding(.top, 109)
+        }
+        .task {
+            await data.downloadImage()
         }
     }
 }

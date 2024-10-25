@@ -18,8 +18,8 @@ struct MenuListView: View {
         // let _ = Self._printChanges()
 
         NavigationStack(path: $router.path) {
-            List(viewModel.listData) { rowVM in
-                MenuRow(data: rowVM)
+            List(viewModel.listData) { rowData in
+                MenuRow(data: rowData)
                     .listRowInsets(.init())
                     .listRowSeparator(.hidden)
             }
@@ -63,7 +63,6 @@ struct MenuListView: View {
             }
             .navigationTitle(.localizable(.mainTitle))
         }
-        .tint(.accent)
         .alertModifier(viewModel, alertHelper, router)
         .task {
             try? await viewModel.loadPizzas()

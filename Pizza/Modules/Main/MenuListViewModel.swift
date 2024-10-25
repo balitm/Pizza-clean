@@ -13,11 +13,11 @@ import Combine
 
 @MainActor
 final class MenuListViewModel: ObservableObject {
+    /// UI alert events.
     enum AlertKind {
         case progress, none, added, initError(Error)
     }
 
-    // Output
     @Published var listData = [MenuRowData]()
     var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
@@ -47,7 +47,12 @@ final class MenuListViewModel: ObservableObject {
 
             let basePrice = pizzas.basePrice
             let vms = pizzas.pizzas.enumerated().map {
-                MenuRowData(index: $0.offset, basePrice: basePrice, pizza: $0.element, onTapPrice: addPizza)
+                MenuRowData(
+                    index: $0.offset,
+                    basePrice: basePrice,
+                    pizza: $0.element,
+                    onTapPrice: addPizza
+                )
             }
 
             listData = vms
