@@ -22,6 +22,12 @@ public extension Container {
 
     var ingredientsUseCase: Factory<IngredientsUseCase> {
         self { IngredientsRepository() }
+#if DEBUG
+            .onPreview {
+                debugPrint(#fileID, #line, "#1 on Preview, switching to preview ingredients repository.")
+                return PreviewIngredientsRepository()
+            }
+#endif
     }
 
     var drinksUseCase: Factory<DrinksUseCase> {

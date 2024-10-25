@@ -10,7 +10,7 @@ import Domain
 import Factory
 
 struct IngredientsRepository: IngredientsUseCase {
-    @Injected(\.initActor) private var initActor
+    @Injected(\.initActor) fileprivate var initActor
     private var _pizza: Pizza!
     private var ingredients = [IngredientSelection]()
 
@@ -58,3 +58,34 @@ private func _createSelecteds(_ pizza: Pizza, _ ingredients: [Ingredient]) -> [I
     }
     return sels
 }
+
+#if DEBUG
+struct PreviewIngredientsRepository: IngredientsUseCase {
+    var implementation = IngredientsRepository()
+
+    mutating func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection] {
+        _ = try? await implementation.initActor.initialize()
+        return await implementation.selectedIngredients(for: pizza)
+    }
+
+    mutating func selectedIngredients() async -> [IngredientSelection] {
+        await implementation.selectedIngredients()
+    }
+
+    mutating func select(ingredientIndex index: Int) -> [IngredientSelection] {
+        implementation.select(ingredientIndex: index)
+    }
+
+    func addToCart() async {
+        await implementation.addToCart()
+    }
+
+    func name() -> String {
+        implementation.name()
+    }
+
+    func pizza() -> Pizza {
+        implementation.pizza()
+    }
+}
+#endif

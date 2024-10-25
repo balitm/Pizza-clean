@@ -78,6 +78,17 @@
         }
       }
     },
+    "ingredientsSectionTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingredients"
+          }
+        }
+      }
+    },
     "mainTitle" : {
       "comment" : "Main screen's title",
       "extractionState" : "manual",
