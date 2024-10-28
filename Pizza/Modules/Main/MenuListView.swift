@@ -64,6 +64,7 @@ struct MenuListView: View {
             .navigationTitle(.localizable(.mainTitle))
         }
         .alertModifier(viewModel, alertHelper, router)
+        .tint(.accent)
         .task {
             try? await viewModel.loadPizzas()
         }

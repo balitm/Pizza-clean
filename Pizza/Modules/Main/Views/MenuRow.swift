@@ -30,6 +30,7 @@ struct MenuRow: View {
                     .clipped()
             } else {
                 ProgressView()
+                    .tint(.secondary)
                     .frame(height: 128)
             }
 
