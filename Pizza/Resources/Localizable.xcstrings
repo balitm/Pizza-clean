@@ -12,6 +12,17 @@
         }
       }
     },
+    "addIngredientsToCart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ADD TO CART %@"
+          }
+        }
+      }
+    },
     "cartSuccessThanx" : {
       "extractionState" : "manual",
       "localizations" : {
