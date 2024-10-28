@@ -13,8 +13,8 @@ public struct Pizza: Sendable {
     public let ingredients: [Ingredient]
     public let imageUrl: URL?
 
-    public init(copy other: Pizza, with ingredients: [Ingredient]? = nil) {
-        name = other.name
+    public init(copy other: Pizza, name: String? = nil, with ingredients: [Ingredient]? = nil) {
+        self.name = name ?? other.name
         imageUrl = other.imageUrl
         self.ingredients = ingredients ?? other.ingredients
     }
@@ -53,5 +53,16 @@ public struct Pizza: Sendable {
             iNames += "."
         }
         return iNames
+    }
+}
+
+extension Pizza: Hashable {
+    public static func ==(lhs: Pizza, rhs: Pizza) -> Bool {
+        lhs.name == rhs.name && lhs.imageUrl == rhs.imageUrl
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(imageUrl)
     }
 }

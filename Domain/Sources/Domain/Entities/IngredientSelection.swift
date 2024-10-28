@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct IngredientSelection {
+public struct IngredientSelection: Sendable {
     public let ingredient: Ingredient
     public let isOn: Bool
 

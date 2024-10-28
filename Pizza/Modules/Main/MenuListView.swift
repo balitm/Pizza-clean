@@ -23,15 +23,6 @@ struct MenuListView: View {
                     .listRowInsets(.init())
                     .listRowSeparator(.hidden)
             }
-            // NavigationLink(destination:
-            //     self.resolver.resolve(
-            //         IngredientsListView.self,
-            //         args: self._viewModel.pizza(at: vm.index)
-            //     )
-            // ) {
-            //     EmptyView()
-            // }
-            // .buttonStyle(PlainButtonStyle())
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -41,20 +32,13 @@ struct MenuListView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Image(systemName: "plus")
-                        .foregroundStyle(.accent)
-                        .fontWeight(.semibold)
-
-                    // HStack {
-                    //     Text("")
-                    //     NavigationLink(destination:
-                    //         resolver.resolve(IngredientsListView.self,
-                    //                          args: Just(Pizza()).eraseToAnyPublisher())
-                    //     ) {
-                    //         Image(systemName: "plus")
-                    //             .accentColor(KColors.cTint)
-                    //     }
-                    // }
+                    Button {
+                        router.push(.ingredients(Pizza(), .constant(nil)))
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(.accent)
+                            .fontWeight(.semibold)
+                    }
                 }
             }
             .listStyle(.plain)

@@ -11,10 +11,22 @@ import Domain
 
 struct MenuRow: View {
     @ObservedObject var data: MenuRowData
+    @EnvironmentObject private var router: MainRouter
 
     var body: some View {
-        let _ = Self._printChanges()
+        // let _ = Self._printChanges()
 
+        Button {
+            router.push(.ingredients(data.pizza, $data.image))
+        } label: {
+            rowView
+        }
+        .task {
+            await data.downloadImage()
+        }
+    }
+
+    var rowView: some View {
         ZStack(alignment: .top) {
             Image(.bgWood)
                 .resizable()
@@ -68,9 +80,6 @@ struct MenuRow: View {
             .padding()
             .background(.regularMaterial, in: Rectangle())
             .padding(.top, 109)
-        }
-        .task {
-            await data.downloadImage()
         }
     }
 }

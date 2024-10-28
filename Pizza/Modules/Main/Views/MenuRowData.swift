@@ -21,7 +21,7 @@ final class MenuRowData: ObservableObject {
     let url: URL?
     let onTapPrice: (Int) -> Void
 
-    private let pizza: Pizza
+    let pizza: Pizza
 
     @Injected(\.menuUseCase) private var menuUseCase
 

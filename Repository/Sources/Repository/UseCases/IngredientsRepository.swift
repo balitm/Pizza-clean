@@ -21,7 +21,7 @@ struct IngredientsRepository: IngredientsUseCase {
 
     mutating func selectedIngredients() async -> [IngredientSelection] {
         let ingredients = await initActor.component.ingredients
-        self.ingredients = _createSelecteds(_pizza, ingredients)
+        self.ingredients = createSelecteds(_pizza, ingredients)
         return self.ingredients
     }
 
@@ -34,12 +34,41 @@ struct IngredientsRepository: IngredientsUseCase {
     }
 
     func addToCart() async {
-        let newPizza = Pizza(copy: _pizza, with: ingredients.compactMap { $0.isOn ? $0.ingredient : nil })
+        let newPizza = Pizza(copy: _pizza, name: name(), with: ingredients.compactMap { $0.isOn ? $0.ingredient : nil })
         _ = await initActor.cartHandler.add(pizza: newPizza)
     }
 
     func name() -> String {
-        _pizza.ingredients.isEmpty ? "CREATE A PIZZA" : _pizza.name.uppercased()
+        customName(String(repository: .emptyPizzaName))
+    }
+
+    func title() -> String {
+        customName(String(repository: .emptyPizzaTitle))
+    }
+
+    private func customName(_ emptyName: String) -> String {
+        guard !_pizza.ingredients.isEmpty else { return emptyName }
+
+        let selectedNames = Set(ingredients
+            .compactMap { selection in
+                selection.isOn ? selection.ingredient.name : nil
+            })
+        let pizzaNames = Set(_pizza.ingredients
+            .map(\.name))
+        let pre = if selectedNames != pizzaNames {
+            String(repository: .customPrefix)
+        } else {
+            ""
+        }
+        return "\(pre)\(_pizza.name)"
+    }
+
+    func sum() -> Double {
+        let selecteds = ingredients
+            .compactMap { selection in
+                selection.isOn ? selection.ingredient : nil
+            }
+        return selecteds.reduce(0.0) { $0 + $1.price }
     }
 
     func pizza() -> Pizza {
@@ -48,7 +77,7 @@ struct IngredientsRepository: IngredientsUseCase {
 }
 
 /// Create array of Ingredients with selectcion flag.
-private func _createSelecteds(_ pizza: Pizza, _ ingredients: [Ingredient]) -> [IngredientSelection] {
+private func createSelecteds(_ pizza: Pizza, _ ingredients: [Ingredient]) -> [IngredientSelection] {
     func isContained(_ ingredient: Ingredient) -> Bool {
         pizza.ingredients.contains { $0.id == ingredient.id }
     }
@@ -84,8 +113,16 @@ struct PreviewIngredientsRepository: IngredientsUseCase {
         implementation.name()
     }
 
+    func title() -> String {
+        implementation.title()
+    }
+
     func pizza() -> Pizza {
         implementation.pizza()
+    }
+
+    func sum() -> Double {
+        implementation.sum()
     }
 }
 #endif
