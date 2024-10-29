@@ -14,28 +14,33 @@ struct CartView: View {
     @StateObject private var viewModel = CartViewModel()
 
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: 0) {
-                    Section(header: listHeader, footer: listHeader) {
-                        ForEach(viewModel.listData) { item in
-                            Button {
-                                viewModel.select(index: item.index)
-                            } label: {
-                                CartItemRow(data: item)
-                                    .listRowInsets(.init())
-                            }
-                        }
-                    }
-
-                    Section(header: listHeader) {
-                        CartTotalRow(data: viewModel.totalData)
-                            .listRowInsets(.init())
+        List {
+            Section {
+                ForEach(viewModel.listData) { item in
+                    Button {
+                        viewModel.select(index: item.index)
+                    } label: {
+                        CartItemRow(data: item)
                     }
                 }
+            } header: {
+                listHeader
             }
+            .listRowInsets(.init())
+            .listSectionSeparator(.hidden)
 
-            FooterView(viewModel: viewModel)
+            Section {
+                CartTotalRow(data: viewModel.totalData)
+            } header: {
+                listHeader
+            }
+            .listSectionSeparator(.hidden, edges: .bottom)
+            .listRowInsets(.init())
+        }
+        .environment(\.defaultMinListHeaderHeight, 0)
+        .listStyle(.plain)
+        .overlay(alignment: .bottom) {
+            footer
         }
         .toolbar {
             Button {
@@ -58,9 +63,24 @@ struct CartView: View {
 
     var listHeader: some View {
         Rectangle()
-            .frame(maxWidth: .infinity, minHeight: 12, maxHeight: 12)
-            .foregroundColor(Color(UIColor.systemBackground))
-            .listRowInsets(.init())
+            .fill(Color(.systemBackground))
+            .frame(maxWidth: .infinity, minHeight: 1, maxHeight: 1)
+    }
+
+    var footer: some View {
+        Text(localizable: .checkout)
+            .font(.system(size: 16, weight: .bold))
+            .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
+            .foregroundStyle(viewModel.canCheckout ? .white : .gray)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                viewModel.checkout()
+            }
+            .disabled(!viewModel.canCheckout)
+            .background {
+                Color.accent
+                    .ignoresSafeArea(edges: .bottom)
+            }
     }
 }
 
@@ -86,28 +106,6 @@ private extension View {
                     .transition(.move(edge: .bottom))
                 }
             }
-        }
-    }
-}
-
-private struct FooterView: View {
-    @ObservedObject var viewModel: CartViewModel
-
-    var body: some View {
-        VStack(spacing: 0) {
-            Text(localizable: .checkout)
-                .font(.system(size: 16, weight: .bold))
-                .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
-                .foregroundStyle(viewModel.canCheckout ? .white : .gray)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    viewModel.checkout()
-                }
-                .disabled(!viewModel.canCheckout)
-        }
-        .background {
-            Color.accent
-                .ignoresSafeArea(edges: .bottom)
         }
     }
 }
