@@ -8,9 +8,8 @@
 import Foundation
 import Domain
 import Factory
-import class UIKit.UIImage
-
-public typealias Image = UIImage
+import CoreGraphics
+import ImageIO
 
 /// Protocol for request Pizza API.
 public protocol PizzaNetwork: Sendable {
@@ -19,7 +18,7 @@ public protocol PizzaNetwork: Sendable {
     func getPizzas() async throws -> DataSource.Pizzas
     func checkout(pizzas: [DataSource.Pizza], drinks: [DataSource.Drink.ID]) async throws
     func checkout(cart: DataSource.Cart) async throws
-    func downloadImage(url: URL) async throws -> Image
+    func downloadImage(url: URL) async throws -> CGImage
 }
 
 public extension PizzaNetwork {
@@ -51,9 +50,10 @@ final class APIPizzaNetwork: PizzaNetwork {
         try await api.perform(request: PizzaReqests.checkout(pizzas: pizzas, drinks: drinks))
     }
 
-    func downloadImage(url: URL) async throws -> Image {
+    func downloadImage(url: URL) async throws -> CGImage {
         let data = try await api.perform(request: PizzaReqests.downloadImage(url: url))
-        let image = UIImage(data: data)
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { throw APIError(kind: .processingFailed) }
+        let image = CGImageSourceCreateImageAtIndex(source, 0, nil)
         guard let image else { throw APIError(kind: .processingFailed) }
         return image
     }
@@ -78,8 +78,10 @@ public final class MockPizzaNetwork: PizzaNetwork {
 
     public func checkout(pizzas _: [DataSource.Pizza], drinks _: [DataSource.Drink.ID]) async throws {}
 
-    public func downloadImage(url: URL) async throws -> Image {
-        let image = try UIImage(data: Data(contentsOf: url))!
+    public func downloadImage(url: URL) async throws -> CGImage {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { throw APIError(kind: .processingFailed) }
+        let image = CGImageSourceCreateImageAtIndex(source, 0, nil)
+        guard let image else { throw APIError(kind: .processingFailed) }
         return image
     }
 }

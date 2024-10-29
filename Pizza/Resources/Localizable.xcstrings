@@ -12,6 +12,17 @@
         }
       }
     },
+    "addIngredientsToCart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ADD TO CART %@"
+          }
+        }
+      }
+    },
     "cartSuccessThanx" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -74,6 +85,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error:"
+          }
+        }
+      }
+    },
+    "ingredientsSectionTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingredients"
           }
         }
       }

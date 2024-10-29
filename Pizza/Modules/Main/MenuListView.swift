@@ -18,20 +18,11 @@ struct MenuListView: View {
         // let _ = Self._printChanges()
 
         NavigationStack(path: $router.path) {
-            List(viewModel.listData) { rowVM in
-                MenuRow(data: rowVM)
+            List(viewModel.listData) { rowData in
+                MenuRow(data: rowData)
                     .listRowInsets(.init())
                     .listRowSeparator(.hidden)
             }
-            // NavigationLink(destination:
-            //     self.resolver.resolve(
-            //         IngredientsListView.self,
-            //         args: self._viewModel.pizza(at: vm.index)
-            //     )
-            // ) {
-            //     EmptyView()
-            // }
-            // .buttonStyle(PlainButtonStyle())
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -41,20 +32,13 @@ struct MenuListView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Image(systemName: "plus")
-                        .foregroundStyle(.accent)
-                        .fontWeight(.semibold)
-
-                    // HStack {
-                    //     Text("")
-                    //     NavigationLink(destination:
-                    //         resolver.resolve(IngredientsListView.self,
-                    //                          args: Just(Pizza()).eraseToAnyPublisher())
-                    //     ) {
-                    //         Image(systemName: "plus")
-                    //             .accentColor(KColors.cTint)
-                    //     }
-                    // }
+                    Button {
+                        router.push(.ingredients(Pizza(), .constant(nil)))
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(.accent)
+                            .fontWeight(.semibold)
+                    }
                 }
             }
             .listStyle(.plain)
@@ -63,8 +47,8 @@ struct MenuListView: View {
             }
             .navigationTitle(.localizable(.mainTitle))
         }
-        .tint(.accent)
         .alertModifier(viewModel, alertHelper, router)
+        .tint(.accent)
         .task {
             try? await viewModel.loadPizzas()
         }
