@@ -17,9 +17,6 @@ public extension Container {
         self { DataSource.Storage() }.singleton
     }
 
-    var appConfig: Factory<AppConfigProtocol> {
-        self { AppConfig() }.singleton
-    }
 }
 
 extension Container: @retroactive AutoRegistering {
@@ -27,7 +24,18 @@ extension Container: @retroactive AutoRegistering {
 #if DEBUG
         Container.shared.pizzaAPI.onPreview { MockPizzaNetwork() }
         Container.shared.pizzaAPI.onTest { MockPizzaNetwork() }
-        Container.shared.appConfig.onTest { TestingAppConfig() }
 #endif
+    }
+}
+
+public final class DataSourceContainer: SharedContainer {
+    public static let shared = DataSourceContainer()
+
+    public let manager = ContainerManager()
+
+    public var appConfig: Factory<AppConfigProtocol> {
+        self { AppConfig() }
+            .onTest { TestingAppConfig() }
+            .singleton
     }
 }

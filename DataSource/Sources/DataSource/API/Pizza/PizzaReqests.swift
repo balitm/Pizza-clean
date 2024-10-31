@@ -103,7 +103,7 @@ extension PizzaReqests: TargetType {
         case let .downloadImage(url):
             return url
         default:
-            let string = Container.shared.appConfig().pizzaBaseURL
+            let string = DataSourceContainer.shared.appConfig().pizzaBaseURL
             return URL(string: string)!
         }
     }

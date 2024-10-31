@@ -19,6 +19,7 @@ final class MenuListViewModel: ObservableObject {
     }
 
     @Published var listData = [MenuRowData]()
+    var appVersionInfo: String { service.appVersionInfo }
     var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 

@@ -18,9 +18,16 @@ struct MenuListView: View {
         // let _ = Self._printChanges()
 
         NavigationStack(path: $router.path) {
-            List(viewModel.listData) { rowData in
-                MenuRow(data: rowData)
-                    .listRowInsets(.init())
+            List {
+                ForEach(viewModel.listData) { rowData in
+                    MenuRow(data: rowData)
+                        .listRowInsets(.init())
+                        .listRowSeparator(.hidden)
+                }
+                Text(viewModel.appVersionInfo)
+                    .frame(maxWidth: .infinity)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                     .listRowSeparator(.hidden)
             }
             .toolbar {

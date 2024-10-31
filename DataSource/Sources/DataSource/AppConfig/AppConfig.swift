@@ -56,5 +56,5 @@ struct TestingAppConfig: AppConfigProtocol {
     public let flavour: AppFlavour = .testing
     public let appVersion: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
     public let appBuild: String = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-    public let pizzaBaseURL = "http://192.168.1.20:4010"
+    public let pizzaBaseURL = "http://localhost:4010"
 }

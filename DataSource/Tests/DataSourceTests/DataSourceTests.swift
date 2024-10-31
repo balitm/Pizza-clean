@@ -32,6 +32,11 @@ struct DataSourceTests {
         #expect(!pizzas.pizzas.isEmpty)
     }
 
+    @Test func appVersion() async throws {
+        let appConfig = DataSourceContainer.shared.appConfig()
+        #expect(appConfig.pizzaBaseURL == "http://localhost:4010")
+    }
+
     @Test func publicAPI() async throws {
         let api = APIPizzaNetwork()
         await testNetwork(api: api)
@@ -57,7 +62,7 @@ struct DataSourceTests {
 
         if let str = pizzas.pizzas[2].imageUrl, let url = URL(string: str) {
             let cgImage = try! await api.downloadImage(url: url)
-            debugPrint(#fileID, #line, "imge size:", cgImage.height, cgImage.width)
+            debugPrint(#fileID, #line, "image size:", cgImage.height, cgImage.width)
         }
 
         try! await api.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id])

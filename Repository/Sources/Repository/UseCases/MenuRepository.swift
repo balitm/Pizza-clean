@@ -7,12 +7,14 @@
 
 import Foundation
 import Domain
+import DataSource
 import Factory
 import struct SwiftUI.Image
 
-actor MenuRepository: MenuUseCase {
+final class MenuRepository: MenuUseCase {
     @Injected(\.initActor) private var initActor
     @Injected(\.pizzaAPI) var network
+    @Injected(\DataSourceContainer.appConfig) var appConfig
 
     func initialize() async throws {
         _ = try await initActor.initialize()
@@ -30,5 +32,9 @@ actor MenuRepository: MenuUseCase {
         guard let url = pizza.imageUrl else { return nil }
         let cgImage = try await network.downloadImage(url: url)
         return Image(decorative: cgImage, scale: 1)
+    }
+
+    var appVersionInfo: String {
+        "\(String(repository: .appVersion)): \(appConfig.appVersion) - \(appConfig.appBuild)"
     }
 }

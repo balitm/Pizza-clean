@@ -23,4 +23,7 @@ public protocol MenuUseCase {
     /// - Parameter pizza: The pizza.
     /// - Returns: SwiftUI.Image.
     func dowloadImage(for pizza: Pizza) async throws -> Image?
+
+    /// Version info string to show.
+    var appVersionInfo: String { get }
 }
