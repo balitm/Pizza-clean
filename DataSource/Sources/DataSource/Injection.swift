@@ -17,6 +17,9 @@ public extension Container {
         self { DataSource.Storage() }.singleton
     }
 
+    var reachability: Factory<ReachabilityUseCase> {
+        self { Reachable() }.singleton
+    }
 }
 
 extension Container: @retroactive AutoRegistering {

@@ -64,16 +64,5 @@ struct AlertHelperView<Content: View>: View {
                 alert = alertView
             }
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if alertHelper.noNetView {
-                Text("No net")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(20)
-                    .foregroundColor(.white)
-                    .background(.red)
-                    .transition(.move(edge: .bottom))
-            }
-        }
-        .animation(.default, value: alertHelper.noNetView)
     }
 }
