@@ -48,6 +48,7 @@ struct MenuListView: View {
                     }
                 }
             }
+            .animation(.default, value: viewModel.listData.isEmpty)
             .listStyle(.plain)
             .navigationDestination(for: MainPath.self) {
                 router.view(for: $0)

@@ -46,7 +46,7 @@ struct MenuRow: View {
 
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text(data.nameText)
+                    Text(data.pizza.name)
                         .font(.system(size: 24, weight: .bold))
                         .foregroundStyle(.text)
                         .frame(maxWidth: .infinity, alignment: .leading)
