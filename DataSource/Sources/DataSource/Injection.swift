@@ -11,14 +11,11 @@ import Factory
 public extension Container {
     var pizzaAPI: Factory<PizzaNetwork> {
         self { APIPizzaNetwork() }.singleton
+        // self { MockPizzaNetwork() }.singleton
     }
 
     var storage: Factory<DataSource.Storage> {
         self { DataSource.Storage() }.singleton
-    }
-
-    var reachability: Factory<ReachabilityUseCase> {
-        self { Reachable() }.singleton
     }
 }
 

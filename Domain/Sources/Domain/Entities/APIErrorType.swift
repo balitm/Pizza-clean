@@ -38,7 +38,7 @@ public struct APIError: LocalizedError {
             case let .netError(error):
                 "netError: \(error?.localizedDescription ?? "nil")"
             case .offline:
-                "offline:"
+                "offline"
             }
         }
     }

@@ -1,27 +1,28 @@
 //
-//  Reachability.swift
-//  DataSource
+//  ReachabilityRepository.swift
+//  Repository
 //
-//  Created by Balázs Kilvády on 2024. 10. 30..
+//  Created by Balázs Kilvády on 2024. 11. 01..
 //
 
 import Foundation
-import Reachability
 import Domain
-import Factory
+import DataSource
+import Reachability
 
-public protocol ReachabilityUseCase {
-    var connection: AsyncStream<Reachability.Connection> { get }
-}
-
-final class Reachable: ReachabilityUseCase {
-    var connection: AsyncStream<Reachability.Connection> {
+struct ReachabilityRepository: ReachabilityUseCase {
+    var connection: AsyncStream<Connection> {
         AsyncStream { continuation in
             do {
                 let reachability = try createReachability()
 
                 reachability.whenReachable = { reach in
-                    continuation.yield(reach.connection)
+                    let connection: Connection = switch reach.connection {
+                    case .wifi: .wifi
+                    case .cellular: .cellular
+                    case .unavailable: .unavailable
+                    }
+                    continuation.yield(connection)
                 }
                 reachability.whenUnreachable = { _ in
                     continuation.yield(.unavailable)

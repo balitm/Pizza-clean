@@ -11,17 +11,19 @@ import Factory
 
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
+    @EnvironmentObject private var alertHelper: AlertHelper
     @State private var saveService = Container.shared.saveUseCase()
     @StateObject private var router = MainRouter()
     @StateObject private var viewModel = ContentViewModel()
 
     var body: some View {
         AlertHelperView {
-            MenuListView()
+            MenuListView(viewModel: viewModel.menuListViewModel)
                 .environmentObject(router)
         }
+        .alertModifier(viewModel, alertHelper, router)
         .task {
-            await viewModel.listenToReachabiity()
+            await viewModel.listenToReachabity()
         }
         .onChange(of: scenePhase) { phase in
             if phase == .background {
@@ -39,7 +41,8 @@ private extension View {
         _ alertHelper: AlertHelper,
         _ router: MainRouter
     ) -> some View {
-        onReceive(viewModel.alertKind) { kind in
+        onReceive(viewModel.alertKind.removeDuplicates()) { kind in
+            DLog(l: .trace, "receiving \(kind)")
             switch kind {
             case .none:
                 alertHelper.hideAlert()

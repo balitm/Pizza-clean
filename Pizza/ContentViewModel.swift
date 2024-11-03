@@ -9,6 +9,7 @@ import Domain
 import Factory
 import Combine
 
+@MainActor
 final class ContentViewModel: ViewModelBase {
     enum AlertKind {
         case none, noNetwork
@@ -16,12 +17,21 @@ final class ContentViewModel: ViewModelBase {
 
     @Injected(\.reachability) var reachability
 
+    let menuListViewModel = MenuListViewModel()
     var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    func listenToReachabiity() async {
+    func listenToReachabity() async {
         for await connection in reachability.connection {
-            _alertKind.send(connection == .unavailable ? .noNetwork : .none)
+            switch connection {
+            case .wifi, .cellular:
+                menuListViewModel.resume()
+                _alertKind.send(.none)
+            case .unavailable:
+                menuListViewModel.reset()
+                _alertKind.send(.noNetwork)
+            }
         }
+        DLog(l: .trace, "Reachabilty for await ended.")
     }
 }

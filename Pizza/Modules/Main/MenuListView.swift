@@ -11,7 +11,7 @@ import Domain
 
 struct MenuListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
-    @StateObject private var viewModel = MenuListViewModel()
+    @ObservedObject var viewModel: MenuListViewModel
     @EnvironmentObject private var router: MainRouter
 
     var body: some View {
@@ -102,7 +102,7 @@ private extension View {
 
 #if DEBUG
 #Preview {
-    MenuListView()
+    MenuListView(viewModel: .init())
         .environmentObject(AlertHelper())
         .environmentObject(MainRouter())
 }

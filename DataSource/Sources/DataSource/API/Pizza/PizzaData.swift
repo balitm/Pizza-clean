@@ -120,7 +120,7 @@ private let _kPizzas = """
         1,
         2
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/72e67aa8b2784333a15d/?dl=1"
+      "imageUrl": "https://drive.google.com/file/d/1SeX23_JZ5JsgqcVXqyyyKbBlb8IkP50D/view?usp=share_link"
     },
     {
       "name": "Ricci",

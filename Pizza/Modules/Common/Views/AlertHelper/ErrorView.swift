@@ -22,7 +22,7 @@ struct ErrorView: View {
                 .buttonStyle(.filled)
         }
         .padding(16)
-        .background()
+        .background(.regularMaterial, in: Rectangle())
         .cornerRadius(16)
         .padding(32)
     }
