@@ -41,9 +41,22 @@
 		29E84B0D2CDA9A6400D0A513 /* Repository */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Repository; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2920BE7B2CDBDEC700CDD0C5 /* Exceptions for "Pizza" folder in "Pizza" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 29727D382CDA87BC000A24BC /* Pizza */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		29727D3B2CDA87BC000A24BC /* Pizza */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2920BE7B2CDBDEC700CDD0C5 /* Exceptions for "Pizza" folder in "Pizza" target */,
+			);
 			path = Pizza;
 			sourceTree = "<group>";
 		};
@@ -449,6 +462,7 @@
 				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pizza/Info.plist;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app requires access to the local network to communicate with local devices.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -480,6 +494,7 @@
 				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pizza/Info.plist;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app requires access to the local network to communicate with local devices.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -647,6 +662,7 @@
 				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pizza/Info.plist;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app requires access to the local network to communicate with local devices.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
