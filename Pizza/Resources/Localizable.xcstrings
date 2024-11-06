@@ -23,6 +23,9 @@
         }
       }
     },
+    "Alert" : {
+
+    },
     "cartSuccessThanx" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -89,6 +92,9 @@
         }
       }
     },
+    "Hello, world!" : {
+
+    },
     "ingredientsSectionTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -113,6 +119,9 @@
       }
     },
     "No net" : {
+
+    },
+    "OK" : {
 
     },
     "total" : {

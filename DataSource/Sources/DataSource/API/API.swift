@@ -34,6 +34,10 @@ public final class API: Sendable {
         // or any session-related data to disk. Instead, session-related data is stored in RAM.
         let config = URLSessionConfiguration.ephemeral
 
+        // Allow usage of local net/IP
+        config.waitsForConnectivity = true
+        config.timeoutIntervalForResource = 30
+
         session = URLSession(configuration: config)
     }
 
