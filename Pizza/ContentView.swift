@@ -2,17 +2,30 @@
 //  ContentView.swift
 //  Pizza
 //
-//  Created by Balázs Kilvády on 2024. 10. 04..
+//  Created by Balázs Kilvády on 2024. 11. 05..
 //
 
 import SwiftUI
 import Domain
 import Factory
 
+class ContentModel: ObservableObject {
+    let session: URLSession = {
+        let config = URLSessionConfiguration.ephemeral
+
+        // Allow usage of local net/IP
+        config.waitsForConnectivity = true
+        config.timeoutIntervalForResource = 30
+
+        return URLSession(configuration: config)
+    }()
+}
+
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
     @State private var saveService = Container.shared.saveUseCase()
     @State private var showAlert = false
+    @StateObject private var model = ContentModel()
 
     var body: some View {
         // AlertHelperView {
@@ -39,27 +52,19 @@ struct ContentView: View {
             }
         }
         .task {
-            fetchDataFromLocalIP()
+            await fetchDataFromLocalIP()
         }
     }
 
-    func fetchDataFromLocalIP() {
+    func fetchDataFromLocalIP() async {
         let urlString = "http://192.168.1.20:4010/drinks"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
         }
 
-        let task = URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error {
-                print("Error: \(error.localizedDescription)")
-                return
-            }
-
-            guard let data else {
-                print("No data received")
-                return
-            }
+        do {
+            let (data, _) = try await model.session.data(from: url)
 
             // Process the data
             if let responseString = String(data: data, encoding: .utf8) {
@@ -67,9 +72,9 @@ struct ContentView: View {
                     showAlert = true
                 }
             }
+        } catch {
+            print("Error: \(error.localizedDescription)")
         }
-
-        task.resume()
     }
 }
 

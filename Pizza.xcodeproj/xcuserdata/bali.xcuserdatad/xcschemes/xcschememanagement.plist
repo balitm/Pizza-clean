@@ -4,17 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>GettingStarted (Playground).xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>5</integer>
-		</dict>
-		<key>Pizza (internal debug).xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>2</integer>
-		</dict>
 		<key>Pizza (internal).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>Pizza int.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
@@ -27,17 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>29D3C0C42CB044FF00BD1D6C</key>
+		<key>29727D382CDA87BC000A24BC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>29D3C0D42CB0450000BD1D6C</key>
+		<key>29727D482CDA87BD000A24BC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>29D3C0DE2CB0450000BD1D6C</key>
+		<key>29727D522CDA87BD000A24BC</key>
 		<dict>
 			<key>primary</key>
 			<true/>

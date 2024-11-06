@@ -20,13 +20,13 @@ class DrinksUseCaseTests: NetworklessUseCaseTestsBase {
     }
 
     @Test func drinks() async throws {
-        let drinks = try await service.drinks()
+        let drinks = await service.drinks()
         #expect(!drinks.isEmpty)
     }
 
     @Test func addDrink() async throws {
         try await addItemTest {
-            try await self.service.addToCart(drinkIndex: 0)
+            await self.service.addToCart(drinkIndex: 0)
         } test: { [unowned data = data!] in
             #expect($0.drinks.count == 1)
             let handler = await data.cartHandler

@@ -12,10 +12,6 @@ import Factory
 
 struct DatabaseTest {
     nonisolated(unsafe) static let realm: Realm = {
-        _ = Container.shared.pizzaAPI.register {
-            MockPizzaNetwork()
-        }.singleton
-
         var config = Realm.Configuration.defaultConfiguration
         debugPrint(#fileID, #line, "Realm file: \(config.fileURL!.path)")
         var fileURL = config.fileURL!

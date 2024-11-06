@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1600"
+   LastUpgradeVersion = "1610"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "29D3C0C42CB044FF00BD1D6C"
+               BlueprintIdentifier = "29727D382CDA87BC000A24BC"
                BuildableName = "Pizza.app"
                BlueprintName = "Pizza"
                ReferencedContainer = "container:Pizza.xcodeproj">
@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "29D3C0D42CB0450000BD1D6C"
+               BlueprintIdentifier = "29727D482CDA87BD000A24BC"
                BuildableName = "PizzaTests.xctest"
                BlueprintName = "PizzaTests"
                ReferencedContainer = "container:Pizza.xcodeproj">
@@ -46,7 +46,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "29D3C0DE2CB0450000BD1D6C"
+               BlueprintIdentifier = "29727D522CDA87BD000A24BC"
                BuildableName = "PizzaUITests.xctest"
                BlueprintName = "PizzaUITests"
                ReferencedContainer = "container:Pizza.xcodeproj">
@@ -68,7 +68,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "29D3C0C42CB044FF00BD1D6C"
+            BlueprintIdentifier = "29727D382CDA87BC000A24BC"
             BuildableName = "Pizza.app"
             BlueprintName = "Pizza"
             ReferencedContainer = "container:Pizza.xcodeproj">
@@ -85,7 +85,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "29D3C0C42CB044FF00BD1D6C"
+            BlueprintIdentifier = "29727D382CDA87BC000A24BC"
             BuildableName = "Pizza.app"
             BlueprintName = "Pizza"
             ReferencedContainer = "container:Pizza.xcodeproj">

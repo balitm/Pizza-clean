@@ -34,7 +34,8 @@ struct DataSourceTests {
 
     @Test func appVersion() async throws {
         let appConfig = DataSourceContainer.shared.appConfig()
-        #expect(appConfig.pizzaBaseURL == "http://localhost:4010")
+        #expect(appConfig.pizzaBaseURL == "http://192.168.1.20:4010")
+        #expect(appConfig.flavour == .testing)
     }
 
     @Test func publicAPI() async throws {

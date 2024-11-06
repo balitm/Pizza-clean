@@ -26,7 +26,7 @@ actor InitRepository {
     let cartHandler = CartHandler()
 
     func initialize() async throws -> Components {
-        let component = try await self.initComponentes()
+        let component = try await initComponentes()
         self.component = component
 
         // Init cart.
