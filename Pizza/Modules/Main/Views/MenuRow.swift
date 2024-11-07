@@ -10,19 +10,17 @@ import SwiftUI
 import Domain
 
 struct MenuRow: View {
-    @ObservedObject var data: MenuRowData
     @EnvironmentObject private var router: MainRouter
+    @ObservedObject var data: MenuRowData
 
     var body: some View {
-        // let _ = Self._printChanges()
-
         Button {
-            router.push(.ingredients(data.pizza, $data.image))
+            router.push(.ingredients(data))
         } label: {
             rowView
         }
-        .task {
-            await data.downloadImage()
+        .onAppear {
+            data.downloadImage()
         }
     }
 
@@ -40,7 +38,7 @@ struct MenuRow: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(height: 179)
                     .clipped()
-            } else {
+            } else if data.pizza.imageUrl != nil {
                 ProgressView()
                     .tint(.secondary)
                     .frame(height: 128)

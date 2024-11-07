@@ -40,7 +40,7 @@ struct MenuListView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        router.push(.ingredients(Pizza(), .constant(nil)))
+                        router.push(.ingredients(.init()))
                     } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(.accent)
@@ -55,7 +55,6 @@ struct MenuListView: View {
             .navigationTitle(.localizable(.mainTitle))
         }
         .alertModifier(viewModel, alertHelper, router)
-        .tint(.accent)
         .task {
             try? await viewModel.loadPizzas()
         }

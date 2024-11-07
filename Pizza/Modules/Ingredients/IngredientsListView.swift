@@ -13,10 +13,12 @@ import Domain
 struct IngredientsListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
     @EnvironmentObject private var router: MainRouter
-    @StateObject var viewModel: IngredientsViewModel
-    @Binding var image: Image?
+    @StateObject var viewModel = IngredientsViewModel()
+    @ObservedObject var rowData: MenuRowData
 
     var body: some View {
+        // let _ = Self._printChanges()
+
         VStack(spacing: 0) {
             List {
                 header
@@ -44,29 +46,37 @@ struct IngredientsListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarRole(.editor)
         .task {
-            await viewModel.loadData()
+            await viewModel.loadData(rowData: rowData)
         }
     }
 
     @ViewBuilder
     var header: some View {
-        ZStack {
-            Image(.bgWood)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 300)
-                .clipped()
-            image.map {
-                $0
+        VStack(alignment: .leading, spacing: 0) {
+            ZStack {
+                Image(.bgWood)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(height: 300)
+                    .clipped()
+
+                if let image = rowData.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 300)
+                } else if rowData.pizza.imageUrl != nil {
+                    ProgressView()
+                        .tint(.secondary)
+                        .frame(height: 128)
+                }
             }
+
+            Text(localizable: .ingredientsSectionTitle)
+                .font(.system(size: 24, weight: .bold))
+                .foregroundStyle(.text)
+                .padding(12)
         }
-        Text(localizable: .ingredientsSectionTitle)
-            .font(.system(size: 24, weight: .bold))
-            .foregroundStyle(.text)
-            .padding(12)
     }
 
     @ViewBuilder
@@ -115,15 +125,13 @@ import Factory
 #Preview {
     struct AsyncTestView: View {
         @State var pizzas: Pizzas?
-        @State var pizzaImage: Image?
 
         var body: some View {
             NavigationStack {
                 VStack {
                     if let pizzas {
                         IngredientsListView(
-                            viewModel: .init(pizza: pizzas.pizzas[0]),
-                            image: .constant(pizzaImage)
+                            rowData: .preview(from: pizzas, at: 0)
                         )
                     }
                 }
@@ -131,13 +139,14 @@ import Factory
                     let service = Container.shared.menuUseCase()
                     try? await service.initialize()
                     pizzas = await service.pizzas()
-                    pizzaImage = try? await service.dowloadImage(for: pizzas!.pizzas[0])
                 }
             }
         }
     }
 
     return AsyncTestView()
+        .environmentObject(AlertHelper())
+        .environmentObject(MainRouter())
 }
 
 #endif

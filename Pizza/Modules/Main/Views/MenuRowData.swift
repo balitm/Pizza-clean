@@ -36,13 +36,33 @@ final class MenuRowData: ObservableObject {
         self.pizza = pizza
     }
 
+    init() {
+        self.index = 0
+        nameText = ""
+        let price = 0.0
+        priceText = format(price: price)
+        ingredientsText = ""
+        url = nil
+        self.onTapPrice = { _ in }
+        pizza = .init()
+    }
+
     func addToCart() {
         onTapPrice(index)
     }
 
     @MainActor
-    func downloadImage() async {
-        image = try? await menuUseCase.dowloadImage(for: pizza)
+    func downloadImage() {
+        guard image == nil else { return }
+        Task {
+            do {
+                let image = try await menuUseCase.dowloadImage(for: pizza)
+                DLog(l: .trace, "#> image downloaded for \(pizza.name)")
+                self.image = image
+            } catch {
+                DLog(l: .trace, "#> image download for \(pizza.name) failed: \(error)")
+            }
+        }
     }
 }
 

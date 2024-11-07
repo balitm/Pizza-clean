@@ -31,24 +31,17 @@ final class IngredientsViewModel: ViewModelBase {
 
     var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
-
-    private var pizza: Pizza
     private var timer: DispatchSourceTimer?
 
     @Injected(\.ingredientsUseCase) private var service
 
-    init(pizza: Pizza) {
-        self.pizza = pizza
-        super.init()
-
-        // title
-        title = pizza.name
-    }
-
     @MainActor
-    func loadData() async {
+    func loadData(rowData: MenuRowData) async {
+        // title
+        title = rowData.pizza.name
+
         // items
-        let selections = await service.selectedIngredients(for: pizza)
+        let selections = await service.selectedIngredients(for: rowData.pizza)
         map(selections: selections)
     }
 

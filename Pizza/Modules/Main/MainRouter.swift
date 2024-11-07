@@ -9,14 +9,14 @@ import SwiftUI
 import Domain
 
 enum MainPath: Hashable {
-    case cart, drinks, ingredients(Pizza, Binding<Image?>)
+    case cart, drinks, ingredients(MenuRowData)
 
     func hash(into hasher: inout Hasher) {
         switch self {
         case .cart, .drinks:
             hasher.combine(self)
-        case let .ingredients(pizza, _):
-            hasher.combine(pizza)
+        case let .ingredients(rowData):
+            hasher.combine(rowData.pizza)
         }
     }
 
@@ -24,8 +24,8 @@ enum MainPath: Hashable {
         switch (lhs, rhs) {
         case (.cart, .cart), (.drinks, .drinks):
             true
-        case let (.ingredients(lhsPizza, _), .ingredients(rhsPizza, _)):
-            lhsPizza == rhsPizza
+        case let (.ingredients(lhs), .ingredients(rhs)):
+            lhs.pizza == rhs.pizza
         default:
             false
         }
@@ -39,8 +39,8 @@ final class MainRouter: CustomNavPathProvider<MainPath>, Routing {
             CartView()
         case .drinks:
             DrinksListView()
-        case let .ingredients(pizza, binding):
-            IngredientsListView(viewModel: .init(pizza: pizza), image: binding)
+        case let .ingredients(rowData):
+            IngredientsListView(rowData: rowData)
         }
     }
 }
