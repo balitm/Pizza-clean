@@ -12,7 +12,7 @@ import Factory
 import Combine
 
 @MainActor
-final class MenuListViewModel: ObservableObject {
+final class MenuListViewModel: ViewModelBase {
     /// UI alert events.
     enum AlertKind {
         case progress, none, added, initError(Error)
@@ -24,6 +24,7 @@ final class MenuListViewModel: ObservableObject {
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
     private var pizzas: Pizzas?
+    private var isLoading = false
 
     @Injected(\.menuUseCase) private var service
 
@@ -41,6 +42,7 @@ final class MenuListViewModel: ObservableObject {
     /// Load pizza data.
     func loadPizzas() async throws {
         _alertKind.send(.progress)
+        isLoading = true
 
         do {
             try await service.initialize()
@@ -58,6 +60,7 @@ final class MenuListViewModel: ObservableObject {
             }
 
             listData = vms
+            isLoading = false
             _alertKind.send(.none)
         } catch {
             _alertKind.send(.initError(error))
@@ -66,9 +69,12 @@ final class MenuListViewModel: ObservableObject {
 
     func reset() {
         listData = []
+        isLoading = false
     }
 
     func resume() {
+        guard !isLoading else { return }
+
         Task {
             do {
                 try await loadPizzas()

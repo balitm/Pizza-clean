@@ -4,6 +4,7 @@
 //
 //  Created by Balázs Kilvády on 2024. 10. 31..
 //
+
 import Foundation
 import Domain
 import Factory
