@@ -112,8 +112,16 @@
         }
       }
     },
-    "No net" : {
-
+    "noNetworkNotification" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NO NETWORK"
+          }
+        }
+      }
     },
     "total" : {
       "extractionState" : "manual",

@@ -49,7 +49,7 @@ private extension View {
                     isTouchOutside: true,
                     alignment: .top
                 ) {
-                    CustomNotification(text: .localizable(.addedNotification)) {
+                    AddedNotification(text: .localizable(.addedNotification)) {
                         dismiss()
                     }
                     .transition(.move(edge: .top))

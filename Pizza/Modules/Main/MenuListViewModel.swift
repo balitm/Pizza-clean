@@ -27,6 +27,7 @@ final class MenuListViewModel: ObservableObject {
 
     @Injected(\.menuUseCase) private var service
 
+    /// Add the selected pizza to the cart.
     func addPizza(index: Int) {
         guard let pizzas else { return }
 
@@ -60,6 +61,20 @@ final class MenuListViewModel: ObservableObject {
             _alertKind.send(.none)
         } catch {
             _alertKind.send(.initError(error))
+        }
+    }
+
+    func reset() {
+        listData = []
+    }
+
+    func resume() {
+        Task {
+            do {
+                try await loadPizzas()
+            } catch {
+                _alertKind.send(.initError(error))
+            }
         }
     }
 

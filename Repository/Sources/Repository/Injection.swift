@@ -16,6 +16,10 @@ extension Container {
 }
 
 public extension Container {
+    var reachability: Factory<ReachabilityUseCase> {
+        self { ReachabilityRepository() }
+    }
+
     var menuUseCase: Factory<MenuUseCase> {
         self { MenuRepository() }
     }

@@ -11,8 +11,8 @@ import Domain
 
 struct MenuListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
-    @StateObject private var viewModel = MenuListViewModel()
-    @StateObject private var router = MainRouter()
+    @ObservedObject var viewModel: MenuListViewModel
+    @EnvironmentObject private var router: MainRouter
 
     var body: some View {
         // let _ = Self._printChanges()
@@ -48,6 +48,7 @@ struct MenuListView: View {
                     }
                 }
             }
+            .animation(.default, value: viewModel.listData.isEmpty)
             .listStyle(.plain)
             .navigationDestination(for: MainPath.self) {
                 router.view(for: $0)
@@ -79,7 +80,7 @@ private extension View {
                     isTouchOutside: true,
                     alignment: .top
                 ) {
-                    CustomNotification(text: .localizable(.addedNotification)) {
+                    AddedNotification(text: .localizable(.addedNotification)) {
                         router.push(.cart)
                     }
                     .transition(.move(edge: .top))
@@ -101,7 +102,8 @@ private extension View {
 
 #if DEBUG
 #Preview {
-    MenuListView()
+    MenuListView(viewModel: .init())
         .environmentObject(AlertHelper())
+        .environmentObject(MainRouter())
 }
 #endif

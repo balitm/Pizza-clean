@@ -39,9 +39,6 @@ final class AlertHelper: ObservableObject {
     /// Alert/modal popup to show.
     @Published private(set) var alertView: IdentifiableAlert?
 
-    /// Show No net bottom bar?
-    @Published private(set) var noNetView = false
-
     /// Let hide for touch up outside?
     var isTouchOutside = false
 
@@ -72,11 +69,6 @@ final class AlertHelper: ObservableObject {
     func hideAlert() {
         isTouchOutside = false
         alertView = nil
-    }
-
-    /// Show the no network view.
-    func showNoNet(_ noNet: Bool) {
-        noNetView = noNet
     }
 }
 
