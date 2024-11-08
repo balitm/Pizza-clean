@@ -24,7 +24,7 @@ final class MenuListViewModel: ViewModelBase {
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
     private var pizzas: Pizzas?
-    private var isLoading = false
+    private(set) var isLoading = false
 
     @Injected(\.menuUseCase) private var service
 
@@ -62,16 +62,27 @@ final class MenuListViewModel: ViewModelBase {
             listData = vms
             isLoading = false
             _alertKind.send(.none)
+        } catch let error as APIError {
+            DLog(l: .error, "Initial donwload failed with: \(error)")
+            switch error.kind {
+            case .cancelled:
+                // swallow cancelled error
+                break
+            default:
+                _alertKind.send(.initError(error))
+            }
         } catch {
             _alertKind.send(.initError(error))
         }
     }
 
+    /// Reset UI when network is gone.
     func reset() {
         listData = []
         isLoading = false
     }
 
+    /// Resume when network is back.
     func resume() {
         guard !isLoading else { return }
 

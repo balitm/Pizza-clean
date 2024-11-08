@@ -16,29 +16,38 @@ private struct ParamArray {
     let elements: [String]
 }
 
-public final class API: Sendable {
+private func createSession() -> URLSession {
+    // An ephemeral session configuration object is similar to a default session configuration,
+    // except that the corresponding session object doesn’t store caches, credential stores,
+    // or any session-related data to disk. Instead, session-related data is stored in RAM.
+    let config = URLSessionConfiguration.ephemeral
+
+    // Allow usage of local net/IP
+    config.waitsForConnectivity = true
+    config.timeoutIntervalForResource = 30
+
+    return URLSession(configuration: config)
+}
+
+actor API {
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
-    private let session: URLSession
+    private var session: URLSession
 
     init() {
         decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(DateHelper.dateTimeZoneFormatter)
 
         encoder = JSONEncoder()
-        // encoder.outputFormatting = .sortedKeys
         encoder.dateEncodingStrategy = .formatted(DateHelper.dateTimeZoneFormatter)
 
-        // An ephemeral session configuration object is similar to a default session configuration,
-        // except that the corresponding session object doesn’t store caches, credential stores,
-        // or any session-related data to disk. Instead, session-related data is stored in RAM.
-        let config = URLSessionConfiguration.ephemeral
+        session = createSession()
+    }
 
-        // Allow usage of local net/IP
-        config.waitsForConnectivity = true
-        config.timeoutIntervalForResource = 30
-
-        session = URLSession(configuration: config)
+    /// Cancels all the pendig tasks and starts a new URLSession.
+    func resetSession() {
+        session.invalidateAndCancel()
+        session = createSession()
     }
 
     func perform<T: Decodable>(type: T.Type = T.self, request: TargetType) async throws -> T {
@@ -278,15 +287,18 @@ public final class API: Sendable {
             } catch {
                 DLog("caught: \(error)")
                 let nserror = error as NSError
-                if nserror.code == -1001 {
+                if nserror.code == NSURLErrorTimedOut {
                     // timeout
                     response = HTTPURLResponse(
                         url: request.url!, statusCode: HTTPStatusCode.requestTimeout.rawValue,
                         httpVersion: nil, headerFields: nil
                     )!
-                } else if nserror.code == -1009 {
+                } else if nserror.code == NSURLErrorNotConnectedToInternet {
                     // offline
                     throw APIError(kind: .offline)
+                } else if nserror.code == NSURLErrorCancelled {
+                    // cancelled (hopefully by us)
+                    throw APIError(kind: .cancelled)
                 }
                 throw APIError(kind: .netError(error))
             }

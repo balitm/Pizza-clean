@@ -13,7 +13,7 @@ import struct SwiftUI.Image
 
 final class MenuRepository: MenuUseCase {
     @Injected(\.initActor) private var initActor
-    @Injected(\.pizzaAPI) var network
+    @Injected(\DataSourceContainer.pizzaAPI) var network
     @Injected(\DataSourceContainer.appConfig) var appConfig
 
     func initialize() async throws {

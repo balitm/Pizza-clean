@@ -9,4 +9,7 @@ import Foundation
 
 public protocol ReachabilityUseCase {
     var connection: AsyncStream<Connection> { get }
+
+    /// Reset (underlying URL)session.
+    func resetSession() async
 }

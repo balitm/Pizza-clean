@@ -8,26 +8,6 @@
 import Foundation
 import Factory
 
-public extension Container {
-    var pizzaAPI: Factory<PizzaNetwork> {
-        self { APIPizzaNetwork() }.singleton
-        // self { MockPizzaNetwork() }.singleton
-    }
-
-    var storage: Factory<DataSource.Storage> {
-        self { DataSource.Storage() }.singleton
-    }
-}
-
-extension Container: @retroactive AutoRegistering {
-    public func autoRegister() {
-#if DEBUG
-        Container.shared.pizzaAPI.onPreview { MockPizzaNetwork() }
-        Container.shared.pizzaAPI.onTest { MockPizzaNetwork() }
-#endif
-    }
-}
-
 public final class DataSourceContainer: SharedContainer {
     public static let shared = DataSourceContainer()
 
@@ -37,5 +17,22 @@ public final class DataSourceContainer: SharedContainer {
         self { AppConfig() }
             .onTest { TestingAppConfig() }
             .singleton
+    }
+
+    public var pizzaAPI: Factory<PizzaNetwork> {
+        self { APIPizzaNetwork() }.singleton
+    }
+
+    public var storage: Factory<DataSource.Storage> {
+        self { DataSource.Storage() }.singleton
+    }
+}
+
+extension DataSourceContainer: AutoRegistering {
+    public func autoRegister() {
+#if DEBUG
+        Self.shared.pizzaAPI.onPreview { MockPizzaNetwork() }
+        Self.shared.pizzaAPI.onTest { MockPizzaNetwork() }
+#endif
     }
 }

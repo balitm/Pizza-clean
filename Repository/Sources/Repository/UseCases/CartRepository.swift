@@ -7,11 +7,12 @@
 
 import Foundation
 import Domain
+import DataSource
 import Factory
 
 struct CartRepository: CartUseCase {
     @Injected(\.initActor) fileprivate var initActor
-    @Injected(\.pizzaAPI) private var network
+    @Injected(\DataSourceContainer.pizzaAPI) private var network
 
     func items() async -> [CartItem] {
         await initActor.cartHandler.cart.items()
