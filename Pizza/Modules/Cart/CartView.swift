@@ -37,6 +37,7 @@ struct CartView: View {
             .listSectionSeparator(.hidden, edges: .bottom)
             .listRowInsets(.init())
         }
+        .animation(.default, value: viewModel.listData.count)
         .environment(\.defaultMinListHeaderHeight, 0)
         .listStyle(.plain)
         .overlay(alignment: .bottom) {
