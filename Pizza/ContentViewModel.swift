@@ -4,6 +4,7 @@
 //
 //  Created by Balázs Kilvády on 2024. 10. 31..
 //
+
 import Foundation
 import Domain
 import Factory
@@ -18,18 +19,26 @@ final class ContentViewModel: ViewModelBase {
     @Injected(\.reachability) var reachability
 
     let menuListViewModel = MenuListViewModel()
-    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
+    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.removeDuplicates().eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
+    private var hasNetwork = true
 
     func listenToReachabity() async {
         for await connection in reachability.connection {
             switch connection {
             case .wifi, .cellular:
-                menuListViewModel.resume()
-                _alertKind.send(.none)
+                if !hasNetwork {
+                    hasNetwork = true
+                    menuListViewModel.resume()
+                    _alertKind.send(.none)
+                }
             case .unavailable:
-                menuListViewModel.reset()
-                _alertKind.send(.noNetwork)
+                if hasNetwork {
+                    hasNetwork = false
+                    menuListViewModel.reset()
+                    await reachability.resetSession()
+                    _alertKind.send(.noNetwork)
+                }
             }
         }
         DLog(l: .trace, "Reachabilty for await ended.")

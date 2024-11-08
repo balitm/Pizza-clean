@@ -59,7 +59,6 @@ struct MenuListView: View {
         .task {
             try? await viewModel.loadPizzas()
         }
-        .environmentObject(router)
     }
 }
 

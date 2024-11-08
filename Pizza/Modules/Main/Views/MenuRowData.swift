@@ -15,10 +15,8 @@ final class MenuRowData: ObservableObject {
     @Published var image: Image?
 
     let index: Int
-    let nameText: String
     let ingredientsText: String
     let priceText: String
-    let url: URL?
     let onTapPrice: (Int) -> Void
 
     let pizza: Pizza
@@ -27,22 +25,17 @@ final class MenuRowData: ObservableObject {
 
     init(index: Int, basePrice: Double, pizza: Pizza, onTapPrice: @escaping (Int) -> Void) {
         self.index = index
-        nameText = pizza.name
         let price = pizza.price(from: basePrice)
         priceText = format(price: price)
         ingredientsText = pizza.ingredientNames()
-        url = pizza.imageUrl
         self.onTapPrice = onTapPrice
         self.pizza = pizza
     }
 
     init() {
         self.index = 0
-        nameText = ""
-        let price = 0.0
-        priceText = format(price: price)
+        priceText = ""
         ingredientsText = ""
-        url = nil
         self.onTapPrice = { _ in }
         pizza = .init()
     }

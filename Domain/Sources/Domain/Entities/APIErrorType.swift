@@ -18,6 +18,7 @@ public struct APIError: LocalizedError {
         case connectionLost
         case netError(Error?)
         case offline
+        case cancelled
 
         var localizedDescription: String {
             switch self {
@@ -39,6 +40,8 @@ public struct APIError: LocalizedError {
                 "netError: \(error?.localizedDescription ?? "nil")"
             case .offline:
                 "offline"
+            case .cancelled:
+                "canelled"
             }
         }
     }

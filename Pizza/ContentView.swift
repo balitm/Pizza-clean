@@ -41,7 +41,7 @@ private extension View {
         _ alertHelper: AlertHelper,
         _ router: MainRouter
     ) -> some View {
-        onReceive(viewModel.alertKind.removeDuplicates()) { kind in
+        onReceive(viewModel.alertKind) { kind in
             DLog(l: .trace, "receiving \(kind)")
             switch kind {
             case .none:

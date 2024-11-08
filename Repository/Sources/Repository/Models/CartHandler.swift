@@ -12,7 +12,7 @@ import Factory
 
 actor CartHandler {
     // @Injected(\.storage) nonisolated(unsafe) private var storage
-    private let storage = Container.shared.storage()
+    private let storage = DataSourceContainer.shared.storage()
     private(set) var cart = Cart.empty
 
     func start(with: Cart) -> Cart {

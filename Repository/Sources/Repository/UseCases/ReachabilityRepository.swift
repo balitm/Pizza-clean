@@ -9,8 +9,11 @@ import Foundation
 import Domain
 import DataSource
 import Reachability
+import Factory
 
 struct ReachabilityRepository: ReachabilityUseCase {
+    @Injected(\DataSourceContainer.pizzaAPI) private var api
+
     var connection: AsyncStream<Connection> {
         AsyncStream { continuation in
             do {
@@ -43,6 +46,10 @@ struct ReachabilityRepository: ReachabilityUseCase {
                 continuation.finish()
             }
         }
+    }
+
+    func resetSession() async {
+        await api.resetSession()
     }
 }
 

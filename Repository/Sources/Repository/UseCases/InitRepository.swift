@@ -19,8 +19,8 @@ actor InitRepository {
         static let empty = Components(pizzas: Pizzas(pizzas: [], basePrice: 0), ingredients: [], drinks: [])
     }
 
-    @Injected(\.pizzaAPI) var network
-    @Injected(\.storage) var storage
+    @Injected(\DataSourceContainer.pizzaAPI) var network
+    @Injected(\DataSourceContainer.storage) var storage
 
     private(set) var component = Components.empty
     let cartHandler = CartHandler()

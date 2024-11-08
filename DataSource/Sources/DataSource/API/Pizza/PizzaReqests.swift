@@ -19,6 +19,7 @@ public protocol PizzaNetwork: Sendable {
     func checkout(pizzas: [DataSource.Pizza], drinks: [DataSource.Drink.ID]) async throws
     func checkout(cart: DataSource.Cart) async throws
     func downloadImage(url: URL) async throws -> CGImage
+    func resetSession() async
 }
 
 public extension PizzaNetwork {
@@ -30,9 +31,6 @@ public extension PizzaNetwork {
 /// Implementation of request Pizza API.
 final class APIPizzaNetwork: PizzaNetwork {
     let api = API()
-
-    /// Singleton instance
-    static let shared = APIPizzaNetwork()
 
     func getIngredients() async throws -> [DataSource.Ingredient] {
         try await api.perform(request: PizzaReqests.getIngredients)
@@ -56,6 +54,10 @@ final class APIPizzaNetwork: PizzaNetwork {
         let image = CGImageSourceCreateImageAtIndex(source, 0, nil)
         guard let image else { throw APIError(kind: .processingFailed) }
         return image
+    }
+
+    func resetSession() async {
+        await api.resetSession()
     }
 }
 
@@ -84,6 +86,8 @@ public final class MockPizzaNetwork: PizzaNetwork {
         guard let image else { throw APIError(kind: .processingFailed) }
         return image
     }
+
+    public func resetSession() {}
 }
 #endif
 
