@@ -3,7 +3,7 @@
 //  DCPizza
 //
 //  Created by Balázs Kilvády on 6/9/20.
-//  Copyright © 2020 kil-dev. All rights reserved.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import SwiftUI
