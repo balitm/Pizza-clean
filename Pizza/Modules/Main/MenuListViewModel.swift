@@ -39,8 +39,8 @@ final class MenuListViewModel: ViewModelBase {
         }
     }
 
-    /// Load pizza data.
-    func loadPizzas() async throws {
+    /// Download pizza data.
+    func fetchPizzas() async throws {
         _alertKind.send(.progress)
         isLoading = true
 
@@ -88,7 +88,7 @@ final class MenuListViewModel: ViewModelBase {
 
         Task {
             do {
-                try await loadPizzas()
+                try await fetchPizzas()
             } catch {
                 _alertKind.send(.initError(error))
             }

@@ -57,7 +57,7 @@ struct MenuListView: View {
         }
         .alertModifier(viewModel, alertHelper, router)
         .task {
-            try? await viewModel.loadPizzas()
+            try? await viewModel.fetchPizzas()
         }
     }
 }
