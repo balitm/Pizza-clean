@@ -3,6 +3,7 @@
 //  DataSource
 //
 //  Created by Balázs Kilvády on 2024. 10. 08..
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
@@ -10,7 +11,7 @@ import os
 
 extension API {
     enum NetworkLogger {
-        private static let _logger = Logger(subsystem: "BinX", category: "NetworkLogger")
+        private static let _logger = Logger(subsystem: "Pizza", category: "NetworkLogger")
 
         static func log(request: URLRequest, data _: Data? = nil) {
             var lines = ["\n - - - - - - - - - - OUTGOING - - - - - - - - - - \n"]

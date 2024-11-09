@@ -3,7 +3,7 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 2/17/20.
-//  Copyright © 2020 kil-dev. All rights reserved.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
@@ -45,6 +45,7 @@ public struct Cart: Sendable {
     }
 
     public mutating func remove(at index: Int) {
+        guard index >= 0 && index < _ids.count else { return }
         _ids.remove(at: index)
         let count = pizzas.count
         if index < count {

@@ -3,33 +3,26 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 2/17/20.
-//  Copyright © 2020 kil-dev. All rights reserved.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
-import Combine
-import class UIKit.UIImage
-
-public typealias Image = UIImage
 
 public struct Pizza: Sendable {
     public let name: String
     public let ingredients: [Ingredient]
     public let imageUrl: URL?
-    public let image: Image?
 
-    public init(copy other: Pizza, with ingredients: [Ingredient]? = nil, image: Image? = nil) {
-        name = other.name
+    public init(copy other: Pizza, name: String? = nil, with ingredients: [Ingredient]? = nil) {
+        self.name = name ?? other.name
         imageUrl = other.imageUrl
         self.ingredients = ingredients ?? other.ingredients
-        self.image = image ?? other.image
     }
 
     public init() {
         name = "Custom"
         imageUrl = nil
         ingredients = []
-        image = nil
     }
 
     public init(
@@ -40,7 +33,6 @@ public struct Pizza: Sendable {
         self.name = name
         self.ingredients = ingredients
         self.imageUrl = imageUrl
-        image = nil
     }
 
     public func price(from basePrice: Double) -> Double {
@@ -61,5 +53,16 @@ public struct Pizza: Sendable {
             iNames += "."
         }
         return iNames
+    }
+}
+
+extension Pizza: Hashable {
+    public static func ==(lhs: Pizza, rhs: Pizza) -> Bool {
+        lhs.name == rhs.name && lhs.imageUrl == rhs.imageUrl
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(imageUrl)
     }
 }

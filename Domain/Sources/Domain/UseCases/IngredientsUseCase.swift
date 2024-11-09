@@ -3,14 +3,18 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 5/15/20.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
 import Combine
 
 public protocol IngredientsUseCase {
-    func ingredients(selected: AnyPublisher<Int, Never>) -> AnyPublisher<[IngredientSelection], Never>
-    func addToCart() -> AnyPublisher<Void, Error>
-    func name() -> AnyPublisher<String, Never>
-    func pizza() -> AnyPublisher<Pizza, Never>
+    mutating func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection]
+    mutating func select(ingredientIndex index: Int) -> [IngredientSelection]
+    func addToCart() async
+    func name() -> String
+    func pizza() -> Pizza
+    func title() -> String
+    func sum() -> Double
 }

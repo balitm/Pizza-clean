@@ -3,9 +3,12 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 2024. 10. 07..
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
-public struct APIError: Error {
+import Foundation
+
+public struct APIError: LocalizedError {
     public enum Kind: Error {
         case invalidURL(String)
         case invalidRequest
@@ -16,6 +19,32 @@ public struct APIError: Error {
         case connectionLost
         case netError(Error?)
         case offline
+        case cancelled
+
+        var localizedDescription: String {
+            switch self {
+            case let .invalidURL(string):
+                "invalidURL: \(string)"
+            case .invalidRequest:
+                "invalidRequest"
+            case .disabled:
+                "disabled"
+            case .invalidResponse:
+                "invalidResponse"
+            case .processingFailed:
+                "processingFailed"
+            case let .httpError(statusCode):
+                "httpError: \(statusCode)"
+            case .connectionLost:
+                "connectionLost:"
+            case let .netError(error):
+                "netError: \(error?.localizedDescription ?? "nil")"
+            case .offline:
+                "offline"
+            case .cancelled:
+                "canelled"
+            }
+        }
     }
 
     public let kind: Kind
@@ -52,5 +81,16 @@ public struct APIError: Error {
 
     public var description: String {
         "\(kind)"
+    }
+
+    public var errorDescription: String? {
+        var description = kind.localizedDescription
+        if let code {
+            description += " - \(code)"
+        }
+        if let message {
+            description += " - \(message)"
+        }
+        return description
     }
 }

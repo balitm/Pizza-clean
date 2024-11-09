@@ -42,7 +42,7 @@ public class DLogger {
         }
     }
 
-    private let _logger = Logger(subsystem: "MAVApp.DLog", category: "General")
+    private let _logger = Logger(subsystem: "Pizza", category: "General")
 
     init() {}
 

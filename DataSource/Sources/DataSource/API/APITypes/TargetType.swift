@@ -3,6 +3,7 @@
 //  DataSource
 //
 //  Created by Balázs Kilvády on 2024. 10. 08..
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
@@ -38,7 +39,7 @@ protocol TargetType {
     var baseURL: URL { get }
 
     /// The path to be appended to `baseURL` to form the full `URL`.
-    var path: String { get }
+    var path: String? { get }
 
     /// The HTTP method used in the request.
     var method: Method { get }
@@ -57,12 +58,6 @@ protocol TargetType {
 
     /// The timeout of the request.
     var retryCount: Int { get }
-
-    var resultIsData: Bool { get }
-
-    var decodableResutType: Decodable.Type? { get }
-
-    var isAbsolutePath: Bool { get }
 }
 
 extension TargetType {

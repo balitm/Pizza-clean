@@ -1,0 +1,291 @@
+openapi: 3.0.0
+info:
+  title: Pizza Ordering Service API
+  description: API for ordering pizzas, including retrieving ingredients, drinks, and pizzas.
+  version: 1.0.0
+servers:
+  - url: 'https://api.yourpizzaservice.com/v1'
+paths:
+  /drinks:
+    get:
+      summary: Get list of available drinks
+      operationId: getDrinks
+      responses:
+        '200':
+          description: A list of drinks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Drinks'
+              examples:
+                allDrinks:
+                  summary: Example of all drinks
+                  value:
+                    - id: 1
+                      name: "Still Water"
+                      price: 1.0
+                    - id: 2
+                      name: "Sparkling Water"
+                      price: 1.5
+                    - id: 3
+                      name: "Coke"
+                      price: 2.5
+                    - id: 4
+                      name: "Beer"
+                      price: 3.0
+                    - id: 5
+                      name: "Red Wine"
+                      price: 4.0
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              examples:
+                error:
+                  value: {"errorCode": 404, "description": "Item not found", "localizableKey": "notFoundError"}
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeader'
+        - $ref: '#/components/parameters/UserAgentHeader'
+  /ingredients:
+    get:
+      summary: Get list of available ingredients
+      operationId: getIngredients
+      responses:
+        '200':
+          description: A list of ingredients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredients'
+              examples:
+                allIngredients:
+                  summary: Example of all ingredients
+                  value:
+                    - id: 1
+                      name: "Mozzarella"
+                      price: 1.0
+                    - id: 2
+                      name: "Tomato Sauce"
+                      price: 0.5
+                    - id: 3
+                      name: "Salami"
+                      price: 1.5
+                    - id: 4
+                      name: "Mushrooms"
+                      price: 2.0
+                    - id: 5
+                      name: "Ricci"
+                      price: 4.0
+                    - id: 6
+                      name: "Asparagus"
+                      price: 2.0
+                    - id: 7
+                      name: "Pineapple"
+                      price: 1.0
+                    - id: 8
+                      name: "Speck"
+                      price: 3.0
+                    - id: 9
+                      name: "Bottarga"
+                      price: 2.5
+                    - id: 10
+                      name: "Tuna"
+                      price: 2.2
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              examples:
+                error:
+                  value: {"errorCode": 404, "description": "Item not found", "localizableKey": "notFoundError"}
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeader'
+        - $ref: '#/components/parameters/UserAgentHeader'
+  /pizzas:
+    get:
+      summary: Get list of available pizzas
+      operationId: getPizzas
+      responses:
+        '200':
+          description: A list of pizzas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pizzas'
+              examples:
+                allPizzas:
+                  summary: Example of all pizzas
+                  value:
+                    basePrice: 4.0
+                    pizzas:
+                      - name: "Margherita"
+                        ingredients: [1, 2]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=1SeX23_JZ5JsgqcVXqyyyKbBlb8IkP50D"
+                      - name: "Ricci"
+                        ingredients: [1, 5]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=14D7zR82oywZbEKZYXg6LehLhqddNK07D"
+                      - name: "Boscaiola"
+                        ingredients: [1, 2, 3, 4]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=1n_yyc55nEVwoOPO3bHQgqrbJP79iVqaA"
+                      - name: "Primavera"
+                        ingredients: [1, 5, 6]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=1WYcpmXtz4CZnSVxByW2vjSLNpxN1q0jL"
+                      - name: "Hawaii"
+                        ingredients: [1, 2, 7, 8]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=1hPJNswxRSDudT5wsmPh6VQkJGIa6_Lv1"
+                      - name: "Mare Bianco"
+                        ingredients: [1, 9, 10]
+                      - name: "Mari e monti"
+                        ingredients: [1, 2, 4, 8, 9, 10]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=1dz-zx45_9H74OqT-_bd0tSIHu3TPXnk-"
+                      - name: "Bottarga"
+                        ingredients: [1, 9]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=1CvwuqO2V0I7IKjLeMq4IGwKZlZAjpMYb"
+                      - name: "Boottarga e Asparagi"
+                        ingredients: [1, 2, 9, 6]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=13scUPhjIIhXOZ4yaLE9lsShi_jPygXPO"
+                      - name: "Ricci e Asparagi"
+                        ingredients: [1, 5, 6]
+                        imageUrl: "https://drive.google.com/uc?export=download&id=16480rKx_X-POxY-OWcVUB6-iBE4YD2mD"
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              examples:
+                error:
+                  value: {"errorCode": 404, "description": "Item not found", "localizableKey": "notFoundError"}
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeader'
+        - $ref: '#/components/parameters/UserAgentHeader'
+  /checkout:
+    post:
+      summary: Checkout to place an order
+      operationId: checkoutOrder
+      requestBody:
+        description: Order data containing selected pizzas and drinks
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Checkout'
+      responses:
+        '201':
+          description: Order placed successfully
+        '400':
+          description: Request not in working hours
+          content:
+            application/json:
+              examples:
+                error:
+                  value: {"errorCode": 400, "description": "Service unavailable: Request not in working hours", "localizableKey": "outsideWorkingHoursError"}
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              examples:
+                error:
+                  value: {"errorCode": 404, "description": "Item not found", "localizableKey": "notFoundError"}
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeader'
+        - $ref: '#/components/parameters/ContentTypeHeader'
+        - $ref: '#/components/parameters/AuthBearerHeader'
+        - $ref: '#/components/parameters/UserAgentHeader'
+components:
+  schemas:
+    Drink:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+    Drinks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Drink'
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+    Ingredients:
+      type: array
+      items:
+        $ref: '#/components/schemas/Ingredient'
+    Pizza:
+      type: object
+      properties:
+        name:
+          type: string
+        ingredients:
+          type: array
+          items:
+            type: integer
+        imageUrl:
+          type: string
+          nullable: true
+    Pizzas:
+      type: object
+      properties:
+        basePrice:
+          type: number
+          format: float
+        pizzas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pizza'
+    Checkout:
+      type: object
+      properties:
+        pizzas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pizzas'
+        drinks:
+          type: array
+          items:
+            type: integer
+  parameters:
+    AcceptHeader:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: 'application/json'
+    ContentTypeHeader:
+      name: Content-Type
+      in: header
+      required: true
+      schema:
+        type: string
+        default: 'application/json'
+    AuthBearerHeader:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 'Bearer <token>'
+    UserAgentHeader:
+      name: User-Agent
+      in: header
+      required: true
+      schema:
+        type: string
+        default: 'Pizza-iOS/1.1.67.development (iOS 17.6.1; Apple iPhone11,8; hu-HU)'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

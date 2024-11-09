@@ -3,12 +3,12 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 5/20/20.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
-import Combine
 
 public protocol DrinksUseCase {
-    func drinks() -> AnyPublisher<[Drink], Never>
-    func addToCart(drinkIndex: Int) -> AnyPublisher<Void, Error>
+    func drinks() async -> [Drink]
+    func addToCart(drinkIndex: Int) async
 }
