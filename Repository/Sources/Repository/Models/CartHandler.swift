@@ -3,6 +3,7 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 03/25/21.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation

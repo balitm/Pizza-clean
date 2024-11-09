@@ -3,6 +3,7 @@
 //
 //
 //  Created by Balázs Kilvády on 5/16/20.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Testing
@@ -34,7 +35,7 @@ import Factory
 
     @Test func addPizza() async throws {
         let pizza = component.pizzas.pizzas[0]
-        var selection = await service.selectedIngredients(for: pizza)
+        _ = await service.selectedIngredients(for: pizza)
         try await addItemTest(addItem: { [service = service!] in
             await service.addToCart()
         })

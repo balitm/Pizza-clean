@@ -3,6 +3,7 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 5/15/20.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Testing
@@ -16,10 +17,6 @@ typealias DS = DataSource
 
 class UseCaseTestsBase {
     static let inited: Bool = {
-        _ = Container.shared.pizzaAPI.register {
-            MockPizzaNetwork()
-        }.singleton
-
         var config = Realm.Configuration.defaultConfiguration
         debugPrint(#fileID, #line, "Realm file: \(config.fileURL!.path)")
         var fileURL = config.fileURL!
@@ -34,7 +31,7 @@ class UseCaseTestsBase {
             nonisolated(unsafe) var realm: Realm!
             try DS.dbQueue.sync {
                 realm = try Realm(configuration: config, queue: DS.dbQueue)
-                _ = Container.shared.storage.register {
+                _ = DataSourceContainer.shared.storage.register {
                     DS.Storage(realm: realm)
                 }
             }
@@ -51,8 +48,8 @@ class UseCaseTestsBase {
 
     init() async throws {
         _ = Self.inited
-        storage = Container.shared.storage()
-        mock = Container.shared.pizzaAPI()
+        storage = DataSourceContainer.shared.storage()
+        mock = DataSourceContainer.shared.pizzaAPI()
         debugPrint(#fileID, #line, "!!! test case init")
     }
 }

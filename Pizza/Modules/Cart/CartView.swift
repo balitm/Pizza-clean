@@ -3,6 +3,7 @@
 //  Pizza
 //
 //  Created by Balázs Kilvády on 2024. 10. 21..
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import SwiftUI
@@ -37,6 +38,7 @@ struct CartView: View {
             .listSectionSeparator(.hidden, edges: .bottom)
             .listRowInsets(.init())
         }
+        .animation(.default, value: viewModel.listData.count)
         .environment(\.defaultMinListHeaderHeight, 0)
         .listStyle(.plain)
         .overlay(alignment: .bottom) {

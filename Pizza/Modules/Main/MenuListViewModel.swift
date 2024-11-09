@@ -3,7 +3,7 @@
 //  DCPizza
 //
 //  Created by Balázs Kilvády on 2/18/20.
-//  Copyright © 2020 kil-dev. All rights reserved.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
@@ -39,8 +39,8 @@ final class MenuListViewModel: ViewModelBase {
         }
     }
 
-    /// Load pizza data.
-    func loadPizzas() async throws {
+    /// Download pizza data.
+    func fetchPizzas() async throws {
         _alertKind.send(.progress)
         isLoading = true
 
@@ -88,7 +88,7 @@ final class MenuListViewModel: ViewModelBase {
 
         Task {
             do {
-                try await loadPizzas()
+                try await fetchPizzas()
             } catch {
                 _alertKind.send(.initError(error))
             }

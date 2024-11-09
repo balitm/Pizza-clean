@@ -3,6 +3,7 @@
 //  Domain
 //
 //  Created by Balázs Kilvády on 7/20/20.
+//  Copyright © 2024 kil-dev. All rights reserved.
 //
 
 import Testing
