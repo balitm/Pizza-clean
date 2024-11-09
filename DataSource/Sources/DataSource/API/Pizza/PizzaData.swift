@@ -120,7 +120,7 @@ private let _kPizzas = """
         1,
         2
       ],
-      "imageUrl": "https://drive.google.com/file/d/1SeX23_JZ5JsgqcVXqyyyKbBlb8IkP50D/view?usp=share_link"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=1SeX23_JZ5JsgqcVXqyyyKbBlb8IkP50D"
     },
     {
       "name": "Ricci",
@@ -128,7 +128,7 @@ private let _kPizzas = """
         1,
         5
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/0a8b5ae87d4844418c16/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=14D7zR82oywZbEKZYXg6LehLhqddNK07D"
     },
     {
       "name": "Boscaiola",
@@ -138,7 +138,7 @@ private let _kPizzas = """
         3,
         4
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/890735e82ee24483ade3/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=1n_yyc55nEVwoOPO3bHQgqrbJP79iVqaA"
     },
     {
       "name": "Primavera",
@@ -147,7 +147,7 @@ private let _kPizzas = """
         5,
         6
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/d2fb80d3eae14336b9a4/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=1WYcpmXtz4CZnSVxByW2vjSLNpxN1q0jL"
     },
     {
       "name": "Hawaii",
@@ -157,7 +157,7 @@ private let _kPizzas = """
         7,
         8
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/e74891428f7443b39a6e/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=1hPJNswxRSDudT5wsmPh6VQkJGIa6_Lv1"
     },
     {
       "name": "Mare Bianco",
@@ -177,7 +177,7 @@ private let _kPizzas = """
         9,
         10
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/f5e317c08b294eaaa456/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=1dz-zx45_9H74OqT-_bd0tSIHu3TPXnk-"
     },
     {
       "name": "Bottarga",
@@ -185,7 +185,7 @@ private let _kPizzas = """
         1,
         9
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/d373b0a798fc4cc096c0/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=1CvwuqO2V0I7IKjLeMq4IGwKZlZAjpMYb"
     },
     {
       "name": "Boottarga e Asparagi",
@@ -195,7 +195,7 @@ private let _kPizzas = """
         9,
         6
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/f5a11cdaa00b4a32ba1c/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=13scUPhjIIhXOZ4yaLE9lsShi_jPygXPO"
     },
     {
       "name": "Ricci e Asparagi",
@@ -204,7 +204,7 @@ private let _kPizzas = """
         5,
         6
       ],
-      "imageUrl": "https://seafile.arteries.hu/f/fe4922a18bc94b0d9405/?dl=1"
+      "imageUrl": "https://drive.google.com/uc?export=download&id=16480rKx_X-POxY-OWcVUB6-iBE4YD2mD"
     }
   ]
 }
