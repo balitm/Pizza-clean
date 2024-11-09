@@ -26,7 +26,7 @@ struct DatabaseTest {
             nonisolated(unsafe) var realm: Realm!
             try DS.dbQueue.sync {
                 realm = try Realm(configuration: config, queue: DS.dbQueue)
-                _ = Container.shared.storage.register {
+                _ = DataSourceContainer.shared.storage.register {
                     DS.Storage(realm: realm)
                 }
             }
@@ -43,7 +43,7 @@ struct DatabaseTest {
 
     init() async throws {
         container = DS.Storage(realm: Self.realm)
-        mock = Container.shared.pizzaAPI()
+        mock = DataSourceContainer.shared.pizzaAPI()
         debugPrint(#fileID, #line, "!!! test case init")
     }
 

@@ -34,7 +34,7 @@ import Factory
 
     @Test func addPizza() async throws {
         let pizza = component.pizzas.pizzas[0]
-        var selection = await service.selectedIngredients(for: pizza)
+        _ = await service.selectedIngredients(for: pizza)
         try await addItemTest(addItem: { [service = service!] in
             await service.addToCart()
         })

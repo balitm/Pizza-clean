@@ -24,7 +24,7 @@ struct DataSourceTests {
             let data = try! await api.perform(request: PizzaReqests.downloadImage(url: url))
             debugPrint(#fileID, #line, "recved data: \(data.count)")
             let image = UIImage(data: data)
-            debugPrint(#fileID, #line, "imge size:", image?.size ?? .zero)
+            debugPrint(#fileID, #line, "image size:", image?.size ?? .zero)
         }
 
         try! await api.perform(request: PizzaReqests.checkout(pizzas: [pizzas.pizzas[0]], drinks: [drinks[0].id]))
@@ -44,7 +44,7 @@ struct DataSourceTests {
     }
 
     @Test func mockAPI() async throws {
-        let api = Container.shared.pizzaAPI()
+        let api = DataSourceContainer.shared.pizzaAPI()
         await testNetwork(api: api)
     }
 
