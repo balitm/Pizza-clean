@@ -11,8 +11,8 @@ import SwiftUI
 struct CartView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var alertHelper: AlertHelper
-    @EnvironmentObject private var router: MainRouter
-    @StateObject private var viewModel = CartViewModel()
+    @Environment(MainRouter.self) private var router
+    @State private var viewModel = CartViewModel()
 
     var body: some View {
         List {
@@ -117,7 +117,7 @@ private extension View {
     NavigationStack {
         CartView()
             .environmentObject(AlertHelper())
-            .environmentObject(MainRouter())
+            .environment(MainRouter())
     }
 }
 #endif

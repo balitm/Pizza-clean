@@ -12,21 +12,21 @@ import Factory
 import Combine
 
 @MainActor
-final class MenuListViewModel: ViewModelBase {
+@Observable final class MenuListViewModel {
     /// UI alert events.
     enum AlertKind {
         case progress, none, added, initError(Error)
     }
 
-    @Published var listData = [MenuRowData]()
-    var appVersionInfo: String { service.appVersionInfo }
-    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
+    var listData = [MenuRowData]()
+    @ObservationIgnored var appVersionInfo: String { service.appVersionInfo }
+    @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
     private var pizzas: Pizzas?
-    private(set) var isLoading = false
+    @ObservationIgnored private(set) var isLoading = false
 
-    @Injected(\.menuUseCase) private var service
+    @ObservationIgnored @Injected(\.menuUseCase) private var service
 
     /// Add the selected pizza to the cart.
     func addPizza(index: Int) {

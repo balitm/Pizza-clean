@@ -14,19 +14,19 @@ struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject private var alertHelper: AlertHelper
     @State private var saveService = Container.shared.saveUseCase()
-    @StateObject private var router = MainRouter()
-    @StateObject private var viewModel = ContentViewModel()
+    @State private var router = MainRouter()
+    @State private var viewModel = ContentViewModel()
 
     var body: some View {
         AlertHelperView {
             MenuListView(viewModel: viewModel.menuListViewModel)
-                .environmentObject(router)
+                .environment(router)
         }
         .alertModifier(viewModel, alertHelper, router)
         .task {
             await viewModel.listenToReachabity()
         }
-        .onChange(of: scenePhase) { phase in
+        .onChange(of: scenePhase) { _, phase in
             if phase == .background {
                 Task {
                     try? await saveService.saveCart()

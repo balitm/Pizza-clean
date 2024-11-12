@@ -11,8 +11,8 @@ import Domain
 import Factory
 import struct SwiftUI.Image
 
-final class MenuRowData: ObservableObject {
-    @Published var image: Image?
+@Observable final class MenuRowData {
+    var image: Image?
 
     let index: Int
     let ingredientsText: String
@@ -21,7 +21,7 @@ final class MenuRowData: ObservableObject {
 
     let pizza: Pizza
 
-    @Injected(\.menuUseCase) private var menuUseCase
+    @ObservationIgnored @Injected(\.menuUseCase) private var menuUseCase
 
     init(index: Int, basePrice: Double, pizza: Pizza, onTapPrice: @escaping (Int) -> Void) {
         self.index = index

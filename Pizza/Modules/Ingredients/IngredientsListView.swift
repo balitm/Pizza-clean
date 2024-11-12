@@ -12,9 +12,9 @@ import Domain
 
 struct IngredientsListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
-    @EnvironmentObject private var router: MainRouter
-    @StateObject var viewModel = IngredientsViewModel()
-    @ObservedObject var rowData: MenuRowData
+    @Environment(MainRouter.self) private var router
+    @State var viewModel = IngredientsViewModel()
+    var rowData: MenuRowData
 
     var body: some View {
         // let _ = Self._printChanges()
@@ -146,7 +146,7 @@ import Factory
 
     return AsyncTestView()
         .environmentObject(AlertHelper())
-        .environmentObject(MainRouter())
+        .environment(MainRouter())
 }
 
 #endif

@@ -11,11 +11,12 @@ import Domain
 
 struct MenuListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
-    @ObservedObject var viewModel: MenuListViewModel
-    @EnvironmentObject private var router: MainRouter
+    var viewModel: MenuListViewModel
+    @Environment(MainRouter.self) private var router
 
     var body: some View {
         // let _ = Self._printChanges()
+        @Bindable var router = router
 
         NavigationStack(path: $router.path) {
             List {
@@ -103,6 +104,6 @@ private extension View {
 #Preview {
     MenuListView(viewModel: .init())
         .environmentObject(AlertHelper())
-        .environmentObject(MainRouter())
+        .environment(MainRouter())
 }
 #endif

@@ -11,9 +11,9 @@ import Domain
 
 struct DrinksListView: View {
     @EnvironmentObject private var alertHelper: AlertHelper
-    @EnvironmentObject private var router: MainRouter
+    @Environment(MainRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel = DrinksViewModel()
+    @State private var viewModel = DrinksViewModel()
 
     var body: some View {
         List(viewModel.listData) { item in
@@ -64,5 +64,5 @@ private extension View {
         DrinksListView()
     }
     .environmentObject(AlertHelper())
-    .environmentObject(MainRouter())
+    .environment(MainRouter())
 }
