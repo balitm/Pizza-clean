@@ -14,6 +14,7 @@ import Factory
 
 struct ReachabilityRepository: ReachabilityUseCase {
     @Injected(\DataSourceContainer.pizzaAPI) private var api
+    @Injected(\.saveUseCase) private var saveUseCase
 
     var connection: AsyncStream<Connection> {
         AsyncStream { continuation in
@@ -51,6 +52,7 @@ struct ReachabilityRepository: ReachabilityUseCase {
 
     func resetSession() async {
         await api.resetSession()
+        try? await saveUseCase.saveCart()
     }
 }
 
