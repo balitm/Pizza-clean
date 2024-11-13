@@ -1,6 +1,6 @@
 //
 //  SuccessView.swift
-//  DCPizza
+//  Pizza
 //
 //  Created by Balázs Kilvády on 7/7/20.
 //  Copyright © 2024 kil-dev. All rights reserved.

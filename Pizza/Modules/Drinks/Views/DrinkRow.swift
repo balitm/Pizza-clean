@@ -1,6 +1,6 @@
 //
 //  DrinkRow.swift
-//  DCPizza
+//  Pizza
 //
 //  Created by Balázs Kilvády on 7/10/20.
 //  Copyright © 2024 kil-dev. All rights reserved.

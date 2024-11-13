@@ -1,6 +1,6 @@
 //
 //  MenuRow.swift
-//  DCPizza
+//  Pizza
 //
 //  Created by Balázs Kilvády on 6/8/20.
 //  Copyright © 2024 kil-dev. All rights reserved.
@@ -40,7 +40,7 @@ struct MenuRow: View {
                     .clipped()
             } else if data.pizza.imageUrl != nil {
                 ProgressView()
-                    .tint(.secondary)
+                    .tint(.gray)
                     .frame(height: 128)
             }
 
@@ -106,5 +106,6 @@ import Factory
     }
 
     return AsyncTestView()
+        .environmentObject(MainRouter())
 }
 #endif
