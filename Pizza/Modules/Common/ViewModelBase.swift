@@ -9,7 +9,7 @@
 import Foundation
 import Domain
 
-class ViewModelBase: ObservableObject {
+class ViewModelBase {
     deinit {
         DLog(">>> deinit: ", type(of: self))
     }

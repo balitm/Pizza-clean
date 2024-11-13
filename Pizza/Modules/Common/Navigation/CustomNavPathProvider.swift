@@ -7,8 +7,8 @@ protocol Routing {
     @ViewBuilder func view(for route: Route) -> Self.View
 }
 
-class CustomNavPathProvider<Path: Hashable>: ObservableObject {
-    @Published var path = [Path]()
+@Observable class CustomNavPathProvider<Path: Hashable> {
+    var path = [Path]()
 
     init() {}
 

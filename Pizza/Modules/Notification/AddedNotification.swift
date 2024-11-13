@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-final class CustomNotificationModel: ObservableObject {
+@Observable final class CustomNotificationModel {
     private var timer = Timer()
     var onFire: (() -> Void)?
 
@@ -35,8 +35,8 @@ final class CustomNotificationModel: ObservableObject {
 }
 
 struct AddedNotification: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
-    @StateObject private var addNotificationModel = CustomNotificationModel()
+    @Environment(AlertHelper.self) private var alertHelper
+    @State private var addNotificationModel = CustomNotificationModel()
     let text: LocalizedStringKey
     var onNavigate: () -> Void
 
@@ -63,6 +63,6 @@ struct AddedNotification: View {
 #if DEBUG
 #Preview {
     AddedNotification(text: .localizable(.addedNotification)) {}
-        .environmentObject(AlertHelper())
+        .environment(AlertHelper())
 }
 #endif

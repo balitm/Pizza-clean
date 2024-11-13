@@ -12,15 +12,15 @@ import Factory
 import Combine
 
 @MainActor
-final class ContentViewModel: ViewModelBase {
+@Observable final class ContentViewModel: ViewModelBase {
     enum AlertKind {
         case none, noNetwork
     }
 
-    @Injected(\.reachability) var reachability
+    @ObservationIgnored @Injected(\.reachability) var reachability
 
     let menuListViewModel = MenuListViewModel()
-    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.removeDuplicates().eraseToAnyPublisher() }
+    @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.removeDuplicates().eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
     private var hasNetwork = true
 

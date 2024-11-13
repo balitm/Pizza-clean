@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SuccessView: View {
-    @EnvironmentObject private var router: MainRouter
+    @Environment(MainRouter.self) private var router
 
     var body: some View {
         VStack {
@@ -43,6 +43,6 @@ struct SuccessView: View {
 #if DEBUG
 #Preview {
     SuccessView()
-        .environmentObject(MainRouter())
+        .environment(MainRouter())
 }
 #endif

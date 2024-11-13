@@ -12,17 +12,17 @@ import Combine
 import Factory
 
 @MainActor
-final class DrinksViewModel: ViewModelBase {
+@Observable final class DrinksViewModel: ViewModelBase {
     enum AlertKind {
         case added
     }
 
-    @Published var listData = [DrinkRowData]()
+    var listData = [DrinkRowData]()
 
-    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
+    @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    @Injected(\.drinksUseCase) private var service
+    @ObservationIgnored @Injected(\.drinksUseCase) private var service
 
     func loadDrinks() async {
         listData = await service.drinks().enumerated()

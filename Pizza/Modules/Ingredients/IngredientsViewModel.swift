@@ -14,7 +14,7 @@ import class UIKit.UIImage
 
 private let kTimeout: TimeInterval = 3
 
-final class IngredientsViewModel: ViewModelBase {
+@Observable final class IngredientsViewModel: ViewModelBase {
     /// Event to drive the buy footer of the controller.
     enum FooterEvent {
         case show(String), hide
@@ -25,15 +25,15 @@ final class IngredientsViewModel: ViewModelBase {
         case added
     }
 
-    @Published var listData = [IngredientsItemRowData]()
-    @Published var showCartText = ""
-    private(set) var title = ""
+    var listData = [IngredientsItemRowData]()
+    var showCartText = ""
+    @ObservationIgnored private(set) var title = ""
 
     var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
     private var timer: DispatchSourceTimer?
 
-    @Injected(\.ingredientsUseCase) private var service
+    @ObservationIgnored @Injected(\.ingredientsUseCase) private var service
 
     @MainActor
     func loadData(rowData: MenuRowData) async {

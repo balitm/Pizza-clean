@@ -10,12 +10,13 @@ import SwiftUI
 import Domain
 
 struct MenuListView: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
-    @ObservedObject var viewModel: MenuListViewModel
-    @EnvironmentObject private var router: MainRouter
+    @Environment(AlertHelper.self) private var alertHelper
+    @Environment(MainRouter.self) private var router
+    var viewModel: MenuListViewModel
 
     var body: some View {
         // let _ = Self._printChanges()
+        @Bindable var router = router
 
         NavigationStack(path: $router.path) {
             List {
@@ -102,7 +103,7 @@ private extension View {
 #if DEBUG
 #Preview {
     MenuListView(viewModel: .init())
-        .environmentObject(AlertHelper())
-        .environmentObject(MainRouter())
+        .environment(AlertHelper())
+        .environment(MainRouter())
 }
 #endif

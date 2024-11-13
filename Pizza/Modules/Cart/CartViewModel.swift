@@ -12,19 +12,19 @@ import Combine
 import Factory
 
 @MainActor
-final class CartViewModel: ViewModelBase {
+@Observable final class CartViewModel: ViewModelBase {
     enum AlertKind {
         case progress, none, checkoutError(Error)
     }
 
-    @Published var showSuccess = false
-    @Published var listData = [CartItemRowData]()
-    private(set) var totalData = CartTotalRowData(price: 0)
-    private(set) var canCheckout = false
-    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
+    var showSuccess = false
+    var listData = [CartItemRowData]()
+    @ObservationIgnored private(set) var totalData = CartTotalRowData(price: 0)
+    @ObservationIgnored private(set) var canCheckout = false
+    @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    @Injected(\.cartUseCase) private var service
+    @ObservationIgnored @Injected(\.cartUseCase) private var service
 
     /// Load items.
     func loadItems() async {

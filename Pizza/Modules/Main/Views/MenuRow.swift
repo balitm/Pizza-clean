@@ -10,8 +10,8 @@ import SwiftUI
 import Domain
 
 struct MenuRow: View {
-    @EnvironmentObject private var router: MainRouter
-    @ObservedObject var data: MenuRowData
+    @Environment(MainRouter.self) private var router
+    var data: MenuRowData
 
     var body: some View {
         Button {
@@ -106,6 +106,6 @@ import Factory
     }
 
     return AsyncTestView()
-        .environmentObject(MainRouter())
+        .environment(MainRouter())
 }
 #endif
