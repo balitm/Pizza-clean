@@ -10,9 +10,9 @@ import SwiftUI
 import Domain
 
 struct MenuListView: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
-    var viewModel: MenuListViewModel
+    @Environment(AlertHelper.self) private var alertHelper
     @Environment(MainRouter.self) private var router
+    var viewModel: MenuListViewModel
 
     var body: some View {
         // let _ = Self._printChanges()
@@ -103,7 +103,7 @@ private extension View {
 #if DEBUG
 #Preview {
     MenuListView(viewModel: .init())
-        .environmentObject(AlertHelper())
+        .environment(AlertHelper())
         .environment(MainRouter())
 }
 #endif

@@ -11,7 +11,7 @@ import Combine
 import Domain
 
 struct IngredientsListView: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
+    @Environment(AlertHelper.self) private var alertHelper
     @Environment(MainRouter.self) private var router
     @State var viewModel = IngredientsViewModel()
     var rowData: MenuRowData
@@ -145,7 +145,7 @@ import Factory
     }
 
     return AsyncTestView()
-        .environmentObject(AlertHelper())
+        .environment(AlertHelper())
         .environment(MainRouter())
 }
 

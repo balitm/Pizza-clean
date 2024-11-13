@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AlertHelperView<Content: View>: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
+    @Environment(AlertHelper.self) private var alertHelper
     @State private var alert: AlertHelper.IdentifiableAlert?
     private let content: Content
 
@@ -50,7 +50,7 @@ struct AlertHelperView<Content: View>: View {
             }
             .zIndex(1)
         }
-        .onReceive(alertHelper.$alertView) { alertView in
+        .onReceive(alertHelper.alertView) { alertView in
             withAnimation {
                 alert = alertView
             }

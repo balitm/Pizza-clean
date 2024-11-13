@@ -10,7 +10,7 @@ import SwiftUI
 import Domain
 
 struct DrinksListView: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
+    @Environment(AlertHelper.self) private var alertHelper
     @Environment(MainRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = DrinksViewModel()
@@ -63,6 +63,6 @@ private extension View {
     NavigationStack {
         DrinksListView()
     }
-    .environmentObject(AlertHelper())
+    .environment(AlertHelper())
     .environment(MainRouter())
 }

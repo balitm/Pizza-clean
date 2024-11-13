@@ -12,7 +12,7 @@ import Factory
 
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
-    @EnvironmentObject private var alertHelper: AlertHelper
+    @Environment(AlertHelper.self) private var alertHelper
     @State private var saveService = Container.shared.saveUseCase()
     @State private var router = MainRouter()
     @State private var viewModel = ContentViewModel()
@@ -64,6 +64,6 @@ private extension View {
 #if DEBUG
 #Preview {
     ContentView()
-        .environmentObject(AlertHelper())
+        .environment(AlertHelper())
 }
 #endif

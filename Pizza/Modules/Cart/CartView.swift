@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CartView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var alertHelper: AlertHelper
+    @Environment(AlertHelper.self) private var alertHelper
     @Environment(MainRouter.self) private var router
     @State private var viewModel = CartViewModel()
 
@@ -116,7 +116,7 @@ private extension View {
 #Preview {
     NavigationStack {
         CartView()
-            .environmentObject(AlertHelper())
+            .environment(AlertHelper())
             .environment(MainRouter())
     }
 }
