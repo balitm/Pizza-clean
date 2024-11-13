@@ -1,6 +1,6 @@
 //
 //  MenuListViewModel.swift
-//  DCPizza
+//  Pizza
 //
 //  Created by Balázs Kilvády on 2/18/20.
 //  Copyright © 2024 kil-dev. All rights reserved.
