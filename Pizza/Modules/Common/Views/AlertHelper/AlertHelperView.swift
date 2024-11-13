@@ -1,13 +1,9 @@
 import SwiftUI
-import Domain
-import os
 
 struct AlertHelperView<Content: View>: View {
     @EnvironmentObject private var alertHelper: AlertHelper
     @State private var alert: AlertHelper.IdentifiableAlert?
     private let content: Content
-
-    @State private var show = false
 
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
@@ -56,11 +52,6 @@ struct AlertHelperView<Content: View>: View {
         }
         .onReceive(alertHelper.$alertView) { alertView in
             withAnimation {
-                // if alertView == nil {
-                //     DLog(l: .trace, "#> hide alert")
-                // } else {
-                //     DLog(l: .trace, "#> show alert")
-                // }
                 alert = alertView
             }
         }
