@@ -40,7 +40,7 @@ struct MenuRow: View {
                     .clipped()
             } else if data.pizza.imageUrl != nil {
                 ProgressView()
-                    .tint(.secondary)
+                    .tint(.gray)
                     .frame(height: 128)
             }
 
@@ -106,5 +106,6 @@ import Factory
     }
 
     return AsyncTestView()
+        .environment(MainRouter())
 }
 #endif
