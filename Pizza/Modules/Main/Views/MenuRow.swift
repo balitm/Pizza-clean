@@ -106,6 +106,6 @@ import Factory
     }
 
     return AsyncTestView()
-        .environmentObject(MainRouter())
+        .environment(MainRouter())
 }
 #endif
