@@ -36,6 +36,7 @@
 		29727DEB2CDA9538000A24BC /* development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = development.xcconfig; sourceTree = "<group>"; };
 		29727DEC2CDA9538000A24BC /* internal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = internal.xcconfig; sourceTree = "<group>"; };
 		29727DED2CDA9538000A24BC /* production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = production.xcconfig; sourceTree = "<group>"; };
+		29AADA742DA6CBE300083033 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		29B4EA4B2CDA993C00EE27D2 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
 		29B4EA4C2CDA99BA00EE27D2 /* DataSource */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataSource; sourceTree = "<group>"; };
 		29E84B0D2CDA9A6400D0A513 /* Repository */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Repository; sourceTree = "<group>"; };
@@ -105,6 +106,7 @@
 			children = (
 				29B4EA4B2CDA993C00EE27D2 /* Domain */,
 				29B4EA4C2CDA99BA00EE27D2 /* DataSource */,
+				29AADA742DA6CBE300083033 /* Models */,
 				29E84B0D2CDA9A6400D0A513 /* Repository */,
 				29727DEE2CDA9538000A24BC /* Environment */,
 				29727D3B2CDA87BC000A24BC /* Pizza */,
