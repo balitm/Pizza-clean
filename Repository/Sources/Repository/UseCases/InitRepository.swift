@@ -37,7 +37,7 @@ actor InitRepository {
         }
         var cart = dsCart.asDomain(with: component.ingredients, drinks: component.drinks)
         cart.basePrice = component.pizzas.basePrice
-        _ = await self.cartHandler.start(with: cart)
+        _ = await cartHandler.start(with: cart)
         return component
     }
 
@@ -62,5 +62,4 @@ actor InitRepository {
             throw APIError(kind: .invalidResponse, message: error.localizedDescription)
         }
     }
-
 }
