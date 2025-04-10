@@ -16,7 +16,7 @@ public final class DataSourceContainer: SharedContainer {
     public init() {}
 
 #if DEBUG
-    private nonisolated(unsafe) var realm: Realm = {
+    private nonisolated(unsafe) var testRealm: Realm = {
         var config = Realm.Configuration.defaultConfiguration
         debugPrint(#fileID, #line, "Realm file: \(config.fileURL!.path)")
         var fileURL = config.fileURL!
@@ -67,8 +67,8 @@ extension DataSourceContainer: AutoRegistering {
         Self.shared.pizzaAPI.onTest { MockPizzaNetwork() }
 
         Self.shared.storage.onTest { [unowned self] in
-            debugPrint(#fileID, #line, "!!! test case init with", realm.configuration.fileURL?.absoluteString ?? "nil")
-            return DS.Storage(realm: realm)
+            debugPrint(#fileID, #line, "!!! test case init with", testRealm.configuration.fileURL?.absoluteString ?? "nil")
+            return DS.Storage(realm: testRealm)
         }
 #endif
     }

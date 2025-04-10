@@ -11,9 +11,22 @@ import Domain
 import DataSource
 import Factory
 
-actor CartModel {
+actor CartModel: Domain.CartModel {
     @Injected(\DataSourceContainer.storage) private var storage
-    private(set) var cart = Cart.empty
+    @Injected(\DataSourceContainer.pizzaAPI) private var network
+    @Injected(\.componentsModel) private var component
+    public private(set) var cart = Cart.empty
+
+    /// Reload or init to empty.
+    func initialize() async throws -> Cart {
+        DLog("###### init cart. #########")
+        let dsCart = DataSource.dbQueue.sync {
+            storage.values(DataSource.Cart.self).first ?? DataSource.Cart(pizzas: [], drinks: [])
+        }
+        var cart = await dsCart.asDomain(with: component.ingredients, drinks: component.drinks)
+        cart.basePrice = await component.pizzas.basePrice
+        return start(with: cart)
+    }
 
     func start(with: Cart) -> Cart {
         cart = with
@@ -25,14 +38,33 @@ actor CartModel {
         return cart
     }
 
+    func add(pizzaIndex: Int) async -> Cart {
+        await cart.add(pizza: component.pizzas.pizzas[pizzaIndex])
+        return cart
+    }
+
     func add(drink: Drink) -> Cart {
         cart.add(drink: drink)
         return cart
     }
 
-    func remove(index: Int) -> Cart {
+    func add(drinkIndex: Int) async -> Cart {
+        await cart.add(drink: component.drinks[drinkIndex])
+        return cart
+    }
+
+    @discardableResult
+    func remove(at index: Int) -> Cart {
         cart.remove(at: index)
         return cart
+    }
+
+    func items() -> [CartItem] {
+        cart.items()
+    }
+
+    func totalPrice() -> Double {
+        cart.totalPrice()
     }
 
     func empty() throws -> Cart {
@@ -47,6 +79,12 @@ actor CartModel {
         try _dbAction(storage) {
             $0.add(cart.asDataSource())
         }
+    }
+
+    func checkout() async throws -> Cart {
+        let dsCart = cart.asDataSource()
+        try await network.checkout(cart: dsCart)
+        return try empty()
     }
 }
 
