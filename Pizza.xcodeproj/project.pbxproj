@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		29ACCDB82CDB84D80076BFE0 /* DataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDB72CDB84D80076BFE0 /* DataSource */; };
 		29ACCDBA2CDB84D80076BFE0 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDB92CDB84D80076BFE0 /* Domain */; };
-		29ACCDBC2CDB84D80076BFE0 /* Repository in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDBB2CDB84D80076BFE0 /* Repository */; };
 		29D724C82DA93702000C528C /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 29D724C72DA93702000C528C /* Models */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +39,6 @@
 		29AADA742DA6CBE300083033 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		29B4EA4B2CDA993C00EE27D2 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
 		29B4EA4C2CDA99BA00EE27D2 /* DataSource */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataSource; sourceTree = "<group>"; };
-		29E84B0D2CDA9A6400D0A513 /* Repository */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Repository; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -82,7 +80,6 @@
 				29ACCDBA2CDB84D80076BFE0 /* Domain in Frameworks */,
 				29ACCDB82CDB84D80076BFE0 /* DataSource in Frameworks */,
 				29D724C82DA93702000C528C /* Models in Frameworks */,
-				29ACCDBC2CDB84D80076BFE0 /* Repository in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +106,6 @@
 				29B4EA4B2CDA993C00EE27D2 /* Domain */,
 				29B4EA4C2CDA99BA00EE27D2 /* DataSource */,
 				29AADA742DA6CBE300083033 /* Models */,
-				29E84B0D2CDA9A6400D0A513 /* Repository */,
 				29727DEE2CDA9538000A24BC /* Environment */,
 				29727D3B2CDA87BC000A24BC /* Pizza */,
 				29727D4C2CDA87BD000A24BC /* PizzaTests */,
@@ -169,7 +165,6 @@
 			packageProductDependencies = (
 				29ACCDB72CDB84D80076BFE0 /* DataSource */,
 				29ACCDB92CDB84D80076BFE0 /* Domain */,
-				29ACCDBB2CDB84D80076BFE0 /* Repository */,
 				29D724C72DA93702000C528C /* Models */,
 			);
 			productName = Pizza;
@@ -788,10 +783,6 @@
 		29ACCDB92CDB84D80076BFE0 /* Domain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Domain;
-		};
-		29ACCDBB2CDB84D80076BFE0 /* Repository */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Repository;
 		};
 		29ACCDC82CDB883F0076BFE0 /* XCStringsToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
