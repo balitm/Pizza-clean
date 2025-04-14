@@ -8,9 +8,10 @@
 
 import SwiftUI
 
+@MainActor
 @Observable final class CustomNotificationModel {
     private var timer = Timer()
-    var onFire: (() -> Void)?
+    var onFire: (@MainActor () -> Void)?
 
     func start(with timeout: TimeInterval = kAddTimeout) {
         timer = Timer.scheduledTimer(
@@ -21,7 +22,9 @@ import SwiftUI
                 timer.invalidate()
                 return
             }
-            stop()
+            Task { @MainActor in
+                stop()
+            }
         }
     }
 

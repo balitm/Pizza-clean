@@ -9,7 +9,8 @@ import Foundation
 import Domain
 import Factory
 
-final class IngredientsModel: Domain.IngredientsModel {
+// final class IngredientsModel: Domain.IngredientsModel {
+@MainActor final class IngredientsModel: Domain.IngredientsModel {
     @Injected(\.componentsModel) private var componentsModel
     @Injected(\.cartModel) private var cartModel
 

@@ -14,6 +14,7 @@ import class UIKit.UIImage
 
 private let kTimeout: TimeInterval = 3
 
+@MainActor
 @Observable class IngredientsViewModel: ViewModelBase {
     /// Event to drive the buy footer of the controller.
     enum FooterEvent {
@@ -35,7 +36,6 @@ private let kTimeout: TimeInterval = 3
 
     @ObservationIgnored @Injected(\.ingredientsModel) fileprivate var ingredientsModel
 
-    @MainActor
     func loadData(rowData: MenuRowData) async {
         // title
         title = rowData.pizza.name
@@ -45,7 +45,6 @@ private let kTimeout: TimeInterval = 3
         map(selections: selections)
     }
 
-    @MainActor
     func select(_ index: Int) {
         let selections = ingredientsModel.select(at: index)
         map(selections: selections)
@@ -60,7 +59,6 @@ private let kTimeout: TimeInterval = 3
         startTimer()
     }
 
-    @MainActor
     func addToCart() {
         Task {
             await ingredientsModel.addToCart()
@@ -69,7 +67,6 @@ private let kTimeout: TimeInterval = 3
         }
     }
 
-    @MainActor
     private func map(selections: [IngredientSelection]) {
         listData = selections.enumerated().map {
             IngredientsItemRowData(

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AppConfigProtocol {
+public protocol AppConfigProtocol: Sendable {
     var flavour: AppFlavour { get }
     var appVersion: String { get }
     var appBuild: String { get }

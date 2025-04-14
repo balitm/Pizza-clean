@@ -23,7 +23,7 @@ class NetworklessTestsBase {
     }
 
     func addItemTest(
-        addItem: @escaping () async throws -> Void,
+        addItem: @escaping @Sendable () async throws -> Void,
         test: @escaping (Cart) async throws -> Void = { #expect($0.pizzas.count >= 1) }
     ) async throws {
         // Empty the cart.

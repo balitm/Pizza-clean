@@ -7,7 +7,8 @@
 
 import Foundation
 
-public protocol IngredientsModel {
+@MainActor
+public protocol IngredientsModel: Sendable {
     func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection]
     func select(at index: Int) -> [IngredientSelection]
     func addToCart() async

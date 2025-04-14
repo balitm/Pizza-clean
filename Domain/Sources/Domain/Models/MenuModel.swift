@@ -7,10 +7,10 @@
 
 import struct SwiftUI.Image
 
-public protocol MenuModel: Sendable {
+public protocol MenuModel: Actor {
     func initialize() async throws
     func pizzas() async -> Pizzas
     func addToCart(pizza: Pizza) async
     func dowloadImage(for pizza: Pizza) async throws -> Image?
-    var appVersionInfo: String { get }
+    nonisolated func appVersionInfo() -> String
 }

@@ -11,11 +11,11 @@ import DataSource
 import Factory
 import struct SwiftUI.Image
 
-final class MenuModel: Domain.MenuModel {
+actor MenuModel: Domain.MenuModel {
     @Injected(\.cartModel) private var cartModel
     @Injected(\.componentsModel) private var component
     @Injected(\DataSourceContainer.pizzaAPI) var network
-    @Injected(\DataSourceContainer.appConfig) var appConfig
+    let appConfig = DataSourceContainer.shared.appConfig()
 
     func initialize() async throws {
         try? await withThrowingDiscardingTaskGroup { group in
@@ -38,7 +38,7 @@ final class MenuModel: Domain.MenuModel {
         return Image(decorative: cgImage, scale: 1)
     }
 
-    var appVersionInfo: String {
+    nonisolated func appVersionInfo() -> String {
         "\(String(models: .appVersion)): \(appConfig.appVersion) - \(appConfig.appBuild)"
     }
 }

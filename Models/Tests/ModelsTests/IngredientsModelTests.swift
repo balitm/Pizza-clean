@@ -11,7 +11,7 @@ import Factory
 @testable import Models
 
 // @Suite(.serialized) class IngredientsModelTests: NetworklessTestsBase {
-class IngredientsModelTests: NetworklessTestsBase {
+@MainActor class IngredientsModelTests: NetworklessTestsBase, Sendable {
     @Injected(\.ingredientsModel) var model
 
     @Test func testIngredients() async throws {
@@ -30,7 +30,7 @@ class IngredientsModelTests: NetworklessTestsBase {
     @Test func addPizza() async throws {
         let pizza = await component.pizzas.pizzas[0]
         _ = await model.selectedIngredients(for: pizza)
-        try await addItemTest(addItem: { [model] in
+        try await addItemTest(addItem: { @MainActor [model] in
             await model.addToCart()
         })
     }

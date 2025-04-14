@@ -19,7 +19,7 @@ import Combine
     }
 
     var listData = [MenuRowData]()
-    @ObservationIgnored var appVersionInfo: String { model.appVersionInfo }
+    @ObservationIgnored var appVersionInfo: String { model.appVersionInfo() }
     @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
     @ObservationIgnored private let _alertKind = PassthroughSubject<AlertKind, Never>()
 

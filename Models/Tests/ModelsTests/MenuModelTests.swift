@@ -10,7 +10,7 @@ import Factory
 import Domain
 @testable import Models
 
-class MenuModelTests: NetworklessTestsBase {
+final class MenuModelTests: NetworklessTestsBase {
     @Injected(\.menuModel) var menuModel
 
     @Test func pizzas() async throws {
@@ -20,9 +20,9 @@ class MenuModelTests: NetworklessTestsBase {
     }
 
     @Test func addPizza() async throws {
-        try await addItemTest(addItem: {
-            let pizza = await self.component.pizzas.pizzas.first!
-            await self.menuModel.addToCart(pizza: pizza)
+        try await addItemTest(addItem: { [component, menuModel] in
+            let pizza = await component!.pizzas.pizzas.first!
+            await menuModel.addToCart(pizza: pizza)
         })
     }
 }

@@ -19,8 +19,9 @@ public extension Container {
         self { ComponentsModel() }.singleton
     }
 
+    @MainActor
     var ingredientsModel: Factory<Domain.IngredientsModel> {
-        self { IngredientsModel() }.singleton
+        self { @MainActor in IngredientsModel() }.singleton
     }
 
     var menuModel: Factory<Domain.MenuModel> {
