@@ -10,8 +10,8 @@ import Domain
 import Factory
 
 final class IngredientsModel: Domain.IngredientsModel {
-    @Injected(\.componentsModel) fileprivate var component
-    @Injected(\.cartModel) fileprivate var cartModel
+    @Injected(\.componentsModel) private var componentsModel
+    @Injected(\.cartModel) private var cartModel
 
     private var _pizza: Pizza!
     private var ingredients = [IngredientSelection]()
@@ -22,7 +22,7 @@ final class IngredientsModel: Domain.IngredientsModel {
     }
 
     func selectedIngredients() async -> [IngredientSelection] {
-        let ingredients = await component.ingredients
+        let ingredients = await componentsModel.ingredients
         self.ingredients = createSelecteds(_pizza, ingredients)
         return self.ingredients
     }

@@ -16,10 +16,10 @@ class NetworklessTestsBase {
     var component: Domain.ComponentsModel!
 
     init() async throws {
-        component = ComponentsModel()
-        try? await component.initialize()
-        cartModel = CartModel()
-        _ = try? await cartModel.initialize()
+        component = Container.shared.componentsModel()
+        try await component.initialize()
+        cartModel = Container.shared.cartModel() as? Models.CartModel
+        _ = try await cartModel.initialize()
     }
 
     func addItemTest(

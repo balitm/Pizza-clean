@@ -23,6 +23,10 @@ public extension Container {
         self { IngredientsModel() }.singleton
     }
 
+    var menuModel: Factory<Domain.MenuModel> {
+        self { MenuModel() }.singleton
+    }
+
     var reachability: Factory<Domain.ReachabilityModel> {
         self { ReachabilityModel() }
     }

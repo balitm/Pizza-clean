@@ -9,7 +9,6 @@ import Foundation
 
 public protocol IngredientsModel {
     func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection]
-    // func selectedIngredients() async -> [IngredientSelection]
     func select(at index: Int) -> [IngredientSelection]
     func addToCart() async
     func name() -> String

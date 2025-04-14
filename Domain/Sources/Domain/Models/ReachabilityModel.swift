@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ReachabilityModel {
+public protocol ReachabilityModel: Sendable {
     var connection: AsyncStream<Connection> { get }
 
     /// Reset (underlying URL)session.

@@ -13,8 +13,10 @@ import Reachability
 import Factory
 
 struct ReachabilityModel: Domain.ReachabilityModel {
-    @Injected(\DataSourceContainer.pizzaAPI) private var api
-    @Injected(\.cartModel) private var cart
+    private var api: PizzaNetwork = DataSourceContainer.shared.pizzaAPI()
+    // @Injected(\DataSourceContainer.pizzaAPI) private var api: PizzaNetwork
+    private var cart = Container.shared.cartModel()
+    // @Injected(\.cartModel) private var cart
 
     var connection: AsyncStream<Connection> {
         AsyncStream { continuation in
