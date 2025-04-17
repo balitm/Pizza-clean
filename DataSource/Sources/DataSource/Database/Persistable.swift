@@ -58,8 +58,11 @@ public extension DataSource {
         public init(realm: Realm) {
             _realm = realm
         }
-#endif
 
+        var path: String {
+            _realm.configuration.fileURL!.absoluteString
+        }
+#endif
         public func write(_ block: (WriteTransaction) -> Void) throws {
             let transaction = WriteTransaction(realm: _realm)
             try _realm.write {

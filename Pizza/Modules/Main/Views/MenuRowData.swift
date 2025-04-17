@@ -11,8 +11,8 @@ import Domain
 import Factory
 import struct SwiftUI.Image
 
-final class MenuRowData: ObservableObject {
-    @Published var image: Image?
+@Observable final class MenuRowData {
+    var image: Image?
 
     let index: Int
     let ingredientsText: String
@@ -21,7 +21,7 @@ final class MenuRowData: ObservableObject {
 
     let pizza: Pizza
 
-    @Injected(\.menuUseCase) private var menuUseCase
+    @ObservationIgnored @Injected(\.menuModel) private var menuModel
 
     init(index: Int, basePrice: Double, pizza: Pizza, onTapPrice: @escaping (Int) -> Void) {
         self.index = index
@@ -33,10 +33,10 @@ final class MenuRowData: ObservableObject {
     }
 
     init() {
-        self.index = 0
+        index = 0
         priceText = ""
         ingredientsText = ""
-        self.onTapPrice = { _ in }
+        onTapPrice = { _ in }
         pizza = .init()
     }
 
@@ -49,7 +49,7 @@ final class MenuRowData: ObservableObject {
         guard image == nil else { return }
         Task {
             do {
-                let image = try await menuUseCase.dowloadImage(for: pizza)
+                let image = try await menuModel.dowloadImage(for: pizza)
                 DLog(l: .trace, "#> image downloaded for \(pizza.name)")
                 self.image = image
             } catch {

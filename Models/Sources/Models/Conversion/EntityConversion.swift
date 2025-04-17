@@ -67,7 +67,7 @@ extension DataSource.Cart: DomainConvertibleType {
 
 extension Domain.Cart: DataSourceRepresentable {
     func asDataSource() -> DataSource.Cart {
-        DataSource.Cart(pizzas: self.pizzas.map { $0.asDataSource() },
+        DataSource.Cart(pizzas: pizzas.map { $0.asDataSource() },
                         drinks: drinks.map(\.id))
     }
 }

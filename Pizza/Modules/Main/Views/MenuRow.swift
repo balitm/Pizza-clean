@@ -10,8 +10,8 @@ import SwiftUI
 import Domain
 
 struct MenuRow: View {
-    @EnvironmentObject private var router: MainRouter
-    @ObservedObject var data: MenuRowData
+    @Environment(MainRouter.self) private var router
+    var data: MenuRowData
 
     var body: some View {
         Button {
@@ -98,14 +98,14 @@ import Factory
                 }
             }
             .task {
-                let service = Container.shared.menuUseCase()
-                try? await service.initialize()
-                pizzas = await service.pizzas()
+                let component = Container.shared.componentsModel()
+                try? await component.initialize()
+                pizzas = await component.pizzas
             }
         }
     }
 
     return AsyncTestView()
-        .environmentObject(MainRouter())
+        .environment(MainRouter())
 }
 #endif

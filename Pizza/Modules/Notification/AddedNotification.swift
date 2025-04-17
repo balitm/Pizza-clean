@@ -8,9 +8,10 @@
 
 import SwiftUI
 
-final class CustomNotificationModel: ObservableObject {
+@MainActor
+@Observable final class CustomNotificationModel {
     private var timer = Timer()
-    var onFire: (() -> Void)?
+    var onFire: (@MainActor () -> Void)?
 
     func start(with timeout: TimeInterval = kAddTimeout) {
         timer = Timer.scheduledTimer(
@@ -21,7 +22,9 @@ final class CustomNotificationModel: ObservableObject {
                 timer.invalidate()
                 return
             }
-            stop()
+            Task { @MainActor in
+                stop()
+            }
         }
     }
 
@@ -35,8 +38,8 @@ final class CustomNotificationModel: ObservableObject {
 }
 
 struct AddedNotification: View {
-    @EnvironmentObject private var alertHelper: AlertHelper
-    @StateObject private var addNotificationModel = CustomNotificationModel()
+    @Environment(AlertHelper.self) private var alertHelper
+    @State private var addNotificationModel = CustomNotificationModel()
     let text: LocalizedStringKey
     var onNavigate: () -> Void
 
@@ -63,6 +66,6 @@ struct AddedNotification: View {
 #if DEBUG
 #Preview {
     AddedNotification(text: .localizable(.addedNotification)) {}
-        .environmentObject(AlertHelper())
+        .environment(AlertHelper())
 }
 #endif

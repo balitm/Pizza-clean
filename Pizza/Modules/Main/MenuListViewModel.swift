@@ -12,21 +12,21 @@ import Factory
 import Combine
 
 @MainActor
-final class MenuListViewModel: ViewModelBase {
+@Observable final class MenuListViewModel {
     /// UI alert events.
     enum AlertKind {
         case progress, none, added, initError(Error)
     }
 
-    @Published var listData = [MenuRowData]()
-    var appVersionInfo: String { service.appVersionInfo }
-    var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
-    private let _alertKind = PassthroughSubject<AlertKind, Never>()
+    var listData = [MenuRowData]()
+    @ObservationIgnored var appVersionInfo: String { model.appVersionInfo() }
+    @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
+    @ObservationIgnored private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    private var pizzas: Pizzas?
-    private(set) var isLoading = false
+    @ObservationIgnored private var pizzas: Pizzas?
+    @ObservationIgnored private(set) var isLoading = false
 
-    @Injected(\.menuUseCase) private var service
+    @ObservationIgnored @Injected(\.menuModel) private var model
 
     /// Add the selected pizza to the cart.
     func addPizza(index: Int) {
@@ -34,7 +34,7 @@ final class MenuListViewModel: ViewModelBase {
 
         Task {
             let pizza = pizzas.pizzas[index]
-            await service.addToCart(pizza: pizza)
+            await model.addToCart(pizza: pizza)
             _alertKind.send(.added)
         }
     }
@@ -45,8 +45,8 @@ final class MenuListViewModel: ViewModelBase {
         isLoading = true
 
         do {
-            try await service.initialize()
-            let pizzas = await service.pizzas()
+            try await model.initialize()
+            let pizzas = await model.pizzas()
             self.pizzas = pizzas
 
             let basePrice = pizzas.basePrice

@@ -4,11 +4,11 @@ protocol Routing {
     associatedtype Route
     associatedtype View: SwiftUI.View
 
-    @ViewBuilder func view(for route: Route) -> Self.View
+    @MainActor @ViewBuilder func view(for route: Route) -> Self.View
 }
 
-class CustomNavPathProvider<Path: Hashable>: ObservableObject {
-    @Published var path = [Path]()
+@Observable class CustomNavPathProvider<Path: Hashable> {
+    var path = [Path]()
 
     init() {}
 

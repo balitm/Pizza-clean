@@ -1,5 +1,5 @@
 //
-//  ReachabilityRepository.swift
+//  ReachabilityModel.swift
 //  Repository
 //
 //  Created by Balázs Kilvády on 2024. 11. 01..
@@ -12,9 +12,11 @@ import DataSource
 import Reachability
 import Factory
 
-struct ReachabilityRepository: ReachabilityUseCase {
-    @Injected(\DataSourceContainer.pizzaAPI) private var api
-    @Injected(\.saveUseCase) private var saveUseCase
+struct ReachabilityModel: Domain.ReachabilityModel {
+    private var api: PizzaNetwork = DataSourceContainer.shared.pizzaAPI()
+    // @Injected(\DataSourceContainer.pizzaAPI) private var api: PizzaNetwork
+    private var cart = Container.shared.cartModel()
+    // @Injected(\.cartModel) private var cart
 
     var connection: AsyncStream<Connection> {
         AsyncStream { continuation in
@@ -52,7 +54,7 @@ struct ReachabilityRepository: ReachabilityUseCase {
 
     func resetSession() async {
         await api.resetSession()
-        try? await saveUseCase.saveCart()
+        try? await cart.save()
     }
 }
 
@@ -68,5 +70,4 @@ private func createReachability() throws -> Reachability {
     }
 }
 
-extension Reachability.Connection: @retroactive @unchecked Sendable {}
 extension Reachability: @retroactive @unchecked Sendable {}

@@ -1,6 +1,7 @@
 import SwiftUI
+import Combine
 
-final class AlertHelper: ObservableObject {
+@Observable final class AlertHelper {
     struct AnyOverlayView: Identifiable {
         let id = UUID()
         let view: AnyView
@@ -35,10 +36,10 @@ final class AlertHelper: ObservableObject {
     }
 
     /// Alert/modal popup to show.
-    @Published private(set) var alertView: IdentifiableAlert?
+    @ObservationIgnored private(set) var alertView = CurrentValueSubject<IdentifiableAlert?, Never>(nil)
 
     /// Let hide for touch up outside?
-    var isTouchOutside = false
+    @ObservationIgnored var isTouchOutside = false
 
     /// Show general progress alert animation.
     func showProgress() {
@@ -66,7 +67,7 @@ final class AlertHelper: ObservableObject {
 
     func hideAlert() {
         isTouchOutside = false
-        alertView = nil
+        alertView.send(nil)
     }
 }
 
@@ -74,14 +75,16 @@ private extension AlertHelper {
     func _showAlert(isTouchOutside: Bool = false,
                     _ alert: IdentifiableAlert) {
         self.isTouchOutside = isTouchOutside
-        alertView = alert
+        alertView.send(alert)
     }
 
     func _showAlert(isTouchOutside: Bool = false,
                     _ alert: AnyView) {
         self.isTouchOutside = isTouchOutside
-        alertView = IdentifiableAlert(view: alert, overlays: nil,
-                                      padding: EdgeInsets(), alignment: .center,
-                                      opacity: 0.6)
+        alertView.send(IdentifiableAlert(
+            view: alert, overlays: nil,
+            padding: EdgeInsets(), alignment: .center,
+            opacity: 0.6
+        ))
     }
 }

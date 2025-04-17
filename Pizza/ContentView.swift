@@ -12,25 +12,24 @@ import Factory
 
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
-    @EnvironmentObject private var alertHelper: AlertHelper
-    @State private var saveService = Container.shared.saveUseCase()
-    @StateObject private var router = MainRouter()
-    @StateObject private var viewModel = ContentViewModel()
+    @Environment(AlertHelper.self) private var alertHelper
+    @State private var cartModel = Container.shared.cartModel()
+    @State private var router = MainRouter()
+    @State private var viewModel = ContentViewModel()
 
     var body: some View {
         AlertHelperView {
             MenuListView(viewModel: viewModel.menuListViewModel)
-                .environmentObject(router)
+                .environment(router)
         }
         .alertModifier(viewModel, alertHelper, router)
         .task {
             await viewModel.listenToReachabity()
         }
-        .onChange(of: scenePhase) { phase in
-            if phase == .background {
-                Task {
-                    try? await saveService.saveCart()
-                }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .background else { return }
+            Task {
+                try? await cartModel.save()
             }
         }
     }
@@ -64,6 +63,6 @@ private extension View {
 #if DEBUG
 #Preview {
     ContentView()
-        .environmentObject(AlertHelper())
+        .environment(AlertHelper())
 }
 #endif

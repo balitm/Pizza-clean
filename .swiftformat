@@ -6,15 +6,12 @@
 --disable strongOutlets
 --disable wrapArguments
 --operatorfunc no-space
---disable preferKeyPath
 --disable wrapMultilineStatementBraces
---disable redundantSelf
 
 # rules
 
 --ifdef outdent
 --specifierorder public,override
---typeblanklines preserve
 
 --enable isEmpty
 --enable redundantExtensionACL
