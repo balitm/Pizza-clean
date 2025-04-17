@@ -19,14 +19,14 @@ import Combine
     }
 
     var listData = [MenuRowData]()
-    @ObservationIgnored var appVersionInfo: String { service.appVersionInfo }
+    @ObservationIgnored var appVersionInfo: String { model.appVersionInfo() }
     @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
-    private let _alertKind = PassthroughSubject<AlertKind, Never>()
+    @ObservationIgnored private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    private var pizzas: Pizzas?
+    @ObservationIgnored private var pizzas: Pizzas?
     @ObservationIgnored private(set) var isLoading = false
 
-    @ObservationIgnored @Injected(\.menuUseCase) private var service
+    @ObservationIgnored @Injected(\.menuModel) private var model
 
     /// Add the selected pizza to the cart.
     func addPizza(index: Int) {
@@ -34,7 +34,7 @@ import Combine
 
         Task {
             let pizza = pizzas.pizzas[index]
-            await service.addToCart(pizza: pizza)
+            await model.addToCart(pizza: pizza)
             _alertKind.send(.added)
         }
     }
@@ -45,8 +45,8 @@ import Combine
         isLoading = true
 
         do {
-            try await service.initialize()
-            let pizzas = await service.pizzas()
+            try await model.initialize()
+            let pizzas = await model.pizzas()
             self.pizzas = pizzas
 
             let basePrice = pizzas.basePrice

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		29ACCDB82CDB84D80076BFE0 /* DataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDB72CDB84D80076BFE0 /* DataSource */; };
 		29ACCDBA2CDB84D80076BFE0 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDB92CDB84D80076BFE0 /* Domain */; };
-		29ACCDBC2CDB84D80076BFE0 /* Repository in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDBB2CDB84D80076BFE0 /* Repository */; };
+		29D724C82DA93702000C528C /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 29D724C72DA93702000C528C /* Models */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,9 +36,9 @@
 		29727DEB2CDA9538000A24BC /* development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = development.xcconfig; sourceTree = "<group>"; };
 		29727DEC2CDA9538000A24BC /* internal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = internal.xcconfig; sourceTree = "<group>"; };
 		29727DED2CDA9538000A24BC /* production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = production.xcconfig; sourceTree = "<group>"; };
+		29AADA742DA6CBE300083033 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		29B4EA4B2CDA993C00EE27D2 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
 		29B4EA4C2CDA99BA00EE27D2 /* DataSource */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataSource; sourceTree = "<group>"; };
-		29E84B0D2CDA9A6400D0A513 /* Repository */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Repository; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -79,7 +79,7 @@
 			files = (
 				29ACCDBA2CDB84D80076BFE0 /* Domain in Frameworks */,
 				29ACCDB82CDB84D80076BFE0 /* DataSource in Frameworks */,
-				29ACCDBC2CDB84D80076BFE0 /* Repository in Frameworks */,
+				29D724C82DA93702000C528C /* Models in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +105,7 @@
 			children = (
 				29B4EA4B2CDA993C00EE27D2 /* Domain */,
 				29B4EA4C2CDA99BA00EE27D2 /* DataSource */,
-				29E84B0D2CDA9A6400D0A513 /* Repository */,
+				29AADA742DA6CBE300083033 /* Models */,
 				29727DEE2CDA9538000A24BC /* Environment */,
 				29727D3B2CDA87BC000A24BC /* Pizza */,
 				29727D4C2CDA87BD000A24BC /* PizzaTests */,
@@ -165,7 +165,7 @@
 			packageProductDependencies = (
 				29ACCDB72CDB84D80076BFE0 /* DataSource */,
 				29ACCDB92CDB84D80076BFE0 /* Domain */,
-				29ACCDBB2CDB84D80076BFE0 /* Repository */,
+				29D724C72DA93702000C528C /* Models */,
 			);
 			productName = Pizza;
 			productReference = 29727D392CDA87BC000A24BC /* Pizza.app */;
@@ -225,7 +225,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1610;
-				LastUpgradeCheck = 1610;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					29727D382CDA87BC000A24BC = {
 						CreatedOnToolsVersion = 16.1;
@@ -366,6 +366,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -430,6 +431,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -459,7 +461,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Pizza/Preview Content\"";
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pizza/Info.plist;
@@ -478,7 +479,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.Pizza;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -491,7 +492,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Pizza/Preview Content\"";
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pizza/Info.plist;
@@ -510,7 +510,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.Pizza;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -521,14 +521,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.PizzaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pizza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pizza";
 			};
@@ -540,14 +539,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.PizzaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pizza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pizza";
 			};
@@ -558,13 +556,12 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.PizzaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Pizza;
 			};
@@ -575,13 +572,12 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.PizzaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Pizza;
 			};
@@ -623,6 +619,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -659,7 +656,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Pizza/Preview Content\"";
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pizza/Info.plist;
@@ -678,7 +674,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.Pizza;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Internal;
@@ -689,14 +685,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.PizzaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pizza.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pizza";
 			};
@@ -707,13 +702,12 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UXKNDB9GX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hu.kildev.PizzaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Pizza;
 			};
@@ -784,14 +778,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Domain;
 		};
-		29ACCDBB2CDB84D80076BFE0 /* Repository */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Repository;
-		};
 		29ACCDC82CDB883F0076BFE0 /* XCStringsToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 29ACCDC72CDB88130076BFE0 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */;
 			productName = "plugin:XCStringsToolPlugin";
+		};
+		29D724C72DA93702000C528C /* Models */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Models;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

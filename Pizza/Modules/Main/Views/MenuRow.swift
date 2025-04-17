@@ -98,9 +98,9 @@ import Factory
                 }
             }
             .task {
-                let service = Container.shared.menuUseCase()
-                try? await service.initialize()
-                pizzas = await service.pizzas()
+                let component = Container.shared.componentsModel()
+                try? await component.initialize()
+                pizzas = await component.pizzas
             }
         }
     }

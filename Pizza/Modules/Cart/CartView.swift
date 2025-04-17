@@ -7,12 +7,12 @@
 //
 
 import SwiftUI
+import Factory
 
 struct CartView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(AlertHelper.self) private var alertHelper
     @Environment(MainRouter.self) private var router
-    @State private var viewModel = CartViewModel()
+    @InjectedObservable(\.cartViewModel) private var viewModel
 
     var body: some View {
         List {

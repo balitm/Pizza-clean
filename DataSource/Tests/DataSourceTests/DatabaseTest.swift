@@ -12,40 +12,13 @@ import Factory
 @testable import DataSource
 
 struct DatabaseTest {
-    nonisolated(unsafe) static let realm: Realm = {
-        var config = Realm.Configuration.defaultConfiguration
-        debugPrint(#fileID, #line, "Realm file: \(config.fileURL!.path)")
-        var fileURL = config.fileURL!
-        fileURL.deleteLastPathComponent()
-        fileURL.deleteLastPathComponent()
-        fileURL.appendPathComponent("tmp")
-        fileURL.appendPathComponent("test.realm")
-        debugPrint(#fileID, #line, "Realm file: \(fileURL.path)")
-        config.fileURL = fileURL
-
-        do {
-            nonisolated(unsafe) var realm: Realm!
-            try DS.dbQueue.sync {
-                realm = try Realm(configuration: config, queue: DS.dbQueue)
-                _ = DataSourceContainer.shared.storage.register {
-                    DS.Storage(realm: realm)
-                }
-            }
-            debugPrint(#fileID, #line, "!!! test sequence init")
-
-            return realm
-        } catch {
-            fatalError("test realm can't be inited:\n\(error)")
-        }
-    }()
-
     let container: DS.Storage
     let mock: PizzaNetwork
 
     init() async throws {
-        container = DS.Storage(realm: Self.realm)
+        container = DataSourceContainer.shared.storage()
         mock = DataSourceContainer.shared.pizzaAPI()
-        debugPrint(#fileID, #line, "!!! test case init")
+        debugPrint(#fileID, #line, "!!! test case init -", container.path)
     }
 
     @Test func save() async throws {

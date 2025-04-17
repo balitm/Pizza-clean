@@ -9,11 +9,12 @@
 import SwiftUI
 import Combine
 import Domain
+import Factory
 
 struct IngredientsListView: View {
     @Environment(AlertHelper.self) private var alertHelper
     @Environment(MainRouter.self) private var router
-    @State var viewModel = IngredientsViewModel()
+    @InjectedObservable(\.ingredientsViewModel) private var viewModel
     var rowData: MenuRowData
 
     var body: some View {
@@ -82,7 +83,7 @@ struct IngredientsListView: View {
     @ViewBuilder
     var footer: some View {
         Button {
-            self.viewModel.addToCart()
+            viewModel.addToCart()
         } label: {
             Text(viewModel.showCartText)
                 .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
@@ -136,9 +137,9 @@ import Factory
                     }
                 }
                 .task {
-                    let service = Container.shared.menuUseCase()
-                    try? await service.initialize()
-                    pizzas = await service.pizzas()
+                    let component = Container.shared.componentsModel()
+                    try? await component.initialize()
+                    pizzas = await component.pizzas
                 }
             }
         }

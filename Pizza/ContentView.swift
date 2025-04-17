@@ -13,7 +13,7 @@ import Factory
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(AlertHelper.self) private var alertHelper
-    @State private var saveService = Container.shared.saveUseCase()
+    @State private var cartModel = Container.shared.cartModel()
     @State private var router = MainRouter()
     @State private var viewModel = ContentViewModel()
 
@@ -27,10 +27,9 @@ struct ContentView: View {
             await viewModel.listenToReachabity()
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background {
-                Task {
-                    try? await saveService.saveCart()
-                }
+            guard phase == .background else { return }
+            Task {
+                try? await cartModel.save()
             }
         }
     }

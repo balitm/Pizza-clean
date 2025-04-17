@@ -1,32 +1,34 @@
 //
-//  IngredientsRepository.swift
-//  Domain
+//  IngredientsModel.swift
+//  Models
 //
-//  Created by Balázs Kilvády on 5/16/20.
-//  Copyright © 2024 kil-dev. All rights reserved.
+//  Created by Balázs Kilvády on 2025. 04. 11..
 //
 
 import Foundation
 import Domain
 import Factory
 
-struct IngredientsRepository: IngredientsUseCase {
-    @Injected(\.initActor) fileprivate var initActor
+// final class IngredientsModel: Domain.IngredientsModel {
+@MainActor final class IngredientsModel: Domain.IngredientsModel {
+    @Injected(\.componentsModel) private var componentsModel
+    @Injected(\.cartModel) private var cartModel
+
     private var _pizza: Pizza!
     private var ingredients = [IngredientSelection]()
 
-    mutating func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection] {
+    func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection] {
         _pizza = pizza
         return await selectedIngredients()
     }
 
-    mutating func selectedIngredients() async -> [IngredientSelection] {
-        let ingredients = await initActor.component.ingredients
+    func selectedIngredients() async -> [IngredientSelection] {
+        let ingredients = await componentsModel.ingredients
         self.ingredients = createSelecteds(_pizza, ingredients)
         return self.ingredients
     }
 
-    mutating func select(ingredientIndex index: Int) -> [IngredientSelection] {
+    func select(at index: Int) -> [IngredientSelection] {
         var ings = ingredients
         let item = ingredients[index]
         ings[index] = IngredientSelection(ingredient: item.ingredient, isOn: !item.isOn)
@@ -36,15 +38,15 @@ struct IngredientsRepository: IngredientsUseCase {
 
     func addToCart() async {
         let newPizza = Pizza(copy: _pizza, name: name(), with: ingredients.compactMap { $0.isOn ? $0.ingredient : nil })
-        _ = await initActor.cartHandler.add(pizza: newPizza)
+        await cartModel.add(pizza: newPizza)
     }
 
     func name() -> String {
-        customName(String(repository: .emptyPizzaName))
+        customName(String(models: .emptyPizzaName))
     }
 
     func title() -> String {
-        customName(String(repository: .emptyPizzaTitle))
+        customName(String(models: .emptyPizzaTitle))
     }
 
     private func customName(_ emptyName: String) -> String {
@@ -57,14 +59,14 @@ struct IngredientsRepository: IngredientsUseCase {
         let pizzaNames = Set(_pizza.ingredients
             .map(\.name))
         let pre = if selectedNames != pizzaNames {
-            String(repository: .customPrefix)
+            String(models: .customPrefix)
         } else {
             ""
         }
         return "\(pre)\(_pizza.name)"
     }
 
-    func sum() -> Double {
+    func totalPrice() -> Double {
         let selecteds = ingredients
             .compactMap { selection in
                 selection.isOn ? selection.ingredient : nil
@@ -88,42 +90,3 @@ private func createSelecteds(_ pizza: Pizza, _ ingredients: [Ingredient]) -> [In
     }
     return sels
 }
-
-#if DEBUG
-struct PreviewIngredientsRepository: IngredientsUseCase {
-    var implementation = IngredientsRepository()
-
-    mutating func selectedIngredients(for pizza: Pizza) async -> [IngredientSelection] {
-        _ = try? await implementation.initActor.initialize()
-        return await implementation.selectedIngredients(for: pizza)
-    }
-
-    mutating func selectedIngredients() async -> [IngredientSelection] {
-        await implementation.selectedIngredients()
-    }
-
-    mutating func select(ingredientIndex index: Int) -> [IngredientSelection] {
-        implementation.select(ingredientIndex: index)
-    }
-
-    func addToCart() async {
-        await implementation.addToCart()
-    }
-
-    func name() -> String {
-        implementation.name()
-    }
-
-    func title() -> String {
-        implementation.title()
-    }
-
-    func pizza() -> Pizza {
-        implementation.pizza()
-    }
-
-    func sum() -> Double {
-        implementation.sum()
-    }
-}
-#endif

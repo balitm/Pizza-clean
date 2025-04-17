@@ -1,5 +1,5 @@
 //
-//  ReachabilityUseCase.swift
+//  ReachabilityModel.swift
 //  Domain
 //
 //  Created by Balázs Kilvády on 2024. 11. 01..
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ReachabilityUseCase {
+public protocol ReachabilityModel: Sendable {
     var connection: AsyncStream<Connection> { get }
 
     /// Reset (underlying URL)session.

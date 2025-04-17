@@ -8,6 +8,4 @@
 
 import Factory
 import Domain
-import Repository
-
-let mvm = Container.shared.menuUseCase()
+import Models

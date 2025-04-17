@@ -44,8 +44,8 @@ import Factory
 // }
 
 func initPizzas() async throws -> Pizzas {
-    let service = Container.shared.menuUseCase()
-    try? await service.initialize()
-    await debugPrint(#fileID, #line, "async pizzas task:", service.pizzas().pizzas.count)
-    return await service.pizzas()
+    let model = Container.shared.componentsModel()
+    try? await model.initialize()
+    await debugPrint(#fileID, #line, "async pizzas task:", model.pizzas.pizzas.count)
+    return await model.pizzas
 }

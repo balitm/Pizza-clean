@@ -8,12 +8,12 @@
 
 import SwiftUI
 import Domain
+import Factory
 
 struct DrinksListView: View {
     @Environment(AlertHelper.self) private var alertHelper
-    @Environment(MainRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel = DrinksViewModel()
+    @InjectedObservable(\.drinksViewModel) private var viewModel
 
     var body: some View {
         List(viewModel.listData) { item in
@@ -39,8 +39,7 @@ private extension View {
     func alertModifier(
         _ viewModel: DrinksViewModel,
         _ alertHelper: AlertHelper,
-        _ dismiss: DismissAction
-        // _ router: MainRouter
+        _ dismiss: DismissAction,
     ) -> some View {
         onReceive(viewModel.alertKind) { kind in
             switch kind {
@@ -64,5 +63,4 @@ private extension View {
         DrinksListView()
     }
     .environment(AlertHelper())
-    .environment(MainRouter())
 }

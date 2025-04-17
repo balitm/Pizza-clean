@@ -12,7 +12,7 @@ import Combine
 import Factory
 
 @MainActor
-@Observable final class DrinksViewModel: ViewModelBase {
+@Observable class DrinksViewModel: ViewModelBase {
     enum AlertKind {
         case added
     }
@@ -20,12 +20,13 @@ import Factory
     var listData = [DrinkRowData]()
 
     @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
-    private let _alertKind = PassthroughSubject<AlertKind, Never>()
+    @ObservationIgnored private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    @ObservationIgnored @Injected(\.drinksUseCase) private var service
+    @ObservationIgnored @Injected(\.componentsModel) var components
+    @ObservationIgnored @Injected(\.cartModel) private var cartModel
 
     func loadDrinks() async {
-        listData = await service.drinks().enumerated()
+        listData = await components.drinks.enumerated()
             .map {
                 DrinkRowData(name: $0.element.name,
                              priceText: format(price: $0.element.price),
@@ -37,8 +38,26 @@ import Factory
     /// - Parameter index: index of the item to add.
     func addToCart(index: Int) {
         Task {
-            await service.addToCart(drinkIndex: index)
+            await cartModel.add(drinkIndex: index)
             _alertKind.send(.added)
         }
+    }
+}
+
+// MARK: - Injection
+
+@Observable class DrinksViewModelPreview: DrinksViewModel {
+    override func loadDrinks() async {
+        try? await components.initialize()
+        await super.loadDrinks()
+    }
+}
+
+extension Container {
+    var drinksViewModel: Factory<DrinksViewModel> {
+        self { DrinksViewModel() }
+            .onPreview {
+                DrinksViewModelPreview()
+            }
     }
 }

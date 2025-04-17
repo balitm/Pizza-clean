@@ -12,7 +12,7 @@ import Combine
 import Factory
 
 @MainActor
-@Observable final class CartViewModel: ViewModelBase {
+@Observable class CartViewModel: ViewModelBase {
     enum AlertKind {
         case progress, none, checkoutError(Error)
     }
@@ -22,15 +22,15 @@ import Factory
     @ObservationIgnored private(set) var totalData = CartTotalRowData(price: 0)
     @ObservationIgnored private(set) var canCheckout = false
     @ObservationIgnored var alertKind: AnyPublisher<AlertKind, Never> { _alertKind.eraseToAnyPublisher() }
-    private let _alertKind = PassthroughSubject<AlertKind, Never>()
+    @ObservationIgnored private let _alertKind = PassthroughSubject<AlertKind, Never>()
 
-    @ObservationIgnored @Injected(\.cartUseCase) private var service
+    @ObservationIgnored @Injected(\.cartModel) fileprivate var cartModel
 
     /// Load items.
     func loadItems() async {
-        let items = await service.items()
+        let items = await cartModel.items()
         canCheckout = !items.isEmpty
-        let price = await service.total()
+        let price = await cartModel.totalPrice()
         totalData = CartTotalRowData(price: price)
         listData = items.enumerated()
             .map { index, item in
@@ -43,7 +43,7 @@ import Factory
         _alertKind.send(.progress)
         Task {
             do {
-                _ = try await service.checkout()
+                _ = try await cartModel.checkout()
                 await loadItems()
                 _alertKind.send(.none)
                 showSuccess = true
@@ -56,12 +56,43 @@ import Factory
     /// Remove item on tap/selected.
     func select(index: Int) {
         Task {
-            await service.remove(at: index)
+            await cartModel.remove(at: index)
             await loadItems()
         }
     }
 
     func hideAlert() {
         _alertKind.send(.none)
+    }
+}
+
+// MARK: - Injection
+
+@Observable class CartViewModelPreview: CartViewModel {
+    @ObservationIgnored @Injected(\.componentsModel) private var components
+
+    override func loadItems() async {
+        // initialize
+        try? await components.initialize()
+
+        // fill up with test data
+        await withDiscardingTaskGroup { group in
+            for i in 0 ... 1 {
+                group.addTask { [cartModel, components] in await cartModel.add(drink: components.drinks[i]) }
+                group.addTask { [cartModel, components] in await cartModel.add(pizza: components.pizzas.pizzas[i]) }
+            }
+        }
+
+        // publish content
+        await super.loadItems()
+    }
+}
+
+extension Container {
+    var cartViewModel: Factory<CartViewModel> {
+        self { CartViewModel() }
+            .onPreview {
+                CartViewModelPreview()
+            }
     }
 }
