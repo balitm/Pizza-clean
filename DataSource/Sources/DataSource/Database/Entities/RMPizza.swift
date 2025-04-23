@@ -11,6 +11,6 @@ import RealmSwift
 
 public final class RMPizza: Object {
     @Persisted var name = ""
-    let ingredients = List<Int64>()
+    @Persisted var ingredients = List<Int64>()
     @Persisted var imageUrl = ""
 }

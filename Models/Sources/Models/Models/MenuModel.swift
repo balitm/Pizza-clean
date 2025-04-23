@@ -18,10 +18,8 @@ actor MenuModel: Domain.MenuModel {
     let appConfig = DataSourceContainer.shared.appConfig()
 
     func initialize() async throws {
-        try? await withThrowingDiscardingTaskGroup { group in
-            group.addTask(operation: component.initialize)
-            group.addTask { [cartModel] in try await cartModel.initialize() }
-        }
+        try await component.initialize()
+        try await cartModel.initialize()
     }
 
     func pizzas() async -> Pizzas {

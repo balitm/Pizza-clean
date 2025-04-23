@@ -13,6 +13,11 @@ import Domain
 final class MenuModelTests: NetworklessTestsBase {
     @Injected(\.menuModel) var menuModel
 
+    @Test func initialize() async throws {
+        try? await menuModel.initialize()
+        await #expect(menuModel.pizzas().basePrice > 0)
+    }
+
     @Test func pizzas() async throws {
         let pizzas = await menuModel.pizzas()
         DLog("all pizzas: ", pizzas.pizzas.count)
