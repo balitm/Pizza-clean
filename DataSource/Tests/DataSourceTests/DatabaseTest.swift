@@ -52,6 +52,10 @@ struct DatabaseTest {
                 }
                 for pizza in cart.pizzas.enumerated() {
                     #expect(pizza.element.name == pizzas.pizzas[pizza.offset].name)
+                    #expect(pizza.element.ingredients.count == pizzas.pizzas[pizza.offset].ingredients.count)
+                    for ingredient in pizza.element.ingredients.enumerated() {
+                        #expect(ingredient.element == pizzas.pizzas[pizza.offset].ingredients[ingredient.offset])
+                    }
                 }
                 try container.write {
                     $0.delete(DS.Pizza.self)

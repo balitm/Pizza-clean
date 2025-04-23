@@ -10,6 +10,6 @@ import Foundation
 import RealmSwift
 
 public final class RMCart: Object {
-    let pizzas = List<RMPizza>()
-    let drinks = List<Int64>()
+    @Persisted var pizzas = List<RMPizza>()
+    @Persisted var drinks = List<Int64>()
 }
