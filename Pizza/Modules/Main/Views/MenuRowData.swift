@@ -3,7 +3,7 @@
 //  Pizza
 //
 //  Created by Balázs Kilvády on 2/18/20.
-//  Copyright © 2024 kil-dev. All rights reserved.
+//  Copyright 2024 kil-dev. All rights reserved.
 //
 
 import Foundation
@@ -61,4 +61,12 @@ import struct SwiftUI.Image
 
 extension MenuRowData: Identifiable {
     var id: Int { index }
+}
+
+extension MenuRowData: Equatable {
+    static func ==(lhs: MenuRowData, rhs: MenuRowData) -> Bool {
+        lhs.index == rhs.index &&
+            lhs.pizza.name == rhs.pizza.name &&
+            lhs.image == rhs.image
+    }
 }

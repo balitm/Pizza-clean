@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		294928FC2DD6406C007F866F /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 294928FB2DD6406C007F866F /* ComposableArchitecture */; };
 		29ACCDB82CDB84D80076BFE0 /* DataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDB72CDB84D80076BFE0 /* DataSource */; };
 		29ACCDBA2CDB84D80076BFE0 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 29ACCDB92CDB84D80076BFE0 /* Domain */; };
 		29D724C82DA93702000C528C /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 29D724C72DA93702000C528C /* Models */; };
@@ -79,6 +80,7 @@
 			files = (
 				29ACCDBA2CDB84D80076BFE0 /* Domain in Frameworks */,
 				29ACCDB82CDB84D80076BFE0 /* DataSource in Frameworks */,
+				294928FC2DD6406C007F866F /* ComposableArchitecture in Frameworks */,
 				29D724C82DA93702000C528C /* Models in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +168,7 @@
 				29ACCDB72CDB84D80076BFE0 /* DataSource */,
 				29ACCDB92CDB84D80076BFE0 /* Domain */,
 				29D724C72DA93702000C528C /* Models */,
+				294928FB2DD6406C007F866F /* ComposableArchitecture */,
 			);
 			productName = Pizza;
 			productReference = 29727D392CDA87BC000A24BC /* Pizza.app */;
@@ -251,6 +254,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				29ACCDC72CDB88130076BFE0 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */,
+				294928FA2DD6406C007F866F /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 29727D3A2CDA87BC000A24BC /* Products */;
@@ -759,6 +763,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		294928FA2DD6406C007F866F /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.19.1;
+			};
+		};
 		29ACCDC72CDB88130076BFE0 /* XCRemoteSwiftPackageReference "xcstrings-tool-plugin" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/liamnichols/xcstrings-tool-plugin";
@@ -770,6 +782,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		294928FB2DD6406C007F866F /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 294928FA2DD6406C007F866F /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
 		29ACCDB72CDB84D80076BFE0 /* DataSource */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DataSource;

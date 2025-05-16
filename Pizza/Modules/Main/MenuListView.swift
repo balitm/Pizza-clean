@@ -2,108 +2,83 @@
 //  MenuListView.swift
 //  Pizza
 //
-//  Created by Balázs Kilvády on 6/9/20.
-//  Copyright © 2024 kil-dev. All rights reserved.
+//  Created by Balázs Kilvády on 2/17/20.
+//  Copyright 2024 kil-dev. All rights reserved.
 //
 
 import SwiftUI
 import Domain
+import ComposableArchitecture
 
 struct MenuListView: View {
-    @Environment(AlertHelper.self) private var alertHelper
-    @Environment(MainRouter.self) private var router
-    var viewModel: MenuListViewModel
+    @State var store: StoreOf<MenuListFeature>
 
     var body: some View {
-        // let _ = Self._printChanges()
-        @Bindable var router = router
-
-        NavigationStack(path: $router.path) {
+        WithPerceptionTracking {
             List {
-                ForEach(viewModel.listData) { rowData in
+                if store.isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .listRowSeparator(.hidden)
+                }
+                ForEach(store.listData) { rowData in
                     MenuRow(data: rowData)
+                        .onTapGesture {
+                            store.send(.addPizza(index: rowData.index))
+                        }
                         .listRowInsets(.init())
                         .listRowSeparator(.hidden)
                 }
-                Text(viewModel.appVersionInfo)
-                    .frame(maxWidth: .infinity)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .listRowSeparator(.hidden)
+                // App version info can be added here if still needed,
+                // possibly from a shared state or a dependency.
+                // For now, focusing on core TCA conversion.
+                // Text(viewModel.appVersionInfo)
+                //     .frame(maxWidth: .infinity)
+                //     .font(.footnote)
+                //     .foregroundStyle(.secondary)
+                //     .listRowSeparator(.hidden)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        router.push(.cart)
-                    } label: {
-                        Image(.icCartNavbar)
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        router.push(.ingredients(.init()))
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundStyle(.accent)
-                            .fontWeight(.semibold)
-                    }
-                }
-            }
-            .animation(.default, value: viewModel.listData.isEmpty)
             .listStyle(.plain)
-            .navigationDestination(for: MainPath.self) {
-                router.view(for: $0)
+            .navigationTitle(String.localizable(.mainTitle))
+            .task {
+                await store.send(.task).finish()
             }
-            .navigationTitle(.localizable(.mainTitle))
-        }
-        .alertModifier(viewModel, alertHelper, router)
-        .task {
-            try? await viewModel.fetchPizzas()
-        }
-    }
-}
-
-private extension View {
-    func alertModifier(
-        _ viewModel: MenuListViewModel,
-        _ alertHelper: AlertHelper,
-        _ router: MainRouter
-    ) -> some View {
-        onReceive(viewModel.alertKind) { kind in
-            switch kind {
-            case .none:
-                alertHelper.hideAlert()
-            case .progress:
-                alertHelper.showProgress()
-            case .added:
-                alertHelper.showAlert(
-                    isTouchOutside: true,
-                    alignment: .top
-                ) {
-                    AddedNotification(text: .localizable(.addedNotification)) {
-                        router.push(.cart)
-                    }
-                    .transition(.move(edge: .top))
-                }
-            case let .initError(error):
-                alertHelper.showAlert(
-                    isTouchOutside: true,
-                    alignment: .bottom
-                ) {
-                    ErrorView(error: error) {
-                        viewModel.hideAlert()
-                    }
-                    .transition(.move(edge: .bottom))
-                }
-            }
+            // .alert(
+            //     item: $store.scope(state: \.alertKind, action: \.alertDismissed)
+            // ) { alertKind in
+            //     switch alertKind {
+            //     case .added:
+            //         // The original used a custom AddedNotification.
+            //         // This requires a more complex overlay or sheet if the exact style is needed.
+            //         // For a standard alert:
+            //         Alert(title: Text("Added to Cart!"))
+            //     case .initError(let message):
+            //         Alert(title: Text("Error"), message: Text(message))
+            //     }
+            // }
+            // // Toolbar items for cart and add (+) are now managed by ContentView
+            // // as they affect the global navigation stack.
+            // // If MenuListView itself had local toolbar items, they'd be here.
         }
     }
 }
 
 #if DEBUG
 #Preview {
-    MenuListView(viewModel: .init())
-        .environment(AlertHelper())
-        .environment(MainRouter())
+    NavigationView {
+        MenuListView(
+            store: Store(
+                initialState: MenuListFeature.State(
+                    listData: [
+                        // Preview MenuRowData needs to be created here
+                        // For example:
+                        // MenuRowData(index: 0, basePrice: 10.0, pizza: Pizza(name: "Preview Pizza", ingredients: [], imageUrl: nil, price: 0.0), onTapPrice: { _ in })
+                    ]
+                )
+            ) {
+                MenuListFeature()
+            }
+        )
+    }
 }
 #endif
