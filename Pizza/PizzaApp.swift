@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct PizzaApp: App {
@@ -16,8 +17,12 @@ struct PizzaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(AlertHelper())
+            ContentView(
+                store: Store(initialState: ContentFeature.State()) {
+                    ContentFeature()
+                }
+            )
+            .environment(AlertHelper())
         }
     }
 

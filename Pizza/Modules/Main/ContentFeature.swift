@@ -7,15 +7,21 @@
 //
 
 import ComposableArchitecture
+import CasePaths
 import Domain
 import Factory
 import Combine
 import SwiftUI
 
-typealias ReachabilityConnection = Domain.Connection
-
 @Reducer
 struct ContentFeature {
+    @Reducer(state: .equatable)
+    enum Path {
+        case cart(CartFeature)
+        case drinks(DrinksFeature)
+        case ingredients(IngredientsFeature)
+    }
+
     @ObservableState
     struct State: Equatable {
         var path = StackState<Path.State>()
@@ -32,17 +38,10 @@ struct ContentFeature {
     enum Action {
         case task
         case scenePhaseChanged(ScenePhase)
-        case reachabilityUpdate(ReachabilityConnection)
+        case reachabilityUpdate(Connection)
         case alertDismissed
-        case path(StackAction<Path.State, Path.Action>)
+        case path(StackActionOf<Path>)
         case menuList(MenuListFeature.Action)
-    }
-
-    @Reducer(state: .equatable)
-    enum Path {
-        case cart(CartFeature)
-        case drinks(DrinksFeature)
-        case ingredients(IngredientsFeature)
     }
 
     @Dependency(\.continuousClock) var clock
@@ -102,7 +101,7 @@ struct ContentFeature {
                 return .none
 
             case .path(.element(id: _, action: .cart(.delegate(.dismiss)))):
-                state.path.popLast()
+                _ = state.path.popLast()
                 return .none
 
             case let .menuList(.delegate(delegateAction)):
@@ -143,7 +142,7 @@ struct MenuListFeature {
         }
     }
 
-    enum Action: Equatable {
+    enum Action {
         case task
         case addPizza(index: Int)
         case pizzasResponse(Result<Pizzas, Error>)
@@ -156,22 +155,6 @@ struct MenuListFeature {
             case navigateToCart
             case navigateToIngredients(MenuRowData)
             case navigateToDrinks
-        }
-
-        static func ==(lhs: Action, rhs: Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.task, .task): true
-            case let (.addPizza(lIndex), .addPizza(rIndex)): lIndex == rIndex
-            case let (.pizzasResponse(.success(lPizzas)), .pizzasResponse(.success(rPizzas))):
-                lPizzas.pizzas.map(\.name) == rPizzas.pizzas.map(\.name) && lPizzas.basePrice == rPizzas.basePrice
-            case let (.pizzasResponse(.failure(lError)), .pizzasResponse(.failure(rError))):
-                lError.localizedDescription == rError.localizedDescription
-            case (.alertDismissed, .alertDismissed): true
-            case (.lostNetwork, .lostNetwork): true
-            case (.resumeNetwork, .resumeNetwork): true
-            case let (.delegate(lDelegate), .delegate(rDelegate)): lDelegate == rDelegate
-            default: false
-            }
         }
     }
 
@@ -213,11 +196,7 @@ struct MenuListFeature {
 
             case let .pizzasResponse(.failure(error)):
                 state.isLoading = false
-                // if let apiError = error as? APIError, apiError.kind == .cancelled {
-                //     return .none
-                // } else {
                 state.alertKind = .initError(error.localizedDescription)
-                // }
                 return .none
 
             case .alertDismissed:

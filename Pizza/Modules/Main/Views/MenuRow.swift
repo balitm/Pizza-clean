@@ -10,12 +10,12 @@ import SwiftUI
 import Domain
 
 struct MenuRow: View {
-    @Environment(MainRouter.self) private var router
+    // @Environment(MainRouter.self) private var router
     var data: MenuRowData
 
     var body: some View {
         Button {
-            router.push(.ingredients(data))
+            // router.push(.ingredients(data))
         } label: {
             rowView
         }

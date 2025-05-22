@@ -11,9 +11,11 @@ import Domain
 import ComposableArchitecture
 
 struct MenuListView: View {
-    @State var store: StoreOf<MenuListFeature>
+    @Bindable var store: StoreOf<MenuListFeature>
 
     var body: some View {
+        let _ = Self._printChanges()
+
         WithPerceptionTracking {
             List {
                 if store.isLoading {
@@ -65,7 +67,7 @@ struct MenuListView: View {
 
 #if DEBUG
 #Preview {
-    NavigationView {
+    NavigationStack {
         MenuListView(
             store: Store(
                 initialState: MenuListFeature.State(
