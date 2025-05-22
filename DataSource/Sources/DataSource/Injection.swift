@@ -50,7 +50,8 @@ public final class DataSourceContainer: SharedContainer {
     }
 
     public var pizzaAPI: Factory<PizzaNetwork> {
-        self { APIPizzaNetwork() }.singleton
+        // self { APIPizzaNetwork() }.singleton
+        self { MockPizzaNetwork() }.singleton
     }
 
     public var storage: Factory<DataSource.Storage> {

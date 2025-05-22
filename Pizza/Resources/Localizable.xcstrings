@@ -1,6 +1,19 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@) %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@) %2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
     "addedNotification" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -56,6 +69,21 @@
         }
       }
     },
+    "Current stack" : {
+
+    },
+    "Decoupled navigation to screen A" : {
+
+    },
+    "Decoupled navigation to screen B" : {
+
+    },
+    "Decoupled navigation to screen C" : {
+
+    },
+    "Dismiss" : {
+
+    },
     "drinksTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -89,6 +117,21 @@
         }
       }
     },
+    "Get fact" : {
+
+    },
+    "Go to A → B → C" : {
+
+    },
+    "Go to screen A" : {
+
+    },
+    "Go to screen B" : {
+
+    },
+    "Go to screen C" : {
+
+    },
     "ingredientsSectionTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -112,6 +155,9 @@
         }
       }
     },
+    "Navigation Stack" : {
+
+    },
     "noNetworkNotification" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -123,6 +169,36 @@
         }
       }
     },
+    "Pop to root" : {
+
+    },
+    "Root" : {
+
+    },
+    "Screen A" : {
+
+    },
+    "Screen B" : {
+
+    },
+    "Screen C" : {
+
+    },
+    "Start timer" : {
+
+    },
+    "Stop timer" : {
+
+    },
+    "This screen demonstrates a basic feature hosted in a navigation stack.\n\nYou can also have the child feature dismiss itself, which will communicate back to the root stack view to pop the feature off the stack." : {
+
+    },
+    "This screen demonstrates how to navigate to other screens without needing to compile any symbols from those screens. You can send an action into the system, and allow the root feature to intercept that action and push the next feature onto the stack." : {
+
+    },
+    "This screen demonstrates that if you start a long-living effects in a stack, then it will automatically be torn down when the screen is dismissed." : {
+
+    },
     "total" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -133,6 +209,9 @@
           }
         }
       }
+    },
+    "Total count: %lld" : {
+
     }
   },
   "version" : "1.0"
