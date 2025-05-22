@@ -73,8 +73,7 @@ struct MenuListFeature {
                     MenuRowData(
                         index: $0.offset,
                         basePrice: pizzas.basePrice,
-                        pizza: $0.element,
-                        onTapPrice: { _ in }
+                        pizza: $0.element
                     )
                 }
                 state.isLoading = false

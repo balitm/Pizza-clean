@@ -24,12 +24,15 @@ struct MenuListView: View {
                         .listRowSeparator(.hidden)
                 }
                 ForEach(store.listData) { rowData in
-                    MenuRow(data: rowData)
-                        .onTapGesture {
-                            store.send(.addPizza(index: rowData.index))
+                    MenuRow(
+                        store: Store(
+                            initialState: MenuRowFeature.State(data: rowData)
+                        ) {
+                            MenuRowFeature()
                         }
-                        .listRowInsets(.init())
-                        .listRowSeparator(.hidden)
+                    )
+                    .listRowInsets(.init())
+                    .listRowSeparator(.hidden)
                 }
                 // App version info can be added here if still needed,
                 // possibly from a shared state or a dependency.

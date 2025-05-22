@@ -3,42 +3,46 @@
 //  Pizza
 //
 //  Created by Balázs Kilvády on 6/8/20.
-//  Copyright © 2024 kil-dev. All rights reserved.
+//  Copyright 2024 kil-dev. All rights reserved.
 //
 
 import SwiftUI
 import Domain
+import ComposableArchitecture
 
 struct MenuRow: View {
-    // @Environment(MainRouter.self) private var router
-    var data: MenuRowData
+    let store: StoreOf<MenuRowFeature>
 
     var body: some View {
-        Button {
-            // router.push(.ingredients(data))
-        } label: {
-            rowView
-        }
-        .onAppear {
-            data.downloadImage()
+        WithPerceptionTracking {
+            Button {
+                store.send(.onTapDetails)
+            } label: {
+                rowView
+            }
+            .onAppear {
+                store.send(.downloadImage)
+            }
         }
     }
 
     var rowView: some View {
-        ZStack(alignment: .top) {
+        let state = store.state
+
+        return ZStack(alignment: .top) {
             Image(.bgWood)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 128, alignment: .top)
                 .clipped()
 
-            if let image = data.image {
+            if let image = state.data.image {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(height: 179)
                     .clipped()
-            } else if data.pizza.imageUrl != nil {
+            } else if state.data.pizza.imageUrl != nil {
                 ProgressView()
                     .tint(.gray)
                     .frame(height: 128)
@@ -46,16 +50,16 @@ struct MenuRow: View {
 
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text(data.pizza.name)
+                    Text(state.data.pizza.name)
                         .font(.system(size: 24, weight: .bold))
                         .foregroundStyle(.text)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(data.ingredientsText)
+                    Text(state.data.ingredientsText)
                         .font(.system(size: 14))
                         .foregroundStyle(.text)
                 }
                 Button {
-                    data.addToCart()
+                    store.send(.onTapAddToCart)
                 } label: {
                     HStack(spacing: 4) {
                         Image(.icCartButton)
@@ -63,7 +67,7 @@ struct MenuRow: View {
                             .foregroundStyle(.price)
                             .frame(width: 14, height: 14)
                             .scaledToFit()
-                        Text(data.priceText)
+                        Text(state.data.priceText)
                             .foregroundStyle(.price)
                             .font(.system(size: 16, weight: .bold))
                     }
@@ -92,9 +96,33 @@ import Factory
         var body: some View {
             VStack(spacing: 10) {
                 if let pizzas {
-                    MenuRow(data: .preview(from: pizzas, at: 0))
-                    MenuRow(data: .preview(from: pizzas, at: 1))
-                        .environment(\.colorScheme, .dark)
+                    MenuRow(
+                        store: Store(
+                            initialState: MenuRowFeature.State(
+                                data: MenuRowData(
+                                    index: 0,
+                                    basePrice: pizzas.basePrice,
+                                    pizza: pizzas.pizzas[0]
+                                )
+                            )
+                        ) {
+                            MenuRowFeature()
+                        }
+                    )
+                    MenuRow(
+                        store: Store(
+                            initialState: MenuRowFeature.State(
+                                data: MenuRowData(
+                                    index: 1,
+                                    basePrice: pizzas.basePrice,
+                                    pizza: pizzas.pizzas[1]
+                                )
+                            )
+                        ) {
+                            MenuRowFeature()
+                        }
+                    )
+                    .environment(\.colorScheme, .dark)
                 }
             }
             .task {
@@ -106,6 +134,5 @@ import Factory
     }
 
     return AsyncTestView()
-        .environment(MainRouter())
 }
 #endif
