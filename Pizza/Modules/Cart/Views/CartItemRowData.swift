@@ -9,7 +9,7 @@
 import Foundation
 import Domain
 
-struct CartItemRowData {
+struct CartItemRowData: Equatable {
     let name: String
     let priceText: String
     let index: Int

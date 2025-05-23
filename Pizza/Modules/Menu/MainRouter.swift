@@ -37,7 +37,8 @@ final class MainRouter: CustomNavPathProvider<MainPath>, Routing {
     @MainActor @ViewBuilder func view(for route: MainPath) -> some View {
         switch route {
         case .cart:
-            CartView()
+            // CartView()
+            EmptyView()
         case .drinks:
             DrinksListView()
         case let .ingredients(rowData):

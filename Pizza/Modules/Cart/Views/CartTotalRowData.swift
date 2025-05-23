@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CartTotalRowData {
+struct CartTotalRowData: Equatable {
     var priceText: String
 
     init(price: Double) {

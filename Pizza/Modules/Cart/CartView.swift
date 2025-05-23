@@ -7,60 +7,66 @@
 //
 
 import SwiftUI
-import Factory
+import ComposableArchitecture
 
 struct CartView: View {
     @Environment(AlertHelper.self) private var alertHelper
-    @Environment(MainRouter.self) private var router
-    @InjectedObservable(\.cartViewModel) private var viewModel
+    // @Environment(MainRouter.self) private var router
+    let store: StoreOf<CartFeature>
 
     var body: some View {
-        List {
-            Section {
-                ForEach(viewModel.listData) { item in
-                    Button {
-                        viewModel.select(index: item.index)
-                    } label: {
-                        CartItemRow(data: item)
+        // EmptyView()
+        WithPerceptionTracking {
+            List {
+                Section {
+                    ForEach(store.listData) { item in
+                        Button {
+                            store.send(.selectItem(item.index))
+                        } label: {
+                            CartItemRow(data: item)
+                        }
                     }
+                } header: {
+                    listHeader
                 }
-            } header: {
-                listHeader
-            }
-            .listRowInsets(.init())
-            .listSectionSeparator(.hidden)
+                .listRowInsets(.init())
+                .listSectionSeparator(.hidden)
 
-            Section {
-                CartTotalRow(data: viewModel.totalData)
-            } header: {
-                listHeader
+                Section {
+                    CartTotalRow(data: store.totalData)
+                } header: {
+                    listHeader
+                }
+                .listSectionSeparator(.hidden, edges: .bottom)
+                .listRowInsets(.init())
             }
-            .listSectionSeparator(.hidden, edges: .bottom)
-            .listRowInsets(.init())
-        }
-        .animation(.default, value: viewModel.listData.count)
-        .environment(\.defaultMinListHeaderHeight, 0)
-        .listStyle(.plain)
-        .overlay(alignment: .bottom) {
-            footer
-        }
-        .toolbar {
-            Button {
-                router.push(.drinks)
-            } label: {
-                Image(.icDrinks)
+            .animation(.default, value: store.listData.count)
+            .environment(\.defaultMinListHeaderHeight, 0)
+            .listStyle(.plain)
+            .overlay(alignment: .bottom) {
+                footer
             }
+            .toolbar {
+                Button {
+                    // router.push(.drinks)
+                } label: {
+                    Image(.icDrinks)
+                }
+            }
+            // .sheet(isPresented: viewStore.binding(
+            //     get: \.showSuccess,
+            //     send: { $0 ? .dismissSuccess : .none }
+            // )) {
+            //     SuccessView()
+            // }
+            .task {
+                await store.send(.loadItems).finish()
+            }
+            .alertModifier(store, alertHelper)
+            .navigationTitle(.localizable(.cartTitle))
+            .toolbarRole(.editor)
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .sheet(isPresented: $viewModel.showSuccess) {
-            SuccessView()
-        }
-        .task {
-            await viewModel.loadItems()
-        }
-        .alertModifier(viewModel, alertHelper)
-        .navigationTitle(.localizable(.cartTitle))
-        .toolbarRole(.editor)
-        .navigationBarTitleDisplayMode(.inline)
     }
 
     var listHeader: some View {
@@ -73,12 +79,12 @@ struct CartView: View {
         Text(localizable: .checkout)
             .font(.system(size: 16, weight: .bold))
             .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
-            .foregroundStyle(viewModel.canCheckout ? .white : .gray)
+            .foregroundStyle(store.canCheckout ? .white : .gray)
             .contentShape(Rectangle())
             .onTapGesture {
-                viewModel.checkout()
+                store.send(.checkout)
             }
-            .disabled(!viewModel.canCheckout)
+            .disabled(!store.canCheckout)
             .background {
                 Color.accent
                     .ignoresSafeArea(edges: .bottom)
@@ -88,25 +94,28 @@ struct CartView: View {
 
 private extension View {
     func alertModifier(
-        _ viewModel: CartViewModel,
+        _ store: StoreOf<CartFeature>,
         _ alertHelper: AlertHelper
     ) -> some View {
-        onReceive(viewModel.alertKind) { kind in
-            switch kind {
-            case .none:
-                alertHelper.hideAlert()
-            case .progress:
-                alertHelper.showProgress()
-            case let .checkoutError(error):
-                alertHelper.showAlert(
-                    isTouchOutside: true,
-                    alignment: .bottom
-                ) {
-                    ErrorView(error: error) {
-                        viewModel.hideAlert()
+        onChange(of: store.alertKind) { _, kind in
+            if let kind {
+                switch kind {
+                case .progress:
+                    alertHelper.showProgress()
+                case let .checkoutError(error):
+                    alertHelper.showAlert(
+                        isTouchOutside: true,
+                        alignment: .bottom
+                    ) {
+                        EmptyView()
+                        // ErrorView(error: error) {
+                        //     store.send(.hideAlert)
+                        // }
+                        // .transition(.move(edge: .bottom))
                     }
-                    .transition(.move(edge: .bottom))
                 }
+            } else {
+                alertHelper.hideAlert()
             }
         }
     }
@@ -115,9 +124,15 @@ private extension View {
 #if DEBUG
 #Preview {
     NavigationStack {
-        CartView()
-            .environment(AlertHelper())
-            .environment(MainRouter())
+        CartView(
+            store: Store(
+                initialState: CartFeature.State()
+            ) {
+                CartFeature()
+            }
+        )
+        .environment(AlertHelper())
+        .environment(MainRouter())
     }
 }
 #endif
