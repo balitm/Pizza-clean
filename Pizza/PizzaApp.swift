@@ -17,11 +17,13 @@ struct PizzaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                store: Store(initialState: ContentFeature.State()) {
-                    ContentFeature()
-                }
-            )
+            AlertHelperView {
+                ContentView(
+                    store: Store(initialState: ContentFeature.State()) {
+                        ContentFeature()
+                    }
+                )
+            }
             .environment(AlertHelper())
         }
     }

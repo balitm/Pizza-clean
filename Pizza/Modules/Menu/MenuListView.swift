@@ -11,6 +11,7 @@ import Domain
 import ComposableArchitecture
 
 struct MenuListView: View {
+    @Environment(AlertHelper.self) private var alertHelper
     @Bindable var store: StoreOf<MenuListFeature>
 
     var body: some View {
@@ -77,7 +78,7 @@ struct MenuListView: View {
                     listData: [
                         // Preview MenuRowData needs to be created here
                         // For example:
-                        // MenuRowData(index: 0, basePrice: 10.0, pizza: Pizza(name: "Preview Pizza", ingredients: [], imageUrl: nil, price: 0.0), onTapPrice: { _ in })
+                        // MenuRowData(index: 0, basePrice: 10.0, pizza: Pizza(name: "Preview Pizza", ingredients: [], imageUrl: nil, price: 0.0))
                     ]
                 )
             ) {

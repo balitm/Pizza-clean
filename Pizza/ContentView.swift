@@ -11,6 +11,7 @@ import Factory
 import ComposableArchitecture
 
 struct ContentView: View {
+    @Environment(AlertHelper.self) private var alertHelper
     @Environment(\.scenePhase) private var scenePhase
     @Bindable var store: StoreOf<ContentFeature>
 

@@ -31,7 +31,7 @@ struct MenuListFeature {
 
     enum Action {
         case task
-        case addPizza(index: Int)
+        case addPizza(Int)
         case pizzasResponse(Result<Pizzas, Error>)
         case alertDismissed
         case lostNetwork
