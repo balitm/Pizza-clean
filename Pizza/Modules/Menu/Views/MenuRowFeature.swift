@@ -13,8 +13,9 @@ import ComposableArchitecture
 @Reducer
 struct MenuRowFeature {
     @ObservableState
-    struct State: Equatable {
+    struct State: Equatable, Identifiable {
         var data: MenuRowData
+        var id: Int { data.index }
     }
 
     enum Action {

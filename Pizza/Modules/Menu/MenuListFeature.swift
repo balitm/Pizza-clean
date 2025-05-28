@@ -14,9 +14,10 @@ import Factory
 struct MenuListFeature {
     @ObservableState
     struct State: Equatable {
-        var listData: [MenuRowData] = []
         var isLoading: Bool = false
         var alertKind: AlertKind? = nil
+        var menuRows: IdentifiedArrayOf<MenuRowFeature.State> = []
+        var hasLoadedOnce: Bool = false
 
         enum AlertKind: Equatable, Identifiable {
             case added, initError(String)
@@ -31,12 +32,13 @@ struct MenuListFeature {
 
     enum Action {
         case task
-        case addPizza(Int)
+        case addPizzaAtIndex(Int)
         case pizzasResponse(Result<Pizzas, Error>)
         case alertDismissed
         case lostNetwork
         case resumeNetwork
         case delegate(Delegate)
+        case menuRow(IdentifiedActionOf<MenuRowFeature>)
 
         enum Delegate: Equatable {
             case navigateToCart
@@ -47,19 +49,21 @@ struct MenuListFeature {
 
     @Dependency(\.menuModel) var menuModel
 
-    var body: some Reducer<State, Action> {
+    var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .task:
+                // Only load once unless explicitly cleared
+                guard !state.hasLoadedOnce else { return .none }
                 state.isLoading = true
                 state.alertKind = nil
                 return .run { send in
                     await send(.pizzasResponse(Result { try await menuModel.fetchPizzasWithInitialisation() }))
                 }
 
-            case let .addPizza(index):
-                guard state.listData.indices.contains(index) else { return .none }
-                let pizza = state.listData[index].pizza
+            case let .addPizzaAtIndex(index):
+                guard let rowState = state.menuRows[id: index] else { return .none }
+                let pizza = rowState.data.pizza
                 return .run { send in
                     await menuModel.addToCart(pizza: pizza)
                     await send(.alertDismissed)
@@ -69,14 +73,27 @@ struct MenuListFeature {
                 }
 
             case let .pizzasResponse(.success(pizzas)):
-                state.listData = pizzas.pizzas.enumerated().map {
-                    MenuRowData(
-                        index: $0.offset,
-                        basePrice: pizzas.basePrice,
-                        pizza: $0.element
-                    )
-                }
+                // Preserve existing images when rebuilding the menu rows
+                let existingImages = Dictionary(
+                    state.menuRows.map { ($0.data.index, $0.data.image) },
+                    uniquingKeysWith: { first, _ in first }
+                )
+
+                state.menuRows = IdentifiedArrayOf(
+                    uniqueElements: pizzas.pizzas.enumerated().map { offset, pizza in
+                        var rowData = MenuRowData(
+                            index: offset,
+                            basePrice: pizzas.basePrice,
+                            pizza: pizza
+                        )
+                        // Restore the existing image if available
+                        rowData.image = existingImages[offset] ?? nil
+
+                        return MenuRowFeature.State(data: rowData)
+                    }
+                )
                 state.isLoading = false
+                state.hasLoadedOnce = true
                 return .none
 
             case let .pizzasResponse(.failure(error)):
@@ -89,20 +106,34 @@ struct MenuListFeature {
                 return .none
 
             case .lostNetwork:
-                state.listData = []
+                state.menuRows = []
                 state.isLoading = false
                 state.alertKind = nil
+                state.hasLoadedOnce = false
                 return .none
 
             case .resumeNetwork:
-                if !state.isLoading && state.listData.isEmpty {
+                if !state.isLoading && !state.hasLoadedOnce {
                     return .send(.task)
                 }
+                return .none
+
+            case let .menuRow(.element(_, action: .delegate(.showDetails(rowData)))):
+                return .send(.delegate(.navigateToIngredients(rowData)))
+
+            case let .menuRow(.element(id: id, action: .delegate(.addToCart(index)))):
+                assert(id == index)
+                return .send(.addPizzaAtIndex(index))
+
+            case .menuRow:
                 return .none
 
             case .delegate:
                 return .none
             }
+        }
+        .forEach(\.menuRows, action: \.menuRow) {
+            MenuRowFeature()
         }
     }
 }

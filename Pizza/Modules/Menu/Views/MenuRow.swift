@@ -12,6 +12,8 @@ import ComposableArchitecture
 
 struct MenuRow: View {
     let store: StoreOf<MenuRowFeature>
+    var onTapDetails: ((MenuRowData) -> Void)?
+    var onAddToCart: ((Int) -> Void)?
 
     var body: some View {
         WithPerceptionTracking {

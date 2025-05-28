@@ -24,16 +24,11 @@ struct MenuListView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .listRowSeparator(.hidden)
                 }
-                ForEach(store.listData) { rowData in
-                    MenuRow(
-                        store: Store(
-                            initialState: MenuRowFeature.State(data: rowData)
-                        ) {
-                            MenuRowFeature()
-                        }
-                    )
-                    .listRowInsets(.init())
-                    .listRowSeparator(.hidden)
+                ForEach(store.scope(state: \.menuRows, action: \.menuRow)) { rowStore in
+                    @Bindable var rowStore = rowStore
+                    MenuRow(store: rowStore)
+                        .listRowInsets(.init())
+                        .listRowSeparator(.hidden)
                 }
                 // App version info can be added here if still needed,
                 // possibly from a shared state or a dependency.
@@ -49,22 +44,6 @@ struct MenuListView: View {
             .task {
                 await store.send(.task).finish()
             }
-            // .alert(
-            //     item: $store.scope(state: \.alertKind, action: \.alertDismissed)
-            // ) { alertKind in
-            //     switch alertKind {
-            //     case .added:
-            //         // The original used a custom AddedNotification.
-            //         // This requires a more complex overlay or sheet if the exact style is needed.
-            //         // For a standard alert:
-            //         Alert(title: Text("Added to Cart!"))
-            //     case .initError(let message):
-            //         Alert(title: Text("Error"), message: Text(message))
-            //     }
-            // }
-            // // Toolbar items for cart and add (+) are now managed by ContentView
-            // // as they affect the global navigation stack.
-            // // If MenuListView itself had local toolbar items, they'd be here.
         }
     }
 }
@@ -75,11 +54,9 @@ struct MenuListView: View {
         MenuListView(
             store: Store(
                 initialState: MenuListFeature.State(
-                    listData: [
-                        // Preview MenuRowData needs to be created here
-                        // For example:
-                        // MenuRowData(index: 0, basePrice: 10.0, pizza: Pizza(name: "Preview Pizza", ingredients: [], imageUrl: nil, price: 0.0))
-                    ]
+                    menuRows: IdentifiedArrayOf(uniqueElements: [
+                        // Preview data can be added here if needed
+                    ])
                 )
             ) {
                 MenuListFeature()
