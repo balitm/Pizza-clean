@@ -14,6 +14,6 @@ struct DrinkRowData {
     let index: Int
 }
 
-extension DrinkRowData: Identifiable {
+extension DrinkRowData: Identifiable, Equatable {
     var id: Int { index }
 }

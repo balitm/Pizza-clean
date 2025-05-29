@@ -3,53 +3,59 @@
 //  Pizza
 //
 //  Created by Balázs Kilvády on 7/10/20.
-//  Copyright © 2024 kil-dev. All rights reserved.
+//  Copyright 2024 kil-dev. All rights reserved.
 //
 
 import SwiftUI
 import Domain
-import Factory
+import ComposableArchitecture
 
 struct DrinksListView: View {
     @Environment(AlertHelper.self) private var alertHelper
-    @Environment(\.dismiss) private var dismiss
-    @InjectedObservable(\.drinksViewModel) private var viewModel
+    @Bindable var store: StoreOf<DrinksFeature>
 
     var body: some View {
-        List(viewModel.listData) { item in
-            Button {
-                viewModel.addToCart(index: item.index)
-            } label: {
-                DrinkRow(data: item)
+        WithPerceptionTracking {
+            List {
+                ForEach(store.listData) { item in
+                    Button {
+                        store.send(.addToCart(index: item.index))
+                    } label: {
+                        DrinkRow(data: item)
+                    }
+                    .listRowInsets(.init())
+                }
             }
-            .listRowInsets(.init())
+            .listStyle(.plain)
+            .task {
+                await store.send(.loadDrinks).finish()
+            }
+            .alertModifier(store, alertHelper)
+            .navigationTitle(.localizable(.drinksTitle))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarRole(.editor)
         }
-        .listStyle(.plain)
-        .task {
-            await viewModel.loadDrinks()
-        }
-        .alertModifier(viewModel, alertHelper, dismiss)
-        .navigationTitle(.localizable(.drinksTitle))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarRole(.editor)
     }
 }
 
 private extension View {
     func alertModifier(
-        _ viewModel: DrinksViewModel,
-        _ alertHelper: AlertHelper,
-        _ dismiss: DismissAction,
+        _ store: StoreOf<DrinksFeature>,
+        _ alertHelper: AlertHelper
     ) -> some View {
-        onReceive(viewModel.alertKind) { kind in
+        onChange(of: store.alertKind) { _, kind in
             switch kind {
+            case .none:
+                alertHelper.hideAlert()
             case .added:
                 alertHelper.showAlert(
                     isTouchOutside: true,
                     alignment: .top
                 ) {
                     AddedNotification(text: .localizable(.addedNotification)) {
-                        dismiss()
+                        // store.send(.delegate(.dismiss))
+                    } onDismiss: {
+                        store.send(.delegate(.dismiss))
                     }
                     .transition(.move(edge: .top))
                 }
@@ -60,7 +66,11 @@ private extension View {
 
 #Preview {
     NavigationStack {
-        DrinksListView()
+        DrinksListView(
+            store: Store(initialState: DrinksFeature.State()) {
+                DrinksFeature()
+            }
+        )
     }
     .environment(AlertHelper())
 }

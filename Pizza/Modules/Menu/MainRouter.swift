@@ -40,7 +40,8 @@ final class MainRouter: CustomNavPathProvider<MainPath>, Routing {
             // CartView()
             EmptyView()
         case .drinks:
-            DrinksListView()
+            // DrinksListView()
+            EmptyView()
         case let .ingredients(rowData):
             IngredientsListView(rowData: rowData)
         }
