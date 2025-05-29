@@ -41,13 +41,15 @@ struct AddedNotification: View {
     @Environment(AlertHelper.self) private var alertHelper
     @State private var addNotificationModel = CustomNotificationModel()
     let text: LocalizedStringKey
-    var onNavigate: () -> Void
+    let onNavigate: () -> Void
+    var onDismiss: (() -> Void)?
 
     var body: some View {
         CustomNotification(text: text)
             .onTapGesture {
                 addNotificationModel.stop()
                 onNavigate()
+                // onDismiss?()
             }
             .onAppear {
                 addNotificationModel.onFire = onFire
@@ -55,6 +57,7 @@ struct AddedNotification: View {
             }
             .onDisappear {
                 addNotificationModel.cancel()
+                onDismiss?()
             }
     }
 

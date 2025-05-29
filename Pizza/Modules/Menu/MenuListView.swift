@@ -43,6 +43,47 @@ struct MenuListView: View {
             .task {
                 await store.send(.fetch).finish()
             }
+            .alertModifier(store, alertHelper)
+        }
+    }
+}
+
+private extension View {
+    func alertModifier(
+        _ store: StoreOf<MenuListFeature>,
+        _ alertHelper: AlertHelper,
+    ) -> some View {
+        // onReceive(store.publisher.alertKind) { kind in
+        onChange(of: store.alertKind) { prev, kind in
+            DLog("#> alert kind changed from \(prev) to \(kind)")
+            switch kind {
+            case .none:
+                alertHelper.hideAlert()
+            case .progress:
+                alertHelper.showProgress()
+            case .added:
+                alertHelper.showAlert(
+                    isTouchOutside: true,
+                    alignment: .top
+                ) {
+                    AddedNotification(text: .localizable(.addedNotification)) {
+                        store.send(.delegate(.navigateToCart))
+                    } onDismiss: {
+                        store.send(.alert(.none))
+                    }
+                    .transition(.move(edge: .top))
+                }
+            case let .initError(error):
+                alertHelper.showAlert(
+                    isTouchOutside: true,
+                    alignment: .bottom
+                ) {
+                    ErrorView(error: error) {
+                        alertHelper.hideAlert()
+                    }
+                    .transition(.move(edge: .bottom))
+                }
+            }
         }
     }
 }
