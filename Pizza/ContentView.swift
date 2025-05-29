@@ -57,14 +57,30 @@ struct ContentView: View {
             .onChange(of: scenePhase) { _, newPhase in
                 store.send(.scenePhaseChanged(newPhase))
             }
-            // .alert(
-            //     item: $store.scope(state: \.alertKind, action: \.alertDismissed)
-            // ) { alertKind in
-            //     switch alertKind {
-            //     case .noNetwork:
-            //         Alert(title: Text("No Network"), message: Text(String.localizable(.noNetworkNotification)))
-            //     }
-            // }
+            .alertModifier(store, alertHelper)
+        }
+    }
+}
+
+private extension View {
+    func alertModifier(
+        _ store: StoreOf<ContentFeature>,
+        _ alertHelper: AlertHelper
+    ) -> some View {
+        onChange(of: store.alertKind) { _, kind in
+            switch kind {
+            case .none:
+                alertHelper.hideAlert()
+            case .noNetwork:
+                store.send(.popToRoot)
+                alertHelper.showAlert(
+                    isTouchOutside: false,
+                    alignment: .top
+                ) {
+                    CustomNotification(text: .localizable(.noNetworkNotification))
+                        .transition(.move(edge: .top))
+                }
+            }
         }
     }
 }

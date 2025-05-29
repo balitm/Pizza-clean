@@ -24,12 +24,11 @@ struct ContentFeature {
     struct State: Equatable {
         var path = StackState<Path.State>()
         var menuListState = MenuListFeature.State()
-        var alertKind: RootAlertKind? = nil
+        var alertKind: AlertKind = .none
         var hasNetwork: Bool = true
 
-        enum RootAlertKind: Equatable, Identifiable {
-            case noNetwork
-            var id: Self { self }
+        enum AlertKind: Equatable {
+            case none, noNetwork
         }
     }
 
@@ -37,7 +36,8 @@ struct ContentFeature {
         case task
         case scenePhaseChanged(ScenePhase)
         case reachabilityUpdate(Connection)
-        case alertDismissed
+        case alert(State.AlertKind)
+        case popToRoot
         case path(StackActionOf<Path>)
         case menuList(MenuListFeature.Action)
     }
@@ -74,7 +74,7 @@ struct ContentFeature {
                 case .wifi, .cellular:
                     state.hasNetwork = true
                     if !hadNetworkPreviously {
-                        state.alertKind = nil
+                        state.alertKind = .none
                         return .send(.menuList(.resumeNetwork))
                     }
                 case .unavailable:
@@ -92,8 +92,12 @@ struct ContentFeature {
                 }
                 return .none
 
-            case .alertDismissed:
-                state.alertKind = nil
+            case let .alert(kind):
+                state.alertKind = kind
+                return .none
+
+            case .popToRoot:
+                state.path.removeAll()
                 return .none
 
             case .path(.element(id: _, action: .cart(.delegate(.dismiss)))):
