@@ -25,7 +25,6 @@ struct MenuListView: View {
                         .listRowSeparator(.hidden)
                 }
                 ForEach(store.scope(state: \.menuRows, action: \.menuRow)) { rowStore in
-                    @Bindable var rowStore = rowStore
                     MenuRow(store: rowStore)
                         .listRowInsets(.init())
                         .listRowSeparator(.hidden)
@@ -42,7 +41,7 @@ struct MenuListView: View {
             .listStyle(.plain)
             .navigationTitle(String.localizable(.mainTitle))
             .task {
-                await store.send(.task).finish()
+                await store.send(.fetch).finish()
             }
         }
     }

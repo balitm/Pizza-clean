@@ -31,7 +31,7 @@ struct MenuListFeature {
     }
 
     enum Action {
-        case task
+        case fetch
         case addPizzaAtIndex(Int)
         case pizzasResponse(Result<Pizzas, Error>)
         case alertDismissed
@@ -52,7 +52,7 @@ struct MenuListFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .task:
+            case .fetch:
                 // Only load once unless explicitly cleared
                 guard !state.hasLoadedOnce else { return .none }
                 state.isLoading = true
@@ -114,7 +114,7 @@ struct MenuListFeature {
 
             case .resumeNetwork:
                 if !state.isLoading && !state.hasLoadedOnce {
-                    return .send(.task)
+                    return .send(.fetch)
                 }
                 return .none
 
