@@ -100,8 +100,8 @@ struct ContentFeature {
                 state.path.removeAll()
                 return .none
 
-            case .path(.element(id: _, action: .cart(.delegate(.dismiss)))):
-                _ = state.path.popLast()
+            case .path(.element(id: _, action: .cart(.delegate(.popToRoot)))):
+                state.path.removeAll()
                 return .none
 
             case let .menuList(.delegate(delegateAction)):

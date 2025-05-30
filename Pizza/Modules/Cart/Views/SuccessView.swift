@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SuccessView: View {
-    @Environment(MainRouter.self) private var router
+    var didTap: () -> Void = {}
 
     var body: some View {
         VStack {
@@ -25,7 +25,7 @@ struct SuccessView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            router.popToRoot()
+            didTap()
         }
     }
 
@@ -43,6 +43,5 @@ struct SuccessView: View {
 #if DEBUG
 #Preview {
     SuccessView()
-        .environment(MainRouter())
 }
 #endif

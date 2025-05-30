@@ -3,7 +3,7 @@
 //  Pizza
 //
 //  Created by Balázs Kilvády on 2024. 10. 21..
-//  Copyright © 2024 kil-dev. All rights reserved.
+//  Copyright 2024 kil-dev. All rights reserved.
 //
 
 import SwiftUI
@@ -11,17 +11,16 @@ import ComposableArchitecture
 
 struct CartView: View {
     @Environment(AlertHelper.self) private var alertHelper
-    // @Environment(MainRouter.self) private var router
     let store: StoreOf<CartFeature>
 
     var body: some View {
-        // EmptyView()
         WithPerceptionTracking {
             List {
                 Section {
+                    // EmptyView()
                     ForEach(store.listData) { item in
                         Button {
-                            store.send(.selectItem(item.index))
+                            store.send(.select(item.index))
                         } label: {
                             CartItemRow(data: item)
                         }
@@ -53,12 +52,14 @@ struct CartView: View {
                     Image(.icDrinks)
                 }
             }
-            // .sheet(isPresented: viewStore.binding(
-            //     get: \.showSuccess,
-            //     send: { $0 ? .dismissSuccess : .none }
-            // )) {
-            //     SuccessView()
-            // }
+            .sheet(isPresented: Binding(
+                get: { store.showSuccess },
+                set: { _ in store.send(.didSuccessDismiss) }
+            )) {
+                SuccessView {
+                    store.send(.didSuccessDismiss)
+                }
+            }
             .task {
                 await store.send(.loadItems).finish()
             }
@@ -98,24 +99,21 @@ private extension View {
         _ alertHelper: AlertHelper
     ) -> some View {
         onChange(of: store.alertKind) { _, kind in
-            if let kind {
-                switch kind {
-                case .progress:
-                    alertHelper.showProgress()
-                case let .checkoutError(error):
-                    alertHelper.showAlert(
-                        isTouchOutside: true,
-                        alignment: .bottom
-                    ) {
-                        EmptyView()
-                        // ErrorView(error: error) {
-                        //     store.send(.hideAlert)
-                        // }
-                        // .transition(.move(edge: .bottom))
-                    }
-                }
-            } else {
+            switch kind {
+            case .none:
                 alertHelper.hideAlert()
+            case .progress:
+                alertHelper.showProgress()
+            case let .checkoutError(error):
+                alertHelper.showAlert(
+                    isTouchOutside: true,
+                    alignment: .bottom
+                ) {
+                    ErrorView(error: error) {
+                        store.send(.alert(.none))
+                    }
+                    .transition(.move(edge: .bottom))
+                }
             }
         }
     }

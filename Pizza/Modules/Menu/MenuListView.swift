@@ -53,9 +53,7 @@ private extension View {
         _ store: StoreOf<MenuListFeature>,
         _ alertHelper: AlertHelper,
     ) -> some View {
-        // onReceive(store.publisher.alertKind) { kind in
-        onChange(of: store.alertKind) { prev, kind in
-            DLog("#> alert kind changed from \(prev) to \(kind)")
+        onChange(of: store.alertKind) { _, kind in
             switch kind {
             case .none:
                 alertHelper.hideAlert()
