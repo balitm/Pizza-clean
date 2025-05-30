@@ -17,7 +17,6 @@ struct CartView: View {
         WithPerceptionTracking {
             List {
                 Section {
-                    // EmptyView()
                     ForEach(store.listData) { item in
                         Button {
                             store.send(.select(item.index))
@@ -47,7 +46,7 @@ struct CartView: View {
             }
             .toolbar {
                 Button {
-                    // router.push(.drinks)
+                    store.send(.delegate(.navigateToDrinks))
                 } label: {
                     Image(.icDrinks)
                 }

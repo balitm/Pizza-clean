@@ -50,7 +50,6 @@ struct MenuListFeature {
         enum Delegate: Equatable {
             case navigateToCart
             case navigateToIngredients(MenuRowData)
-            case navigateToDrinks
         }
     }
 

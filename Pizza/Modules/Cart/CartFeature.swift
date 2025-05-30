@@ -50,7 +50,6 @@ struct CartFeature {
         case delegate(Delegate)
 
         enum Delegate: Equatable {
-            // case dismiss
             case navigateToDrinks
             case popToRoot
         }

@@ -53,9 +53,9 @@ private extension View {
                     alignment: .top
                 ) {
                     AddedNotification(text: .localizable(.addedNotification)) {
-                        // store.send(.delegate(.dismiss))
+                        store.send(.dismissView)
                     } onDismiss: {
-                        store.send(.delegate(.dismiss))
+                        store.send(.alertDismissed)
                     }
                     .transition(.move(edge: .top))
                 }

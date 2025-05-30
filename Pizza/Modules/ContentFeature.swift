@@ -104,14 +104,16 @@ struct ContentFeature {
                 state.path.removeAll()
                 return .none
 
+            case .path(.element(id: _, action: .cart(.delegate(.navigateToDrinks)))):
+                state.path.append(.drinks(DrinksFeature.State()))
+                return .none
+
             case let .menuList(.delegate(delegateAction)):
                 switch delegateAction {
                 case .navigateToCart:
                     state.path.append(.cart(CartFeature.State()))
                 case let .navigateToIngredients(pizzaData):
                     state.path.append(.ingredients(IngredientsFeature.State(pizzaData: pizzaData)))
-                case .navigateToDrinks:
-                    state.path.append(.drinks(DrinksFeature.State()))
                 }
                 return .none
 

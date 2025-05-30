@@ -44,8 +44,7 @@ struct ContentView: View {
                 case let .cart(store):
                     CartView(store: store)
                 case let .drinks(store):
-                    // DrinksListView(store: store) // Will need to create DrinksListView(store:)
-                    EmptyView()
+                    DrinksListView(store: store)
                 case let .ingredients(store):
                     // IngredientsListView(store: store) // Will need to create IngredientsListView(store:)
                     EmptyView()

@@ -40,6 +40,7 @@ import SwiftUI
 struct AddedNotification: View {
     @Environment(AlertHelper.self) private var alertHelper
     @State private var addNotificationModel = CustomNotificationModel()
+    @State private var isTapped = false
     let text: LocalizedStringKey
     let onNavigate: () -> Void
     var onDismiss: (() -> Void)?
@@ -47,9 +48,9 @@ struct AddedNotification: View {
     var body: some View {
         CustomNotification(text: text)
             .onTapGesture {
+                isTapped = true
                 addNotificationModel.stop()
                 onNavigate()
-                // onDismiss?()
             }
             .onAppear {
                 addNotificationModel.onFire = onFire
@@ -57,7 +58,9 @@ struct AddedNotification: View {
             }
             .onDisappear {
                 addNotificationModel.cancel()
-                onDismiss?()
+                if !isTapped {
+                    onDismiss?()
+                }
             }
     }
 

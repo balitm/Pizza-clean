@@ -28,6 +28,7 @@ struct DrinksFeature {
         case addToCart(index: Int)
         case drinkAdded
         case alertDismissed
+        case dismissView
         case delegate(Delegate)
 
         enum Delegate: Equatable {
@@ -37,6 +38,7 @@ struct DrinksFeature {
 
     @Dependency(\.componentsModel) var componentsModel
     @Dependency(\.cartModel) var cartModel
+    @Dependency(\.dismiss) var dismiss
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -71,6 +73,11 @@ struct DrinksFeature {
             case .alertDismissed:
                 state.alertKind = .none
                 return .none
+
+            case .dismissView:
+                return .run { _ in
+                    await dismiss()
+                }
 
             case .delegate:
                 return .none
