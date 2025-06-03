@@ -28,14 +28,13 @@ struct MenuListView: View {
                     .listRowInsets(.init())
                     .listRowSeparator(.hidden)
             }
-            // App version info can be added here if still needed,
-            // possibly from a shared state or a dependency.
-            // For now, focusing on core TCA conversion.
-            // Text(viewModel.appVersionInfo)
-            //     .frame(maxWidth: .infinity)
-            //     .font(.footnote)
-            //     .foregroundStyle(.secondary)
-            //     .listRowSeparator(.hidden)
+            if !store.appVersionInfo.isEmpty {
+                Text(store.appVersionInfo)
+                    .frame(maxWidth: .infinity)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .listRowSeparator(.hidden)
+            }
         }
         .listStyle(.plain)
         .navigationTitle(String.localizable(.mainTitle))

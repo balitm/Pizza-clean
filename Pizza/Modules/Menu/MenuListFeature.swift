@@ -18,6 +18,7 @@ struct MenuListFeature {
         var alertKind: AlertKind = .none
         var menuRows: IdentifiedArrayOf<MenuRowFeature.State> = []
         var hasLoadedOnce: Bool = false
+        var appVersionInfo: String = ""
 
         enum AlertKind: Equatable {
             case progress, none, added, initError(Error)
@@ -59,6 +60,9 @@ struct MenuListFeature {
         Reduce { state, action in
             switch action {
             case .fetch:
+                // Get app version info
+                state.appVersionInfo = menuModel.appVersionInfo()
+
                 // Only load once unless explicitly cleared.
                 guard !state.hasLoadedOnce else { return .none }
                 state.isLoading = true
@@ -100,6 +104,7 @@ struct MenuListFeature {
                 )
                 state.isLoading = false
                 state.hasLoadedOnce = true
+
                 return .none
 
             case let .pizzasResponse(.failure(error)):
