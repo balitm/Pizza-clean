@@ -10,7 +10,7 @@ import Domain
 import DataSource
 import Factory
 
-public actor ComponentsModel: Domain.ComponentsModel {
+actor ComponentsModel: Domain.ComponentsModel {
     public private(set) var pizzas: Pizzas
     public private(set) var ingredients: [Ingredient]
     public private(set) var drinks: [Drink]

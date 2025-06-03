@@ -129,7 +129,6 @@ private extension View {
             }
         )
         .environment(AlertHelper())
-        .environment(MainRouter())
     }
 }
 #endif

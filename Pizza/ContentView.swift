@@ -46,8 +46,7 @@ struct ContentView: View {
                 case let .drinks(store):
                     DrinksListView(store: store)
                 case let .ingredients(store):
-                    // IngredientsListView(store: store) // Will need to create IngredientsListView(store:)
-                    EmptyView()
+                    IngredientsListView(store: store)
                 }
             }
             .task {

@@ -108,6 +108,10 @@ struct ContentFeature {
                 state.path.append(.drinks(DrinksFeature.State()))
                 return .none
 
+            case .path(.element(id: _, action: .ingredients(.delegate(.navigateToCart)))):
+                state.path.append(.cart(CartFeature.State()))
+                return .none
+
             case let .menuList(.delegate(delegateAction)):
                 switch delegateAction {
                 case .navigateToCart:
