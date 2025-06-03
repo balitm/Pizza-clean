@@ -38,6 +38,7 @@ struct ContentFeature {
         case reachabilityUpdate(Connection)
         case alert(State.AlertKind)
         case popToRoot
+        case navigateToCustomPizza
         case path(StackActionOf<Path>)
         case menuList(MenuListFeature.Action)
     }
@@ -98,6 +99,11 @@ struct ContentFeature {
 
             case .popToRoot:
                 state.path.removeAll()
+                return .none
+
+            case .navigateToCustomPizza:
+                let customPizzaData = MenuRowData()
+                state.path.append(.ingredients(IngredientsFeature.State(pizzaData: customPizzaData)))
                 return .none
 
             case .path(.element(id: _, action: .cart(.delegate(.popToRoot)))):

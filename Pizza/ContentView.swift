@@ -30,7 +30,7 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        //
+                        store.send(.navigateToCustomPizza)
                     } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(.accent)
