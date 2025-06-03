@@ -16,15 +16,13 @@ struct MenuRow: View {
     var onAddToCart: ((Int) -> Void)?
 
     var body: some View {
-        WithPerceptionTracking {
-            Button {
-                store.send(.onTapDetails)
-            } label: {
-                rowView
-            }
-            .onAppear {
-                store.send(.downloadImage)
-            }
+        Button {
+            store.send(.onTapDetails)
+        } label: {
+            rowView
+        }
+        .onAppear {
+            store.send(.downloadImage)
         }
     }
 

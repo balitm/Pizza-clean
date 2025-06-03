@@ -17,34 +17,32 @@ struct MenuListView: View {
     var body: some View {
         let _ = Self._printChanges()
 
-        WithPerceptionTracking {
-            List {
-                if store.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .listRowSeparator(.hidden)
-                }
-                ForEach(store.scope(state: \.menuRows, action: \.menuRow)) { rowStore in
-                    MenuRow(store: rowStore)
-                        .listRowInsets(.init())
-                        .listRowSeparator(.hidden)
-                }
-                // App version info can be added here if still needed,
-                // possibly from a shared state or a dependency.
-                // For now, focusing on core TCA conversion.
-                // Text(viewModel.appVersionInfo)
-                //     .frame(maxWidth: .infinity)
-                //     .font(.footnote)
-                //     .foregroundStyle(.secondary)
-                //     .listRowSeparator(.hidden)
+        List {
+            if store.isLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowSeparator(.hidden)
             }
-            .listStyle(.plain)
-            .navigationTitle(String.localizable(.mainTitle))
-            .task {
-                await store.send(.fetch).finish()
+            ForEach(store.scope(state: \.menuRows, action: \.menuRow)) { rowStore in
+                MenuRow(store: rowStore)
+                    .listRowInsets(.init())
+                    .listRowSeparator(.hidden)
             }
-            .alertModifier(store, alertHelper)
+            // App version info can be added here if still needed,
+            // possibly from a shared state or a dependency.
+            // For now, focusing on core TCA conversion.
+            // Text(viewModel.appVersionInfo)
+            //     .frame(maxWidth: .infinity)
+            //     .font(.footnote)
+            //     .foregroundStyle(.secondary)
+            //     .listRowSeparator(.hidden)
         }
+        .listStyle(.plain)
+        .navigationTitle(String.localizable(.mainTitle))
+        .task {
+            await store.send(.fetch).finish()
+        }
+        .alertModifier(store, alertHelper)
     }
 }
 

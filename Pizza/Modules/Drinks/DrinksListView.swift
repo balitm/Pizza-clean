@@ -15,26 +15,24 @@ struct DrinksListView: View {
     @Bindable var store: StoreOf<DrinksFeature>
 
     var body: some View {
-        WithPerceptionTracking {
-            List {
-                ForEach(store.listData) { item in
-                    Button {
-                        store.send(.addToCart(index: item.index))
-                    } label: {
-                        DrinkRow(data: item)
-                    }
-                    .listRowInsets(.init())
+        List {
+            ForEach(store.listData) { item in
+                Button {
+                    store.send(.addToCart(index: item.index))
+                } label: {
+                    DrinkRow(data: item)
                 }
+                .listRowInsets(.init())
             }
-            .listStyle(.plain)
-            .task {
-                await store.send(.loadDrinks).finish()
-            }
-            .alertModifier(store, alertHelper)
-            .navigationTitle(.localizable(.drinksTitle))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarRole(.editor)
         }
+        .listStyle(.plain)
+        .task {
+            await store.send(.loadDrinks).finish()
+        }
+        .alertModifier(store, alertHelper)
+        .navigationTitle(.localizable(.drinksTitle))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarRole(.editor)
     }
 }
 

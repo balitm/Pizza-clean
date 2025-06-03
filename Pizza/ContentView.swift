@@ -16,47 +16,45 @@ struct ContentView: View {
     @Bindable var store: StoreOf<ContentFeature>
 
     var body: some View {
-        WithPerceptionTracking {
-            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-                MenuListView(
-                    store: store.scope(state: \.menuListState, action: \.menuList)
-                )
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            store.send(.menuList(.delegate(.navigateToCart)))
-                        } label: {
-                            Image(.icCartNavbar)
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            //
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundStyle(.accent)
-                                .fontWeight(.semibold)
-                        }
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            MenuListView(
+                store: store.scope(state: \.menuListState, action: \.menuList)
+            )
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        store.send(.menuList(.delegate(.navigateToCart)))
+                    } label: {
+                        Image(.icCartNavbar)
                     }
                 }
-            } destination: { store in
-                switch store.case {
-                case let .cart(store):
-                    CartView(store: store)
-                case let .drinks(store):
-                    DrinksListView(store: store)
-                case let .ingredients(store):
-                    IngredientsListView(store: store)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        //
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundStyle(.accent)
+                            .fontWeight(.semibold)
+                    }
                 }
             }
-            .task {
-                await store.send(.task).finish()
+        } destination: { store in
+            switch store.case {
+            case let .cart(store):
+                CartView(store: store)
+            case let .drinks(store):
+                DrinksListView(store: store)
+            case let .ingredients(store):
+                IngredientsListView(store: store)
             }
-            .onChange(of: scenePhase) { _, newPhase in
-                store.send(.scenePhaseChanged(newPhase))
-            }
-            .alertModifier(store, alertHelper)
         }
+        .task {
+            await store.send(.task).finish()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            store.send(.scenePhaseChanged(newPhase))
+        }
+        .alertModifier(store, alertHelper)
     }
 }
 

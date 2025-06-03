@@ -14,59 +14,57 @@ struct CartView: View {
     let store: StoreOf<CartFeature>
 
     var body: some View {
-        WithPerceptionTracking {
-            List {
-                Section {
-                    ForEach(store.listData) { item in
-                        Button {
-                            store.send(.select(item.index))
-                        } label: {
-                            CartItemRow(data: item)
-                        }
+        List {
+            Section {
+                ForEach(store.listData) { item in
+                    Button {
+                        store.send(.select(item.index))
+                    } label: {
+                        CartItemRow(data: item)
                     }
-                } header: {
-                    listHeader
                 }
-                .listRowInsets(.init())
-                .listSectionSeparator(.hidden)
+            } header: {
+                listHeader
+            }
+            .listRowInsets(.init())
+            .listSectionSeparator(.hidden)
 
-                Section {
-                    CartTotalRow(data: store.totalData)
-                } header: {
-                    listHeader
-                }
-                .listSectionSeparator(.hidden, edges: .bottom)
-                .listRowInsets(.init())
+            Section {
+                CartTotalRow(data: store.totalData)
+            } header: {
+                listHeader
             }
-            .animation(.default, value: store.listData.count)
-            .environment(\.defaultMinListHeaderHeight, 0)
-            .listStyle(.plain)
-            .overlay(alignment: .bottom) {
-                footer
-            }
-            .toolbar {
-                Button {
-                    store.send(.delegate(.navigateToDrinks))
-                } label: {
-                    Image(.icDrinks)
-                }
-            }
-            .sheet(isPresented: Binding(
-                get: { store.showSuccess },
-                set: { _ in store.send(.didSuccessDismiss) }
-            )) {
-                SuccessView {
-                    store.send(.didSuccessDismiss)
-                }
-            }
-            .task {
-                await store.send(.loadItems).finish()
-            }
-            .alertModifier(store, alertHelper)
-            .navigationTitle(.localizable(.cartTitle))
-            .toolbarRole(.editor)
-            .navigationBarTitleDisplayMode(.inline)
+            .listSectionSeparator(.hidden, edges: .bottom)
+            .listRowInsets(.init())
         }
+        .animation(.default, value: store.listData.count)
+        .environment(\.defaultMinListHeaderHeight, 0)
+        .listStyle(.plain)
+        .overlay(alignment: .bottom) {
+            footer
+        }
+        .toolbar {
+            Button {
+                store.send(.delegate(.navigateToDrinks))
+            } label: {
+                Image(.icDrinks)
+            }
+        }
+        .sheet(isPresented: Binding(
+            get: { store.showSuccess },
+            set: { _ in store.send(.didSuccessDismiss) }
+        )) {
+            SuccessView {
+                store.send(.didSuccessDismiss)
+            }
+        }
+        .task {
+            await store.send(.loadItems).finish()
+        }
+        .alertModifier(store, alertHelper)
+        .navigationTitle(.localizable(.cartTitle))
+        .toolbarRole(.editor)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     var listHeader: some View {
